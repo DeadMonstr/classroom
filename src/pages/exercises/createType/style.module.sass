@@ -1,0 +1,66 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+.types
+  width: 100%
+  padding: 2rem
+  .header
+    margin-top: 2rem
+    width: 100%
+    display: flex
+    align-items: flex-end
+    justify-content: center
+  .container
+    margin-top: 2rem
+    padding: 1rem
+    display: flex
+    flex-wrap: wrap
+
+  &__item
+    width: fit-content
+    height: fit-content
+    padding: .7rem 1.5rem
+    font-size: 1.6rem
+    color: $color-grey-dark
+    border: 2px solid $color-grey-light
+    cursor: pointer
+    user-select: none
+    border-radius: 5px
+    position: relative
+    overflow: hidden
+    margin: 0 1rem
+    transition: all .1s
+    @include btn-active
+    .delete
+      position: absolute
+      opacity: 0
+      visibility: hidden
+      z-index: 10
+      background-color: $color-grey-light
+      color: white
+      width: 100%
+      height: 100%
+      display: flex
+      align-items: center
+      justify-content: center
+      font-size: 2rem
+      transition: all .1s
+      top: 0
+      left: 0
+    &:hover
+      .delete
+        opacity: 1
+        visibility: visible
+
+
+.createType
+  width: 100%
+  &__types
+    display: flex
+    width: 100%
+  .footer
+    margin-top: 1rem
+    display: flex
+
+
+

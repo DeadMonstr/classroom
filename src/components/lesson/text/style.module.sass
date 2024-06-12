@@ -1,0 +1,130 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+
+.component
+  &__create
+    width: 60rem
+    padding: 2rem
+    box-shadow: 0 107px 43px rgba(0, 0, 0, 0.01), 0 60px 36px rgba(0, 0, 0, 0.05), 0 27px 27px rgba(0, 0, 0, 0.09), 0 7px 15px rgba(0, 0, 0, 0.1), 0 0 0 rgba(0, 0, 0, 0.1)
+    margin-top: 3rem
+    border-radius: 5px
+    h1
+      color: $color-grey-dark
+      font-size: 2rem
+      font-weight: 600
+      margin-bottom: 2rem
+    textarea
+      width: 100%
+      height: 20rem
+      resize: none
+      padding: 1rem
+      font-size: 1.5rem
+      background-color: transparent
+      border: 2px solid $color-grey-light
+    .header
+      width: 100%
+      display: flex
+    .words
+      margin-top: 2rem
+      white-space: pre-wrap
+      font-size: 1.6rem
+      padding: 0 1rem
+      .word
+        &:hover
+          text-decoration: underline
+    .submitBtn
+      width: fit-content
+      height: fit-content
+      border: 2px solid $color-grey-light
+      padding: 0.7rem 2rem
+      font-size: 1.6rem
+      margin-top: 2rem
+      color: $color-grey-dark
+      font-weight: 500
+      cursor: pointer
+      transition: all .1s
+      @include btn-active
+      user-select: none
+      &:hover
+        background-color: $color-grey-light
+        color: white
+    .modal
+      position: absolute
+      min-width: 10rem
+      opacity: 0
+      visibility: hidden
+      transition: opacity .1s
+      z-index: 100
+      background-color: $color-grey-light
+      border-radius: 5px
+      top: 0
+      &.left
+        .innerModal
+          left: -100%
+      &.right
+        .innerModal
+          right: -100%
+      &.active
+        opacity: 1
+        visibility: visible
+      .innerModal
+        position: absolute
+        max-width: 20rem
+        padding: .5rem
+        background-color: white
+        box-shadow: 0 76px 30px rgba(92, 0, 0, 0.01), 0 43px 26px rgba(92, 0, 0, 0.05), 0 19px 19px rgba(92, 0, 0, 0.09), 0 5px 10px rgba(92, 0, 0, 0.1), 0 0 0 rgba(92, 0, 0, 0.1)
+        opacity: 0
+        visibility: hidden
+        transition: opacity .2s
+        display: flex
+        align-items: center
+        justify-content: center
+        border-radius: 5px
+      .item
+        width: 100%
+        padding: 1rem 1.4rem
+        font-size: 1.7rem
+        display: flex
+        align-items: flex-start
+        justify-content: space-between
+        color: white
+        cursor: pointer
+        &:hover
+          i
+            transform: rotate(0)
+          .innerModal
+            opacity: 1
+            visibility: visible
+        span
+          min-width: 15rem
+          max-width: 15rem
+          margin-right: 1rem
+        i
+          transition: all .1s
+          transform: rotate(-90deg)
+    .video__container
+      width: 100%
+      height: 30rem
+      border: 1px dotted $color-grey-dark
+  &__view
+    width: 100%
+    padding: 1rem
+    pre
+      background-color: #f6f6f6
+      padding: 1rem
+      font-size: 1.8rem
+    .text
+      width: fit-content
+      font-size: 1.8rem
+      color: $color-grey-dark
+      position: relative
+      .popup
+        position: absolute
+        cursor: pointer
+        top: -10px
+        right: -25px
+      p
+        white-space: pre-wrap
+        padding: 0 1rem

@@ -1,0 +1,35 @@
+@import "styles/abstracts/variables"
+
+
+
+.attendance
+  width: 100%
+  padding: 4rem
+  .header
+    width: 100%
+    margin-bottom: 2rem
+    display: flex
+    justify-content: space-between
+    align-items: center
+    h1
+      color: $color-grey-dark
+  .container
+    overflow: auto
+    i
+      margin: 0
+  .yes
+    i
+      color: $color-success
+  .no
+    i
+      color: $color-danger
+
+
+@media only screen and (max-width: 768px)
+  .attendance
+    width: 100%
+    padding: 3rem
+@media only screen and (max-width: 425px)
+  .attendance
+    width: 100%
+    padding: 2rem

@@ -1,0 +1,88 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+.createImage
+  width: 60rem
+  padding: 2rem
+  border: 2px solid $color-grey-dark
+  border-radius: 5px
+  margin: 2rem 0
+  .subHeader
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    margin-bottom: 1rem
+    .trash
+      font-size: 1.7rem
+      color: red
+      cursor: pointer
+      @include btn-active
+  &__header
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    justify-content: space-between
+  &__container
+    margin-top: 1rem
+    .btn
+      width: fit-content
+      height: fit-content
+      padding: .5rem 1rem
+      border: 1px solid $color-grey-dark
+      font-size: 1.5rem
+      margin-top: 2rem
+      cursor: pointer
+      transition: all .1s
+      user-select: none
+      @include btn-active
+      &:hover
+        background-color: $color-grey-dark
+        color: white
+
+.viewImage
+  margin-top: 1rem
+  width: fit-content
+  position: relative
+  //&:hover
+  //  .popup
+  //    opacity: 1
+  //    visibility: visible
+  //    transition-delay: 0.5s
+  .popup
+    //visibility: hidden
+    //opacity: 0
+    transition-delay: 1s
+    top: 0
+    right: -2rem
+    position: absolute
+    transition: all .1s
+    i
+      font-size: 1.7rem
+
+
+
+@media only screen and (max-width: 425px)
+  .viewImage
+    margin-top: 1rem
+    position: relative
+    width: 100%
+    audio
+      width: 100%
+    //&:hover
+    //  .popup
+    //    opacity: 1
+    //    visibility: visible
+    //    transition-delay: 0.5s
+    .popup
+      //visibility: hidden
+      //opacity: 0
+      transition-delay: 1s
+      top: 0
+      right: -45px
+      position: absolute
+      transition: all .1s
+      i
+        font-size: 1.7rem
+

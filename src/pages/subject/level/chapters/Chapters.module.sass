@@ -1,0 +1,99 @@
+@import "styles/abstracts/variables"
+
+
+.lessons
+  width: 100%
+  display: flex
+  height: 100%
+  position: relative
+  .box
+    height: 150vh
+    width: 100%
+    background-color: #5d5d5d
+  .main
+    width: 70%
+    height: 100%
+    padding: 0 1rem
+    @media only screen and (max-width: 435px)
+      padding: 0
+      width: 100%
+  .sidebar
+    height: 100%
+    top: 1rem
+    width: 30%
+    position: sticky
+    right: 0
+    border-left: 1px solid rgba($color-grey-light,.3)
+
+.chapters
+  width: 90%
+  min-height: 10rem
+  max-height: 50rem
+  padding: 3rem
+  background-color: white
+  overflow-y: scroll
+.chapter
+  width: 100%
+  overflow: hidden
+  .active
+    .iconDown
+      transform: rotate(0)
+  .iconDown
+    transform: rotate(-90deg)
+    fill: white
+  .handle
+    width: 2.3rem
+    height: 2.3rem
+    margin-right: 1rem
+    fill: white
+  .iconChange
+    width: 2rem
+    height: 2rem
+    margin-right: 1rem
+    fill: white
+  .info
+    padding: 1rem
+    display: flex
+    align-items: center
+    justify-content: space-between
+    border-top: 1px solid white
+    font-size: 1.8rem
+    font-weight: bold
+    cursor: pointer
+    background-color: $color-grey-dark
+    color: white
+    &__item
+      display: flex
+      flex-direction: column
+      align-items: flex-start
+      font-weight: 400
+    //&:hover
+    //  background-color: $color-grey-dark
+  .items
+    width: 100%
+    display: flex
+    flex-direction: column
+    transition: all .1s
+    .lesson
+      display: flex
+      align-items: center
+      justify-content: flex-start
+      padding: 2rem
+      border-top: 1px solid $color-grey-dark
+      color: $color-grey-light
+      &.active
+        background-color: rgba($color-grey-light,.7)
+        color: white
+      h1
+        font-size: 1.7rem
+        font-weight: 400
+      .checkbox
+        width: fit-content
+        height: fit-content
+        accent-color: $color-grey-dark
+        input
+          width: 2rem
+          height: 2rem
+          margin-right: 1rem
+
+

@@ -1,0 +1,168 @@
+@import "styles/abstracts/variables"
+
+
+.header
+  width: 100%
+  height: $appHeader-height-xl
+  display: flex
+  align-items: center
+  justify-content: space-between
+  position: relative
+  z-index: 2001
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.24)
+  &>div
+    display: flex
+    align-items: center
+    padding: 0 2rem
+  .logo
+    height: 5rem
+    width: auto
+    margin-left: 2rem
+    cursor: pointer
+
+  .shape
+    height: 100%
+    width: 34rem
+    background-color: $color-main
+    position: relative
+    &:after
+      content: ""
+      display: block
+      position: absolute
+      right: -6rem
+      width: 0
+      height: 0
+      border-top: $appHeader-height-xl solid transparent
+      border-left: 6rem solid  $color-main
+      border-bottom: 0 solid transparent
+  .hamburger
+    width: 4.5rem
+    height: 5rem
+    display: flex
+    flex-direction: column
+    justify-content: center
+    cursor: pointer
+    overflow: hidden
+    position: relative
+    &.active
+      img
+        &:first-child
+          opacity: 0
+          visibility: hidden
+        &:last-child
+          opacity: 1
+          visibility: visible
+    img
+      transition: all .1s
+      position: absolute
+      &:last-child
+        opacity: 0
+        visibility: hidden
+  .info
+    display: flex
+    align-items: center
+    span
+      margin-right: 2rem
+      display: block
+      font-size: $font-size
+    img
+      width: 5rem
+      height: 5rem
+      border-radius: 50%
+      object-fit: cover
+      object-position: center
+
+.overlay
+  width: 100%
+  height: calc(100dvh - #{$appHeader-height-xl})
+  opacity: 0
+  visibility: hidden
+  position: absolute
+  left: 0
+  top: $appHeader-height-xl
+  background-color: rgba(0, 0, 0, 0.79)
+  z-index: 1000
+  transition: all .3s
+  &.active
+    opacity: 1
+    visibility: visible
+
+
+
+@media only screen and (max-width: 1024px)
+  .header
+    height: $appHeader-height-lg
+    .logo
+      height: 4.5rem
+    .shape
+      &:after
+        border-top: $appHeader-height-lg solid transparent
+    .info
+      img
+        width: 4.5rem
+        height: 4.5rem
+        border-radius: 50%
+
+  .overlay
+    height: calc(100dvh - #{$appHeader-height-lg})
+    top: $appHeader-height-lg
+
+
+
+@media only screen and (max-width: 768px)
+  .header
+    height: $appHeader-height-md
+    .logo
+      height: 4rem
+    .info
+      img
+        width: 4rem
+        height: 4rem
+        border-radius: 50%
+    .shape
+      height: 100%
+      width: 22rem
+      &:after
+        border-top: $appHeader-height-md solid transparent
+    .hamburger
+      width: 4rem
+      height: 4.5rem
+
+  .overlay
+    height: calc(100dvh - #{$appHeader-height-md})
+    top: $appHeader-height-md
+
+
+
+@media only screen and (max-width: 550px)
+  .header
+    .info
+      span
+        display: none
+
+
+
+@media only screen and (max-width: 425px)
+  .header
+    height: $appHeader-height-sm
+    .logo
+      height: 3.7rem
+    .info
+      img
+        width: 3.5rem
+        height: 3.5rem
+        border-radius: 50%
+    .shape
+      height: 100%
+      width: 20rem
+      &:after
+        border-top: $appHeader-height-sm solid transparent
+    .hamburger
+      width: 3.7rem
+      height: 4.3rem
+
+  .overlay
+    height: calc(100dvh - #{$appHeader-height-sm})
+    top: $appHeader-height-sm
+
+

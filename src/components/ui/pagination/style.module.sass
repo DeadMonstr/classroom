@@ -1,0 +1,86 @@
+@import "styles/abstracts/variables"
+
+.paginationContainer
+  width: 100%
+  display: flex
+  justify-content: flex-start
+  align-items: center
+  padding: 1rem
+  margin-top: 2rem
+  .numbers
+    display: flex
+    align-items: center
+    justify-content: center
+  .arrow
+    border: none !important
+    &:hover
+      background-color: rgba(0, 0, 0, 0) !important
+      border: none !important
+      box-shadow: none !important
+  .paginationItem
+    width: fit-content
+    height: fit-content
+    padding: 0.5rem 1rem
+    font-size: 1.8rem
+    border-radius: 5px
+    border: 1px solid $color-grey-light
+    margin: 0 1rem
+    display: flex
+    align-items: center
+    justify-content: center
+    cursor: pointer
+    transition: all .3s
+    user-select: none
+    &.dots:hover
+      background-color: transparent
+      cursor: default
+
+
+    &:hover
+      background-color: $color-main
+      border: 1px solid $color-main
+      color: white
+
+
+    &.selected
+      background-color: $color-main
+      border: 1px solid $color-main
+      color: white
+
+
+    i
+      font-size: 2.5rem
+      user-select: none
+      color: #212121
+      cursor: pointer
+    &.disabled
+      pointer-events: none
+      i
+        color: #a6a6a6
+
+
+@media (max-width: 768px)
+  .pagination-container
+    .pagination-item
+      padding: 1rem 2rem
+      font-size: 2.5rem
+      i
+        font-size: 3rem
+
+@media (max-width: 475px)
+  .pagination-container
+    padding: 1rem
+    .numbers
+      width: 80%
+      overflow-x: scroll
+      justify-content: flex-start
+      padding: 2rem 0
+    .pagination-item
+      padding: 1rem 2.5rem
+      font-size: 3.5rem
+      i
+        font-size: 4rem
+      &:hover
+        border: 1px solid $color-grey-dark
+        color: black
+        box-shadow: none

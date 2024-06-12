@@ -1,0 +1,362 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+.createLesson
+  width: 100%
+  padding: 5rem
+  padding-bottom: 10rem
+  .header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    &__item
+      display: flex
+      align-items: flex-end
+
+  .submit
+    width: 100%
+    position: absolute
+    bottom: 0
+    left: 0
+    padding: 2rem
+    background-color: rgba(255, 255, 255, 0.56)
+    backdrop-filter: blur(10px)
+    display: flex
+    align-items: center
+    justify-content: flex-end
+  .title
+
+    margin-bottom: 3rem
+  &__container
+    margin-top: 3rem
+  &__add
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    margin-top: 2rem
+    .icon
+      width: 5rem
+      height: 5rem
+      border-radius: 50%
+      background-color: white
+      display: flex
+      align-items: center
+      justify-content: center
+      cursor: pointer
+      transition: all .1s
+      @include btn-active
+      &.active
+        i
+          transform: rotate(45deg)
+      &:hover
+        box-shadow:  0 0 8px 1px $color-grey-dark
+      i
+        color: $color-grey-dark
+        font-size: 2.7rem
+        transition: all .1s
+        transform: rotate(0)
+    .tools
+      width: 100%
+      display: flex
+      align-items: center
+      justify-content: center
+      margin-top: 2rem
+      transition: all .2s
+      opacity: 0
+      visibility: hidden
+      &.active
+        opacity: 1
+        visibility: visible
+      &__item
+        padding: .7rem 2rem
+        box-shadow: 0 2px 3px 1px $color-grey-dark
+        font-size: 1.6rem
+        border-radius: 5px
+        transition: all .1s
+        cursor: pointer
+        user-select: none
+        margin: 0 1.5rem
+        @include btn-active
+        &:hover
+          background-color: $color-grey-dark
+          color: white
+
+
+
+.component
+  margin: 1rem
+  &__canChange
+    &:hover
+      border: 1px dotted black
+  &__create
+    width: 60rem
+    padding: 2rem
+    box-shadow: 0 107px 43px rgba(0, 0, 0, 0.01), 0 60px 36px rgba(0, 0, 0, 0.05), 0 27px 27px rgba(0, 0, 0, 0.09), 0 7px 15px rgba(0, 0, 0, 0.1), 0 0 0 rgba(0, 0, 0, 0.1)
+    margin-top: 3rem
+    border-radius: 5px
+    h1
+      color: $color-grey-dark
+      font-size: 2rem
+      font-weight: 600
+      margin-bottom: 2rem
+    textarea
+      width: 100%
+      height: 20rem
+      resize: none
+      padding: 1rem
+      font-size: 1.5rem
+      background-color: transparent
+      border: 2px solid $color-grey-light
+    .header
+      width: 100%
+      display: flex
+      .trash
+        font-size: 1.7rem
+        color: $color-danger
+      &.j_sp_bt
+        justify-content: space-between
+      &.j_sp_ar
+        justify-content: space-around
+      &.a_c
+        align-items: center
+      &.a_fl-s
+        align-items: flex-start
+      &.a_fl-e
+        align-items: flex-end
+    .words
+      margin-top: 2rem
+      white-space: pre-wrap
+      font-size: 1.6rem
+      padding: 0 1rem
+      .word
+        &:hover
+          text-decoration: underline
+    .submitBtn
+      width: fit-content
+      height: fit-content
+      border: 2px solid $color-grey-light
+      padding: 0.7rem 2rem
+      font-size: 1.6rem
+      margin-top: 2rem
+      color: $color-grey-dark
+      font-weight: 500
+      cursor: pointer
+      transition: all .1s
+      @include btn-active
+      user-select: none
+      &:hover
+        background-color: $color-grey-light
+        color: white
+    .modal
+      position: absolute
+      min-width: 10rem
+      opacity: 0
+      visibility: hidden
+      transition: opacity .1s
+      z-index: 100
+      background-color: $color-grey-light
+      border-radius: 5px
+      top: 0
+      &.left
+        .innerModal
+          left: -100%
+      &.right
+        .innerModal
+          right: -100%
+      &.active
+        opacity: 1
+        visibility: visible
+      .innerModal
+        position: absolute
+        max-width: 20rem
+        padding: .5rem
+        background-color: white
+        box-shadow: 0 76px 30px rgba(92, 0, 0, 0.01), 0 43px 26px rgba(92, 0, 0, 0.05), 0 19px 19px rgba(92, 0, 0, 0.09), 0 5px 10px rgba(92, 0, 0, 0.1), 0 0 0 rgba(92, 0, 0, 0.1)
+        opacity: 0
+        visibility: hidden
+        transition: opacity .2s
+        display: flex
+        align-items: center
+        justify-content: center
+        border-radius: 5px
+      .item
+        width: 100%
+        padding: 1rem 1.4rem
+        font-size: 1.7rem
+        display: flex
+        align-items: flex-start
+        justify-content: space-between
+        color: white
+        cursor: pointer
+        &:hover
+          i
+            transform: rotate(0)
+          .innerModal
+            opacity: 1
+            visibility: visible
+        span
+          min-width: 15rem
+          max-width: 15rem
+          margin-right: 1rem
+        i
+          transition: all .1s
+          transform: rotate(-90deg)
+    .video__container
+      width: 100%
+      .input
+        display: none
+      .insert
+        width: 100%
+        padding: 2rem
+        border: 4px dotted $color-grey-dark
+        display: flex
+        align-items: center
+        justify-content: center
+        cursor: pointer
+        transition: all .1s
+        @include btn-active
+        .wrapper
+          display: flex
+          align-items: center
+
+        &.focus
+          border: 4px dotted $color-success
+          h1
+            color: $color-success
+        i
+          font-size: 2.5rem
+          color: $color-grey-dark
+        .icon
+          width: 2rem
+          fill: $color-grey-dark
+          margin-right: 1rem
+        img
+          width: 20rem
+        h1
+          margin: 0
+      video
+        width: 100%
+        height: 20rem
+    .file__container
+      width: 100%
+      .input
+        display: none
+      .insert
+        width: 100%
+        padding: 2rem
+        border: 4px dotted $color-grey-dark
+        display: flex
+        align-items: center
+        justify-content: center
+        cursor: pointer
+        transition: all .1s
+        @include btn-active
+        .wrapper
+          display: flex
+          align-items: center
+
+        &.focus
+          border: 4px dotted $color-success
+          h1
+            color: $color-success
+        i
+          font-size: 2.5rem
+          color: $color-grey-dark
+        .icon
+          width: 2rem
+          fill: $color-grey-dark
+          margin-right: 1rem
+        img
+          width: 20rem
+        h1
+          margin: 0
+      video
+        width: 100%
+        height: 20rem
+  &__view
+    width: 100%
+    margin-top: 2rem
+    pre
+      background-color: #f6f6f6
+      padding: 1rem
+      font-size: 1.8rem
+    .code
+      max-width: 100%
+
+      position: relative
+      background: rgb(43, 43, 43)
+      padding: 2rem
+      border-radius: 5px
+      font-size: 1.7rem
+      .copyBtn
+        position: absolute
+        top: 1rem
+        right: 1rem
+        i
+          font-size: 2.5rem
+          color: white
+    .popup
+      position: absolute
+      cursor: pointer
+      top: -10px
+      right: -25px
+      i
+        font-size: 1.8rem
+    .video
+      display: flex
+      align-items: center
+      justify-content: center
+      width: 100%
+      margin-top: 1rem
+      &__item
+        width: 100%
+        height: 0
+        position: relative
+        padding-bottom: 45.25% // 56.25
+        iframe
+          position: absolute
+          top: 0
+          left: 0
+          width: 100%
+          height: 100%
+    .img
+      display: flex
+      align-items: center
+      justify-content: center
+      width: 100%
+      margin-top: 1rem
+      &__item
+        position: relative
+        img
+          width: 40rem
+    .file
+      display: flex
+      align-items: center
+      justify-content: flex-start
+      width: 100%
+      margin-top: 1rem
+      &__item
+        position: relative
+      .wrapper
+        display: flex
+        align-items: center
+      .icon
+        width: 2rem
+        fill: $color-grey-dark
+        margin-right: 1rem
+    .text
+      width: fit-content
+      font-size: 1.6rem
+      color: $color-grey-dark
+      position: relative
+      p
+        white-space: pre-wrap
+        span
+          display: inline-block
+          margin: 1px 0
+
+
+.sortableItem
+  width: 100%

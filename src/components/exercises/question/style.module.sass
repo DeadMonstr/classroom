@@ -1,0 +1,374 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+.createQuestion
+  width: 60rem
+  padding: 2rem
+  border: 2px solid $color-grey-dark
+  border-radius: 5px
+  margin: 2rem 0
+  .subHeader
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    margin-bottom: 1rem
+    .trash
+      font-size: 1.7rem
+      color: red
+      cursor: pointer
+      @include btn-active
+  &__header
+    width: 100%
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+    .imgInput
+      display: none
+    textarea
+      width: 35rem
+      height: 10rem
+      resize: none
+      padding: 1rem
+    .image
+      width: 40rem
+      height: 10rem
+      border: 4px dotted $color-grey-dark
+      display: flex
+      align-items: center
+      justify-content: center
+      cursor: pointer
+      padding: 1rem
+      img
+        width: 10rem
+        height: 100%
+        object-fit: cover
+      h1
+        color: $color-grey-dark
+
+  &__innerHeader
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 2rem
+    .error
+      font-size: 1.5rem
+      font-weight: 400
+      color: red
+      margin-top: 1rem
+    .about
+      width: 3rem
+      height: 3rem
+      display: flex
+      align-items: center
+      justify-content: center
+      position: relative
+      border: 1px solid $color-grey-dark
+      border-radius: 5px
+      cursor: pointer
+      transition: all .1s
+      @include btn-active
+      &:hover
+        background-color: $color-grey-dark
+        i
+          color: white
+        .popup
+          transition-delay: 0.7s
+          opacity: 1
+          visibility: visible
+      i
+        font-size: 1.7rem
+        color: $color-grey-light
+      .popup
+        top: -110%
+        background-color: $color-grey-dark
+        padding: 0.3rem 2rem
+        position: absolute
+        opacity: 0
+        visibility: hidden
+        color: white
+        font-size: 1.5rem
+        border-radius: 5px
+        transition: all .1s
+  &__container
+    margin-top: 1rem
+    .btn
+      width: fit-content
+      height: fit-content
+      padding: .5rem 1rem
+      border: 1px solid $color-grey-dark
+      font-size: 1.5rem
+      margin-top: 2rem
+      cursor: pointer
+      transition: all .1s
+      user-select: none
+      @include btn-active
+      &:hover
+        background-color: $color-grey-dark
+        color: white
+
+  &__text
+    width: 100%
+    padding: 2rem
+    border: 1px solid $color-grey-dark
+    font-size: 1.6rem
+    white-space: pre-line
+    user-select: none
+    img
+      object-fit: cover
+      width: 8rem
+      height: 3rem
+    h1
+      text-align: center
+      font-size: 1.6rem
+      color: $color-grey-dark
+      user-select: none
+    .word
+      height: fit-content
+      margin: 0 0.2rem
+      cursor: pointer
+      user-select: none
+      &.active
+        background-color: $color-grey-dark
+        color: white
+        padding: 0 .3rem
+      &:hover
+        background-color: $color-grey-light
+        color: white
+  &__variants
+    margin-top: 3rem
+    padding: 2rem
+    border: 1px solid $color-grey-dark
+    &Create
+      &_header
+        width: 100%
+        display: flex
+        align-items: center
+        justify-content: space-between
+        height: 4rem
+
+      &_container
+        .btn
+          width: fit-content
+          height: fit-content
+          padding: .5rem 1rem
+          border: 1px solid $color-grey-dark
+          font-size: 1.5rem
+          margin-top: 2rem
+          cursor: pointer
+          transition: all .1s
+          user-select: none
+          @include btn-active
+          &:hover
+            background-color: $color-grey-dark
+            color: white
+
+        .submit
+          width: fit-content
+          height: fit-content
+          margin-top: 2rem
+          padding: .5rem 1rem
+          font-size: 1.5rem
+          border: 1px solid $color-grey-dark
+          cursor: pointer
+          user-select: none
+          transition: all .1s
+          @include btn-active
+          &:hover
+            background-color: $color-grey-dark
+            color: white
+    &View
+      &_header
+        width: 100%
+        display: flex
+        align-items: center
+        justify-content: space-between
+        i
+          font-size: 1.8rem
+          cursor: pointer
+
+  .select
+    width: 100%
+    padding: 1rem
+    display: flex
+    flex-wrap: wrap
+    &__addOption
+      margin-top: 1rem
+      width: 100%
+      display: flex
+      align-items: center
+      justify-content: center
+      i
+        cursor: pointer
+        font-size: 3.5rem
+    label
+      width: 45%
+      padding: 0 1rem
+      display: flex
+      align-items: center
+      cursor: pointer
+      span
+        margin-left: 1rem
+        font-size: 1.7rem
+      img
+        margin-left: 1rem
+        width: 10rem
+    .option
+      min-width: 50%
+      max-width: fit-content
+      display: flex
+      align-items: center
+      margin-top: 1rem
+      .minus
+        margin-left: 1rem
+        font-size: 2.5rem
+      &__view
+        min-width: 50%
+        max-width: fit-content
+        display: flex
+        align-items: center
+        margin-top: 1rem
+        cursor: pointer
+      &__img
+        min-width: 20rem
+        height: 4rem
+        border: 2px dotted $color-grey-dark
+        margin-right: 1rem
+        display: flex
+        align-items: center
+        justify-content: center
+        cursor: pointer
+        h1
+          color: $color-grey-dark
+          font-size: 1.7rem
+        img
+          width: 100%
+          height: 4rem
+          object-fit: cover
+        input
+          display: none
+      &__checkbox
+        width: 2rem
+        height: 2rem
+      &__input
+        padding: 0.6rem
+        margin-right: 1rem
+      select
+        padding: 0.6rem
+      span
+        margin: 0 1rem
+        font-size: 1.7rem
+  .input
+    h1
+      font-weight: 400
+      font-size: 1.7rem
+    input
+      width: 30rem
+      padding: 0.5rem 1rem
+      margin-top: 1rem
+
+
+
+
+//.viewQuestion
+//  margin-top: 1rem
+//  width: 100%
+//  .words
+//    //display: flex
+//    //align-items: center
+//    img
+//      width: 7rem !important
+//      margin-left: 1rem
+//  .text
+//    position: relative
+//    width: fit-content
+//    img
+//      width: 30rem
+//    .popup
+//
+//      transition-delay: 1s
+//      top: -10px
+//      right: -10px
+//      position: absolute
+//      transition: all .1s
+//      i
+//        font-size: 1.7rem
+//    p
+//      white-space: pre-line
+//      font-size: 1.7rem
+//      //&:hover
+//      //  background-color: #d3d3d3
+//  span
+//    font-size: 1.7rem
+//  .variants
+//    width: 100%
+//    padding: 1rem 2rem
+//    display: flex
+//    align-items: center
+//    flex-wrap: wrap
+//    label
+//      min-width: fit-content
+//      max-width: 50%
+//      margin: 0 1rem
+//      display: flex
+//      align-items: center
+//      cursor: pointer
+//      span
+//        margin-left: 1rem
+//      img
+//        margin-left: 1rem
+//        width: 10rem
+//
+
+.viewQuestion
+  margin-top: 1rem
+  width: 100%
+  .words
+    img
+      width: 7rem !important
+      margin-left: 1rem
+  .text
+    width: 100%
+    position: relative
+    display: flex
+    flex-direction: column
+    img
+      margin: 0 auto
+      padding: 2rem
+      width: 25rem
+    .popup
+      transition-delay: 1s
+      top: -10px
+      right: -10px
+      position: absolute
+      transition: all .1s
+      i
+        font-size: 1.7rem
+    p
+      padding:  1.5rem 1rem
+      white-space: pre-line
+      font-size: 1.8rem
+  span
+    font-size: 1.7rem
+  .variants
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    .active
+      border: 2px solid $color-success
+    .error
+      border: 2px solid $color-danger
+    label
+      width: 100%
+      display: flex
+      align-items: center
+      cursor: pointer
+      border-top: 1px solid $color-grey-light
+      span
+        font-size: 1.8rem
+        margin-left: 1rem
+      img
+        margin-left: 1rem
+        width: 10rem

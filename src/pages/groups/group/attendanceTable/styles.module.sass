@@ -1,0 +1,49 @@
+@import "styles/abstracts/variables"
+
+.attendanceTable
+  width: 100%
+  padding: 4rem
+  .header
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: space-between
+    h1
+      font-weight: 600
+      font-size: 2rem
+      color: $color-grey-dark
+  .container
+    width: 100%
+    overflow: auto
+  .check
+
+    i
+      margin: 0
+      color: $color-success
+  .times
+    i
+      margin: 0
+      color: $color-danger
+
+
+
+
+
+@media only screen and (max-width: 768px)
+  .attendanceTable
+    width: 100%
+    padding: 4rem
+    .header
+      width: 100%
+      display: flex
+      flex-direction: column
+      align-items: center
+      justify-content: space-between
+      h1
+        margin: 2rem 0
+        font-weight: 600
+        font-size: 2rem
+        color: $color-grey-dark
+    .container
+      margin-top: 2rem
+

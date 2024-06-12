@@ -1,0 +1,36 @@
+@import "styles/abstracts/variables"
+
+.main
+  width: 100%
+  height: calc(100dvh - #{$appHeader-height-xl})
+  overflow: auto
+  background-color: #ffffff
+  @media only screen and (min-width: 768px)
+    &::-webkit-scrollbar
+      width: 8px
+    &::-webkit-scrollbar-track
+      background-color: #ffffff
+    &::-webkit-scrollbar-thumb
+      cursor: pointer
+      background-color: #313131
+
+
+
+@media only screen and (max-width: 1024px)
+  .main
+    height: calc(100dvh - #{$appHeader-height-lg})
+
+@media only screen and (max-width: 768px)
+  .main
+    height: calc(100dvh - #{$appHeader-height-md})
+    @media only screen and (min-width: 768px)
+      &::-webkit-scrollbar
+        width: 6px
+
+@media only screen and (max-width: 425px)
+  .main
+    height: calc(100dvh - #{$appHeader-height-sm})
+    @media only screen and (min-width: 768px)
+      &::-webkit-scrollbar
+        width: 5px
+

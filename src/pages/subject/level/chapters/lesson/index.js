@@ -1,0 +1,161 @@
+import React, {useCallback, useContext, useEffect, useRef, useState} from 'react';
+import {Link, useParams} from "react-router-dom";
+import {MainContext, SubjectContext} from "helpers/contexts";
+import {useHttp} from "hooks/http.hook";
+import {BackUrl, headers, ROLES} from "constants/global";
+
+
+import styles from "pages/subject/level/chapters/lesson/style.module.sass"
+import Button from "components/ui/button";
+import {useNavigate} from "react-router";
+import useScrollPosition from "hooks/useScrollPosition";
+import Snippet from "components/lesson/snippet";
+import File from "components/lesson/file/File";
+import Exercises from "components/lesson/exercises"
+import Text from "components/lesson/text"
+import Video from "components/lesson/video"
+import Img from "components/lesson/img"
+import TextEditorExc from "components/exercises/textEditor/TextEditor";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchLessonData} from "slices/lessonSlice";
+import Loader from "components/ui/loader/Loader";
+import {useAuth} from "hooks/useAuth";
+import Modal from "components/ui/modal";
+import {isMobile} from "react-device-detect";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faBars} from "@fortawesome/free-solid-svg-icons";
+
+
+const Lesson = () => {
+
+
+    const {role} = useAuth()
+
+    const {lessonOrder, levelId,chapterId} = useParams()
+
+    const {lesson, prev, next, studentLessonId, components, fetchLessonStatus} = useSelector(state => state.lesson)
+
+    const {request} = useHttp()
+    const dispatch = useDispatch()
+
+
+    useEffect(() => {
+        localStorage.setItem("lastLesson", JSON.stringify({levelId: levelId, lessonOrder: lessonOrder, chapterId:chapterId}))
+    }, [lesson])
+
+
+    useEffect(() => {
+        dispatch(fetchLessonData({lessonOrder, chapterId}))
+    }, [lessonOrder, chapterId])
+
+
+    const renderComponents = useCallback(() => {
+        return components?.map(item => {
+            if (item.type === "text") {
+                return (
+                    <TextEditorExc
+                        component={item}
+                    />
+                )
+            }
+            if (item.type === "snippet") {
+                return (
+                    <Snippet
+                        type={"view"}
+                        component={item}
+                    />
+                )
+            }
+            if (item.type === "video") {
+                return (
+                    <Video
+                        type={"view"}
+                        component={item}
+                    />
+                )
+            }
+            if (item.type === "img") {
+                return (
+                    <Img
+                        type={"view"}
+                        component={item}
+                    />
+                )
+            }
+            if (item.type === "file") {
+                return (
+                    <File
+                        type={"view"}
+                        component={item}
+                    />
+                )
+            }
+            if (item.type === "exc") {
+                return (
+                    <Exercises
+                        // updateExc={updateExc}
+                        lessonId={lesson.id}
+                        type={"view"}
+                        subjectId={lesson.subject_id}
+                        levelId={lesson.level_id}
+                        component={item}
+                        exercises={components.filter(item => item.type === "exc")}
+                    />
+                )
+            }
+        })
+    }, [components])
+
+    const navigate = useNavigate()
+
+    const onClick = (index) => {
+        navigate(`../${chapterId}/${index}`)
+    }
+
+    useEffect(() => {
+        if (components.length > 0 && role === ROLES.Student) {
+            request(`${BackUrl}finish/lesson/${studentLessonId}`, "GET", null, headers())
+                .then(res => {
+                    console.log(res)
+                })
+        }
+    }, [studentLessonId])
+
+    return (
+        <div className={styles.lesson}>
+            {
+                fetchLessonStatus === "loading" ?
+                    <Loader/>
+                    :
+                    <>
+                        <div className={styles.header}>
+                            <h1>{lesson?.name}</h1>
+
+                        </div>
+                        <div className={styles.container}>
+                            {renderComponents()}
+                        </div>
+
+                        <div className={styles.footer}>
+                            <Button
+                                onClick={() => onClick(prev)}
+                                type={"submit"}
+                                disabled={prev === lesson?.order}
+                            >
+                                Oldingi
+                            </Button>
+                            <Button
+                                onClick={() => onClick(next)}
+                                type={"submit"}
+                                disabled={!next}
+                            >
+                                Keyingi
+                            </Button>
+                        </div>
+                    </>
+            }
+        </div>
+    );
+};
+
+export default Lesson;

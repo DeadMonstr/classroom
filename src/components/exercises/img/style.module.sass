@@ -1,0 +1,90 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+.createImage
+  width: 60rem
+  padding: 2rem
+  border: 2px solid $color-grey-dark
+  border-radius: 5px
+  margin: 2rem 0
+  .subHeader
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    margin-bottom: 1rem
+    .trash
+      font-size: 1.7rem
+      color: red
+      cursor: pointer
+      @include btn-active
+  &__header
+    width: 100%
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+    .imgInput
+      display: none
+    .image
+      width: 40rem
+      height: 10rem
+      border: 4px dotted $color-grey-dark
+      display: flex
+      align-items: center
+      justify-content: center
+      cursor: pointer
+      padding: 1rem
+      img
+        width: 10rem
+        height: 100%
+        object-fit: cover
+      h1
+        color: $color-grey-dark
+
+
+  &__container
+    margin-top: 1rem
+    .btn
+      width: fit-content
+      height: fit-content
+      padding: .5rem 1rem
+      border: 1px solid $color-grey-dark
+      font-size: 1.5rem
+      margin-top: 2rem
+      cursor: pointer
+      transition: all .1s
+      user-select: none
+      @include btn-active
+      &:hover
+        background-color: $color-grey-dark
+        color: white
+
+.viewImage
+  width: 100%
+  margin: 2rem 0
+  position: relative
+  display: flex
+  align-items: center
+  justify-content: center
+    //&:hover
+    //  .popup
+    //    opacity: 1
+    //    visibility: visible
+    //    transition-delay: 0.5s
+  .popup
+    //visibility: hidden
+    //opacity: 0
+    transition-delay: 1s
+    top: 0
+    right: -2rem
+    position: absolute
+    transition: all .1s
+    i
+      font-size: 1.7rem
+  img
+    width: 30rem
+
+
+
+
+

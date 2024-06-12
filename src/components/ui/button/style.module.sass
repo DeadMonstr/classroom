@@ -1,0 +1,107 @@
+@import "styles/abstracts/mixins"
+@import "styles/abstracts/variables"
+
+
+.btn
+  width: fit-content
+  height: fit-content
+  padding: 1rem 2rem
+  font-size: 1.6rem
+  border-radius: 3px
+  cursor: pointer
+  user-select: none
+  transition: all .1s
+  font-weight: 600
+  color: white
+  box-shadow: 0 38px 15px rgba(0, 0, 0, 0.01), 0 21px 13px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.09), 0 2px 5px rgba(0, 0, 0, 0.1), 0 0 0 rgba(0, 0, 0, 0.1)
+  margin: 0 .5rem
+  outline: none
+  border: none
+  &.circle
+    width: 5rem
+    height: 5rem
+    border-radius: 100%
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 0
+  i
+    font-size: 2rem
+  &:not(&.disabled)
+    @include btn-active
+  &:hover
+    filter: brightness(93%)
+  &.active
+    color: white
+    svg
+      fill: white
+  &.disabled
+    opacity: .7
+    color: white
+    &:hover
+      filter: none
+      cursor: not-allowed
+
+
+
+
+  &.simple
+    padding: .8rem 2rem
+    border: 2px solid rgba($color-grey-dark,.6)
+    color: $color-grey-dark
+    box-shadow: none
+    background-color: rgba(255, 255, 255, 0)
+    &:hover
+      background-color: $color-grey-dark
+      color: white
+      i
+        color: white
+      svg
+        fill: white
+    &.active
+      border: 2px solid $color-grey-light
+      color: white
+      background-color: $color-grey-light
+      i
+        color: white
+      svg
+        fill: white
+    &.disabled
+      color: $color-grey-dark
+      background-color: $color-grey-light
+      i
+        color: $color-grey-dark
+      svg
+        fill: $color-grey-dark
+
+  &.submit
+    padding: .8rem 2rem
+    border: 2px solid rgba($color-main-light,.6)
+
+    background-color: $color-main-light
+    svg
+      fill: white
+    &.active
+      background-color: $color-main-light
+    &.disabled
+      background-color: $color-main-light
+
+
+  &.danger
+    padding: .8rem 2rem
+    border: 2px solid rgba(#f53c3c,.6)
+    background-color: #f53c3c
+    box-shadow: none
+    &.active
+      background-color: #f53c3c
+    &.disabled
+      background-color: #f53c3c
+
+
+
+  &.warning
+    background-color: #ff8829
+    &.active
+      background-color: #ff8829
+    &.disabled
+      background-color: #ff8829
