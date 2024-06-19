@@ -63,7 +63,6 @@ const Curriculum = () => {
                     message: res.msg,
                     type: "success"
                 }
-
                 dispatch(setAlertOptions({alert}))
                 dispatch(setLevel({levels: res.data}))
             })

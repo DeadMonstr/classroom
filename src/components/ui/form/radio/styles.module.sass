@@ -17,44 +17,49 @@
 .radioInput
   margin: 0
   visibility: hidden
+  display: none
 
-.radioInput:checked + span
-  border: 2px solid $color-main-light
+.wrapper
+  width: 2rem
+  display: flex
+  align-items: center
+  justify-content: center
+  @media only screen and (max-width: 768px)
+    width: 10%
+  .customRadio
+    cursor: pointer
+    width: 20px
+    height: 20px
+    border: 2px solid #9a9a9a
+    border-radius: 50%
+    display: inline-block
+    position: relative
+    &.active
+      border: 2px solid $color-main-light
+      &:after
+        opacity: 1 !important
+        transform: translate(-50%, -50%) scale(1) !important
+    &:after
+      content: ''
+      width: 10px
+      height: 10px
+      background: $color-main-light
+      position: absolute
+      border-radius: 50%
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%) scale(0)
+      opacity: 0
+      transition: all .1s
 
 
-.radioInput:checked + span:after
-  opacity: 1
-  transform: translate(-50%, -50%) scale(1)
 
-
-.customRadio
-  cursor: pointer
-  width: 20px
-  height: 20px
-  border: 2px solid #9a9a9a
-  border-radius: 50%
-  display: inline-block
-  position: relative
-
-
-.customRadio::after
-  content: ''
-  width: 10px
-  height: 10px
-  background: $color-main-light
-  position: absolute
-  border-radius: 50%
-  top: 50%
-  left: 50%
-  transform: translate(-50%, -50%) scale(0)
-  opacity: 0
-  transition: all .1s
 
 .text
   margin-left: 1rem
   font-size: 1.8rem
   font-weight: 600
-
+  max-width: 90%
 
 
 

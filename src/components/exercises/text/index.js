@@ -107,7 +107,6 @@ const CreateExc = ({textComponent, onSetCompletedComponent, onDeleteComponent}) 
 const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedComponent, setAnswers}) => {
 
 
-    console.log(textComponent)
 
     const [words, setWords] = useState([])
     const [text, setText] = useState()
@@ -136,8 +135,6 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
     const optionsData = useCallback((words) => ({
         replace: (domNode) => {
             if (domNode.type === 'tag') {
-
-
                 let hasMatchingText = false;
                 const regex = /\{\{(\d)\}\}/g;
                 // Process children if they contain text nodes
@@ -150,7 +147,6 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                         hasMatchingText = true;
 
                         const parts = child.data.split(regex);
-
 
                         const props = {...attributesToProps(domNode?.attribs)};
 
@@ -178,10 +174,9 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                                 if (wordData?.type === "input") {
 
                                     const style = {display: "inline-block",padding: 0}
-
+                                    console.log(!wordData.status && wordData.status !== undefined ? wordData.value : "", textComponent)
                                     return (
                                         <Input
-                                            title={wordData.status !== undefined && !wordData.status ? `Javob: ${wordData.text}` : null}
                                             onChange={(e) => onChangeWordsInput(wordData.index,e)}
                                             // data-index={wordData?.index}
                                             className={classNames(styles.text_input, props?.className)}
@@ -189,7 +184,7 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                                             // key={index}
                                             placeholder={!isView && wordData?.text}
                                             disabled={disabledExc}
-                                            defaultValue={!wordData.status ? wordData.value : null}
+                                            value={wordData.value || ""}
                                             extraClassName={wordData.status !== undefined && wordData.status ? styles.active :
                                                 wordData.status !== undefined && !wordData.status ? styles.error : null}
                                         />

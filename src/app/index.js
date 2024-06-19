@@ -18,6 +18,7 @@ import RequireAuth from "components/auth/requireAuth";
 import { ROLES } from "constants/global";
 import Books from "pages/books/Books";
 import TeacherObservation from "pages/teacherObservation/teacherObservation";
+import Lesson from "../pages/subject/level/chapters/lesson";
 
 
 
@@ -40,12 +41,21 @@ const App = () => {
                     path={"get_user/:token/:refreshToken"}
                     element={<GetUser/>}
                 />
+
+                <Route
+                    index
+                    path={"lesson/:chapterId/:lessonOrder/:token"}
+                    element={<Lesson/>}
+                />
+
+
                 <Route path="/*" element={<Layout/>}>
                     <Route
                         index
                         path={"user/:id/*"}
                         element={<User/>}
                     />
+
 
                     <Route
                         index
@@ -78,6 +88,8 @@ const App = () => {
                         path="*"
                         element={<Navigate to="/home" replace/>}
                     />
+
+
                 </Route>
             </>
         )

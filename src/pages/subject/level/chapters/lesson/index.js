@@ -20,32 +20,36 @@ import {useDispatch, useSelector} from "react-redux";
 import {fetchLessonData} from "slices/lessonSlice";
 import Loader from "components/ui/loader/Loader";
 import {useAuth} from "hooks/useAuth";
-import Modal from "components/ui/modal";
-import {isMobile} from "react-device-detect";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars} from "@fortawesome/free-solid-svg-icons";
 
 
-const Lesson = () => {
+
+const Lesson = ({isNavigate}) => {
 
 
     const {role} = useAuth()
 
-    const {lessonOrder, levelId,chapterId} = useParams()
+    const {lessonOrder, levelId, chapterId,token} = useParams()
 
-    const {lesson, prev, next, studentLessonId, components, fetchLessonStatus} = useSelector(state => state.lesson)
+    const {lesson, prev, next, studentLessonId, components, fetchLessonStatus,archiveId,isChangedComponents} = useSelector(state => state.lesson)
 
     const {request} = useHttp()
     const dispatch = useDispatch()
 
-
     useEffect(() => {
-        localStorage.setItem("lastLesson", JSON.stringify({levelId: levelId, lessonOrder: lessonOrder, chapterId:chapterId}))
+        if (components && components.length && !isChangedComponents) {
+            document.querySelector('#main').scrollTo({ top: 0, behavior: "smooth" })
+        }
+        localStorage.setItem("lastLesson", JSON.stringify({
+            levelId: levelId,
+            lessonOrder: lessonOrder,
+            chapterId: chapterId
+        }))
+
     }, [lesson])
 
 
     useEffect(() => {
-        dispatch(fetchLessonData({lessonOrder, chapterId}))
+        dispatch(fetchLessonData({lessonOrder, chapterId,token}))
     }, [lessonOrder, chapterId])
 
 
@@ -93,6 +97,7 @@ const Lesson = () => {
             if (item.type === "exc") {
                 return (
                     <Exercises
+                        archiveId={archiveId}
                         // updateExc={updateExc}
                         lessonId={lesson.id}
                         type={"view"}
@@ -104,7 +109,8 @@ const Lesson = () => {
                 )
             }
         })
-    }, [components])
+    }, [components,archiveId])
+
 
     const navigate = useNavigate()
 
@@ -130,27 +136,33 @@ const Lesson = () => {
                     <>
                         <div className={styles.header}>
                             <h1>{lesson?.name}</h1>
-
                         </div>
                         <div className={styles.container}>
                             {renderComponents()}
                         </div>
 
                         <div className={styles.footer}>
-                            <Button
-                                onClick={() => onClick(prev)}
-                                type={"submit"}
-                                disabled={prev === lesson?.order}
-                            >
-                                Oldingi
-                            </Button>
-                            <Button
-                                onClick={() => onClick(next)}
-                                type={"submit"}
-                                disabled={!next}
-                            >
-                                Keyingi
-                            </Button>
+                            {
+                                isNavigate &&
+                                    <>
+                                        <Button
+                                            onClick={() => onClick(prev)}
+                                            type={"submit"}
+                                            disabled={prev === lesson?.order}
+                                        >
+                                            Oldingi
+                                        </Button>
+                                        <Button
+                                            onClick={() => onClick(next)}
+                                            type={"submit"}
+                                            disabled={!next}
+                                        >
+                                            Keyingi
+                                        </Button>
+                                    </>
+
+                            }
+
                         </div>
                     </>
             }

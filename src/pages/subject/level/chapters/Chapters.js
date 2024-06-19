@@ -95,10 +95,7 @@ const Chapters = ({isOpenChapters,onToggleChapterOpen}) => {
         })}>
             <main className={styles.main} >
                 <Routes>
-                    <Route path={":chapterId/:lessonOrder"} element={<Lesson/>} />
-
-
-
+                    <Route path={":chapterId/:lessonOrder"} element={<Lesson isNavigate={true}/>} />
                 </Routes>
             </main>
             {

@@ -43,6 +43,7 @@ import {ReactComponent as ChangePen} from "assets/icons/pen-solid.svg"
 
 
 import {createPortal, unstable_batchedUpdates} from "react-dom";
+import Checkbox from "components/ui/form/checkbox";
 
 
 const CreateLesson = () => {
@@ -51,7 +52,9 @@ const CreateLesson = () => {
     const {id} = useSelector(state => state.subject)
 
     const [activeTools, setActiveTools] = useState(false)
+    const [isTest, setIsTest] = useState(false)
     const [nameLesson, setNameLesson] = useState("")
+    const [numberTest, setNumberTest] = useState(null)
     const [chapters, setChapters] = useState([])
 
     const [selectedChapter, setSelectedChapter] = useState("")
@@ -309,8 +312,9 @@ const CreateLesson = () => {
             levelId,
             subjectId: id,
             name: nameLesson,
-            chapter: selectedChapter
-        }
+            chapter: selectedChapter,
+            number_test: numberTest,
+         }
 
 
         formData.append("info", JSON.stringify(newData))
@@ -392,6 +396,11 @@ const CreateLesson = () => {
                                 options={chapters}
                                 onChange={setSelectedChapter}
                             />
+                            <div className={styles.test}>
+                                <h2>Test</h2>
+                                <Checkbox onChange={setIsTest} value={isTest}/>
+                            </div>
+                            {isTest &&  <Input type={"number"} required={true} title={"Test soni"} value={numberTest} onChange={setNumberTest} />}
                             {
                                 components[components.length- 1]?.completed || components.length === 0 ?
                                 <Button

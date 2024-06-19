@@ -103,9 +103,8 @@ const ViewVideo = ({component,onChangeCompletedComponent,type}) => {
 						config={{
 							youtube: {
 								playerVars: {
-									showinfo: 1,
-									rel: 0,
-									infobar: 1
+									showinfo: 1
+
 								}
 							}
 						}}

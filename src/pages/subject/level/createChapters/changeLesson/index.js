@@ -31,13 +31,16 @@ import {CSS} from "@dnd-kit/utilities";
 import {ReactComponent as ChangePen} from "assets/icons/pen-solid.svg"
 import {closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {unstable_batchedUpdates} from "react-dom";
+import Checkbox from "components/ui/form/checkbox";
 
 
 const ChangeLesson = () => {
     const {lessonId, levelId,chapterId} = useParams()
     const {id} = useSelector(state => state.subject)
     const [activeTools, setActiveTools] = useState(false)
+    const [isTest, setIsTest] = useState(false)
     const [nameLesson, setNameLesson] = useState("")
+    const [numberTest, setNumberTest] = useState(null)
     const [components, setComponents] = useState([])
     const [changeLessonsSort, setChangeLessonsSort] = useState(false)
 
@@ -53,6 +56,9 @@ const ChangeLesson = () => {
         request(`${BackUrl}info_lesson/${chapterId}/${lessonId}`, "GET", null, headers())
             .then(res => {
                 setNameLesson(res.data.name)
+                console.log(res.data)
+                setIsTest(res.data.is_test)
+                setNumberTest(res.data.number_test)
                 setSelectedChapter(res.data.chapter_id)
                 setComponents(res.data.blocks.map((item, i) => {
                     const index = i + 1
@@ -61,7 +67,7 @@ const ChangeLesson = () => {
                     const img = item.img
                     const clone = item.clone
                     const audio = item.audio
-                    const video = item.audio
+                    const video = item.video
                     const file = item.file
                     const block_id = item.id
                     let editorState = null
@@ -355,7 +361,8 @@ const ChangeLesson = () => {
             levelId,
             subjectId: id,
             name: nameLesson,
-            chapter: selectedChapter
+            chapter: selectedChapter,
+            number_test: numberTest
         }
         formData.append("info", JSON.stringify(newData))
 
@@ -446,6 +453,11 @@ const ChangeLesson = () => {
                                 options={chapters}
                                 onChange={setSelectedChapter}
                             />
+                            <div className={styles.test}>
+                                <h2>Test</h2>
+                                <Checkbox checked={isTest} onChange={setIsTest} />
+                            </div>
+                            {isTest &&  <Input type={"number"} required={true} title={"Test soni"} value={numberTest} onChange={setNumberTest} />}
                             {
                                 components[components.length - 1]?.completed || components.length === 0 ?
                                     <Button

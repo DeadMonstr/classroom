@@ -194,6 +194,7 @@ const ChangeExercises = () => {
 
 
     useEffect(() => {
+        if (selectedSubject)
         request(`${BackUrl}info_level/${selectedSubject}`, "GET", null, headers())
             .then(res => {
                 setLevels(res.data)
