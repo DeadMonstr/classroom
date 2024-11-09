@@ -18,7 +18,8 @@ import RequireAuth from "components/auth/requireAuth";
 import { ROLES } from "constants/global";
 import Books from "pages/books/Books";
 import TeacherObservation from "pages/teacherObservation/teacherObservation";
-import Lesson from "../pages/subject/level/chapters/lesson";
+import Lesson from "pages/subject/level/chapters/lesson";
+import Chat from "pages/chat";
 
 
 
@@ -30,6 +31,7 @@ const CreateExercises = lazy(() => import("pages/exercises/createExercises"))
 const CreateExercisesTypes = lazy(() => import("pages/exercises/createType"))
 const Exercises = lazy(() => import("pages/exercises"))
 const Groups = lazy(() => import("pages/groups"))
+const TaskManager = lazy(() => import("pages/taskManager/TaskManager"))
 
 
 const App = () => {
@@ -67,10 +69,13 @@ const App = () => {
                         path={"subject/:id/*"}
                         element={<Subject/>}
                     />
+                    <Route path={"taskManager/*"} element={<TaskManager/>} />
 
                     <Route element={<RequireAuth allowedRules={[ROLES.Teacher,ROLES.Student]} />}>
                         <Route path={"groups/*"} element={<Groups/>} />
                         <Route path={"books/*"} element={<Books/>} />
+                        <Route path={"chat/*"} element={<Chat/>} />
+
                     </Route>
 
                     <Route element={<RequireAuth allowedRules={[ROLES.Teacher]} />}>
@@ -88,6 +93,7 @@ const App = () => {
                         path="*"
                         element={<Navigate to="/home" replace/>}
                     />
+
 
 
                 </Route>

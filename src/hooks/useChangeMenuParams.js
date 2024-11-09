@@ -7,12 +7,12 @@ const useChangeMenuParams = (type, title) => {
 
 	const options = {
 		main: [
-			{
-				type: "simple",
-				title: "Bosh sahifa",
-				href: "/home",
-				role: []
-			},
+			// {
+			// 	type: "simple",
+			// 	title: "Bosh sahifa",
+			// 	href: "/home",
+			// 	role: []
+			// },
 			{
 				type: "simple",
 				title: "Mashqlar",
@@ -29,6 +29,18 @@ const useChangeMenuParams = (type, title) => {
 				type: "simple",
 				title: "Kitoblar",
 				href: "/books",
+				role: [ROLES.Teacher,ROLES.Student]
+			},
+			{
+				type: "simple",
+				title: "Task Manager",
+				href: "/taskManager",
+				// role: [ROLES.Teacher]
+			},
+			{
+				type: "simple",
+				title: "Chat",
+				href: "/chat",
 				role: [ROLES.Teacher,ROLES.Student]
 			},
 			{

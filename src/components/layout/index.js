@@ -10,6 +10,7 @@ import AuthProvider from "components/auth/authProvider";
 import { useAuth } from "hooks/useAuth";
 import { useDispatch } from "react-redux";
 import { setClearPassword } from "slices/userSlice";
+import {useParams} from "react-router";
 
 
 
@@ -28,6 +29,9 @@ const Layout = () => {
 		}
 	},[dispatch, isCheckedPassword])
 	return (
+		// <>
+		//
+		// </>
 		<AuthProvider>
 			<Alert/>
 			<Header/>
