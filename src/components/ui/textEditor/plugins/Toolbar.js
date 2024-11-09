@@ -357,7 +357,8 @@ function DropdownColorPicker({disabled = false, stopCloseOnClickSelf = true, col
         <DropDown
             {...rest}
             disabled={disabled}
-            stopCloseOnClickSelf={stopCloseOnClickSelf}>
+            stopCloseOnClickSelf={stopCloseOnClickSelf}
+        >
             <ColorPicker color={color} onChange={onChange}/>
         </DropDown>
     );
@@ -434,6 +435,56 @@ const MatchToolBarPlugin = () => {
                 // selectedItem.setAttribute("data-input","true")
 
 
+                // $wrapNodes(selection,() => $createInputNode())
+                // $setBlocksType(selection,() => $createInputNode())
+                // selection.insertNodes([myNode])
+
+                // console.log()
+                //
+                // const selectedItem = editor.getElementByKey(nodes[0].getKey())
+
+                const nodes = selection.getNodes()
+                const selectedText = selection.getTextContent();
+                const wrappedText = `%/${selectedText}/%`;
+
+                const selectedItem = editor.getElementByKey(nodes[0].getKey())
+
+                // selectedItem.setAttribute("data-type","input")
+                // selectedItem.classList.add("Excinput")
+
+                selection.insertText(wrappedText);
+                setValue(old => old +1)
+
+            }
+        })
+
+
+    }
+
+    return (
+        <button
+            className={"toolbar-item spaced"}
+            aria-label="Format Italics"
+            onClick={onClick}
+        >
+            <i className="match format"/>
+        </button>
+    )
+
+}
+
+const MatchWrongToolBarPlugin = () => {
+    const [editor] = useLexicalComposerContext()
+    const [value,setValue] = useState(0)
+    const onClick = () => {
+        editor.update(() => {
+            const selection = $getSelection()
+
+            if ($isRangeSelection(selection)) {
+
+                // const selectedItem = editor.getElementByKey(nodes[0].getKey())
+                // selectedItem.setAttribute("data-input","true")
+
 
                 // $wrapNodes(selection,() => $createInputNode())
                 // $setBlocksType(selection,() => $createInputNode())
@@ -443,17 +494,14 @@ const MatchToolBarPlugin = () => {
                 //
                 // const selectedItem = editor.getElementByKey(nodes[0].getKey())
 
-
                 const nodes = selection.getNodes()
                 const selectedText = selection.getTextContent();
-                const wrappedText = `%/${selectedText}/%`;
+                const wrappedText = `$^/${selectedText}/^$`;
 
                 const selectedItem = editor.getElementByKey(nodes[0].getKey())
 
-
                 // selectedItem.setAttribute("data-type","input")
                 // selectedItem.classList.add("Excinput")
-
 
                 selection.insertText(wrappedText);
                 setValue(old => old +1)
@@ -675,7 +723,7 @@ export default function ToolbarPlugin({options}) {
                 <>
 
                     <FontSize
-                        selectionFontSize={fontSize.slice(0, -2)}
+                        selectionFontSize={fontSize.slice(0,-2)}
                         editor={editor}
                     />
                     <button
@@ -736,6 +784,9 @@ export default function ToolbarPlugin({options}) {
                     }
                     {
                         options?.match && <MatchToolBarPlugin/>
+                    }
+                    {
+                        options?.matchWrong && <MatchWrongToolBarPlugin/>
                     }
                     <DropdownColorPicker
                         buttonClassName="toolbar-item color-picker"

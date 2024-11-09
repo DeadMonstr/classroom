@@ -20,6 +20,11 @@ import Books from "pages/books/Books";
 import TeacherObservation from "pages/teacherObservation/teacherObservation";
 import Lesson from "pages/subject/level/chapters/lesson";
 import Chat from "pages/chat";
+import Lesson from "../pages/subject/level/chapters/lesson";
+import Presentations from "pages/presentations/Presentations";
+import Presentation from "pages/presentation/Presentation";
+import CreateTestTuron from "pages/testTuron/create/createTestTuron";
+import ViewTestTuron from "pages/testTuron/view/viewTestTuron";
 
 
 
@@ -51,11 +56,25 @@ const App = () => {
                 />
 
 
+                <Route
+                    index
+                    path={"testTuron"}
+                    element={<ViewTestTuron/>}
+                />
+
+
                 <Route path="/*" element={<Layout/>}>
                     <Route
                         index
                         path={"user/:id/*"}
                         element={<User/>}
+                    />
+
+
+                    <Route
+                        index
+                        path={"createTestTuron"}
+                        element={<CreateTestTuron/>}
                     />
 
 
@@ -87,6 +106,9 @@ const App = () => {
                         <Route path={"createExercises"} element={<CreateExercises/>} />
                         <Route path={"changeExercises/:id"} element={<ChangeExercises/>} />
                         <Route path={"createExercisesTypes"} element={<CreateExercisesTypes/>} />
+
+                        <Route path={"presentations/*"} element={<Presentations/>}/>
+                        <Route path={"presentation/:id"} element={<Presentation/>}/>
                     </Route>
 
                     <Route

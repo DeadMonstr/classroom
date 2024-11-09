@@ -1,0 +1,57 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+.viewTest
+  width: 100%
+  height: 100vh
+  overflow: hidden
+  background-color: #001B61
+  display: flex
+  position: relative
+  .startInfo
+    min-width: 100%
+    height: 100vh
+    display: flex
+    align-items: center
+    justify-content: space-around
+    left: 0
+    top: 0
+    position: absolute
+    transition: all  1s
+    opacity: 1
+    &.active
+      left: -100%
+      opacity: 0
+    img
+      width: 50rem
+    form
+      width: 50rem
+      padding: 3rem
+      box-shadow: 0 76px 30px rgba(92, 0, 0, 0.01), 0 43px 26px rgba(92, 0, 0, 0.05), 0 19px 19px rgba(92, 0, 0, 0.09), 0 5px 10px rgba(92, 0, 0, 0.1), 0 0 0 rgba(92, 0, 0, 0.1)
+      background-color: white
+      border-radius: 10px
+      display: flex
+      flex-direction: column
+      gap: 2rem
+
+  .test
+    min-width: 100%
+    height: 100vh
+    opacity: 0
+    right: -100%
+    top: 0
+    position: absolute
+    transition: all 1s
+    //background-color: white
+    display: flex
+    align-items: center
+    justify-content: center
+    h1
+      color: white
+
+    &.active
+      right: 0
+      opacity: 1
+
+

@@ -21,6 +21,12 @@ const useChangeMenuParams = (type, title) => {
 			},
 			{
 				type: "simple",
+				title: "Taqdimotlar",
+				href: "/presentations",
+				role: [ROLES.Methodist]
+			},
+			{
+				type: "simple",
 				title: "Guruhlar",
 				href: "/groups",
 				role: [ROLES.Teacher,ROLES.Student]
@@ -52,6 +58,15 @@ const useChangeMenuParams = (type, title) => {
 					observer: true
 				}
 			},
+			{
+				type: "simple",
+				title: "Turon test",
+				href: "/createTestTuron",
+				role: [ROLES.Methodist],
+
+			},
+
+
 		],
 		subject: [
 			{

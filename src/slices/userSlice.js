@@ -2,11 +2,16 @@
 
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {useHttp} from "hooks/http.hook";
-import {BackUrl} from "constants/global";
+import {BackUrl, ROLES} from "constants/global";
 
 
 const initialState = {
-	data: {},
+	data: {
+		role:  process.env.NODE_ENV !== "production" ? ROLES.Methodist : null,
+		name: 'Ulug',
+		surname: "dasdas",
+		username: 'asdasdas'
+	},
 	isCheckedPassword: false,
 	fetchUserDataStatus: "idle"
 }

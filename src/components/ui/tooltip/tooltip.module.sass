@@ -1,0 +1,35 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+.tooltip
+  position: relative
+  width: 100%
+  height: fit-content
+  &__modal
+    max-width: 20rem
+    max-height: 10rem
+    position: fixed
+    z-index: 999
+    transition: opacity .5s, visibility .5s
+    left: 0
+    top: 0
+    pointer-events: auto
+    animation: animate linear .1s
+    background-color: $color-grey-light
+    border-radius: 5px
+    color: white
+    padding: 1rem
+    font-size: 1.6rem
+  h1
+    width: 100%
+    height: fit-content
+    text-overflow: ellipsis
+
+
+@keyframes animate
+  from
+    opacity: 0
+    visibility: hidden
+  to
+    visibility: visible
+    opacity: 1

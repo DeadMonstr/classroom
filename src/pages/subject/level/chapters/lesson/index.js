@@ -17,7 +17,7 @@ import Video from "components/lesson/video"
 import Img from "components/lesson/img"
 import TextEditorExc from "components/exercises/textEditor/TextEditor";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchLessonData} from "slices/lessonSlice";
+import {fetchLessonData, setLessonData} from "slices/lessonSlice";
 import Loader from "components/ui/loader/Loader";
 import {useAuth} from "hooks/useAuth";
 
@@ -35,17 +35,17 @@ const Lesson = ({isNavigate}) => {
     const {request} = useHttp()
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        if (components && components.length && !isChangedComponents) {
-            document.querySelector('#main').scrollTo({ top: 0, behavior: "smooth" })
-        }
-        localStorage.setItem("lastLesson", JSON.stringify({
-            levelId: levelId,
-            lessonOrder: lessonOrder,
-            chapterId: chapterId
-        }))
-
-    }, [lesson])
+    // useEffect(() => {
+    //     if (components && components.length && !isChangedComponents) {
+    //         document.querySelector('#main').scrollTo({ top: 0, behavior: "smooth" })
+    //     }
+    //     localStorage.setItem("lastLesson", JSON.stringify({
+    //         levelId: levelId,
+    //         lessonOrder: lessonOrder,
+    //         chapterId: chapterId
+    //     }))
+    //
+    // }, [lesson])
 
 
     useEffect(() => {
@@ -127,6 +127,15 @@ const Lesson = ({isNavigate}) => {
         }
     }, [studentLessonId])
 
+    const onReset = () => {
+        request(`${BackUrl}reset_lesson/${archiveId}`, "GET", null, headers())
+            .then(res => {
+                dispatch(setLessonData({data: res.data}))
+            })
+    }
+
+    console.log(archiveId ? "hello" : "else", archiveId)
+
     return (
         <div className={styles.lesson}>
             {
@@ -159,10 +168,10 @@ const Lesson = ({isNavigate}) => {
                                         >
                                             Keyingi
                                         </Button>
+
+                                        {archiveId ?  <Button onClick={onReset} type={"warning"}>Qayta topshirish</Button> : null}
                                     </>
-
                             }
-
                         </div>
                     </>
             }

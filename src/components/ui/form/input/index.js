@@ -19,6 +19,7 @@ const Input = React.memo((
 	    onChange,
 	    style,
 	    extraClassName,
+	    extraClassNameLabel,
 		disabled,
 		extraValues
 	}) => {
@@ -28,7 +29,7 @@ const Input = React.memo((
 
 
 	return register ? (
-		<label style={style} className={styles.inputLabel} htmlFor={name}>
+		<label style={style} className={classNames(styles.inputLabel,extraClassNameLabel)} htmlFor={name}>
 			{
 				title || subTitle ?
 					<div className={styles.info}>
@@ -78,7 +79,7 @@ const Input = React.memo((
 			</div>
 		</label>
 	) : (
-		<label style={style} className={styles.inputLabel} htmlFor={name}>
+		<label style={style} className={classNames(styles.inputLabel,extraClassNameLabel)} htmlFor={name}>
 			<div className={styles.info}>
 				<span>{title}</span>
 				<span>{subTitle}</span>

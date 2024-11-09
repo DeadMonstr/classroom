@@ -26,7 +26,9 @@
     justify-content: center
     padding: 0
   i
-    font-size: 2rem
+    font-size: 1.8rem
+  span
+    margin: 0 1rem
   &:not(&.disabled)
     @include btn-active
   &:hover
@@ -82,7 +84,7 @@
     svg
       fill: white
     &.active
-      background-color: $color-main-light
+      background-color: $color-main-dark
     &.disabled
       background-color: $color-main-light
 
@@ -105,3 +107,15 @@
       background-color: #ff8829
     &.disabled
       background-color: #ff8829
+
+
+
+  &.present
+    background-color: #00A3FF
+    border-radius: 20px
+
+    box-shadow: none
+    &.active
+      background-color: #00A3FF
+    &.disabled
+      background-color: #00A3FF

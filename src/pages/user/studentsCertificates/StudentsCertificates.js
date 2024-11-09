@@ -57,6 +57,7 @@ const StudentsCertificates = () => {
                 //     dispatch(fetchedTeacher({}))
                 //     dispatch(fetchedResults(res?.list))
                 // }
+                console.log(res)
                 setCertificates(res.list)
             })
             .catch(err => console.log(err))
@@ -129,7 +130,6 @@ const StudentsCertificates = () => {
                     type: "success"
                 }
                 dispatch(setAlertOptions({alert}))
-                console.log(res)
                 setCertificates(items => items.filter(item => item.id !== +res.certificate_id))
                 setActive(false)
             })

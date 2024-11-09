@@ -23,6 +23,7 @@ import Loader from "components/ui/loaderPage/LoaderPage";
 import RequireAuth from "components/auth/requireAuth";
 import LessonPlan from "pages/groups/group/lessonPlan/LessonPlan";
 import ObservedTeacherLessons from "pages/groups/group/observedLessons/observedTeacherLessons";
+import OnlineLesson from "pages/groups/group/onlineLesson/OnlineLesson";
 
 
 
@@ -54,6 +55,7 @@ const Group = () => {
 				<Route path={"finishedLessons/*"} element={<FinishedLessons />} />
 				<Route path={"finishedLessons/*"} element={<FinishedLessons />} />
 				<Route path={"observedTeacherLessons/*"} element={<ObservedTeacherLessons />} />
+				{/*<Route path={"onlineLesson"} element={<OnlineLesson />} />*/}
 
 
 
@@ -150,6 +152,21 @@ const GroupIndex = () => {
 					</svg>
 					<span>
 						Qo'shimcha
+					</span>
+				</NavLink>
+				<NavLink
+					className={({ isActive }) =>
+						isActive ? `${styles.item} ${styles.active}` : `${styles.item}`
+					}
+					to={"../onlineLesson"}
+				>
+					<svg width="38" height="52" viewBox="0 0 38 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M4 40.5789H34C35.6569 40.5789 37 39.2358 37 37.5789V11.6946V4C37 2.34315 35.6569 1 34 1H4C2.34315 1 1 2.34314 1 4V37.5789C1 39.2358 2.34315 40.5789 4 40.5789Z" stroke="#4D4D4D" stroke-width="2"/>
+						<path d="M19.3643 11.5698L19.3643 29.4646" stroke="#4C4C4C" stroke-width="2"/>
+						<line x1="27.9473" y1="20.8948" x2="10.0525" y2="20.8948" stroke="#4C4C4C" stroke-width="2"/>
+					</svg>
+					<span>
+						Online dars
 					</span>
 				</NavLink>
 			</div>

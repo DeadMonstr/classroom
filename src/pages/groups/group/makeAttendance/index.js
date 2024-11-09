@@ -98,6 +98,7 @@ const MakeAttendanceIndex = () => {
 
 			request(`${PlatformUrlApi}attendance_classroom/${data.platform_id}`,"GET",null,headers)
 				.then(res => {
+					console.log(res)
 					setUsers(res.users)
 					setLoading(false)
 					if (res.date.length === 1) {
@@ -192,13 +193,16 @@ const MakeAttendanceIndex = () => {
 	const dispatch = useDispatch()
 	const onSubmit = () => {
 
+
+
 		const newData = {
 			day,
 			month,
 			users: users.filter(item => item.type !== ""),
 			group_id : data.platform_id
-
 		}
+
+		console.log(newData)
 		const oldToken = sessionStorage.getItem("oldToken")
 		const headers = {
 			'Content-Type': 'application/json',

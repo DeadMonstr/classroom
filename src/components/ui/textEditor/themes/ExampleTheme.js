@@ -20,7 +20,7 @@ const exampleTheme= {
         ul: "editor-list-ul",
         listitem: "editor-listitem"
     },
-    image: "editor-image",
+    image: "editor-dropImage",
     link: "editor-link",
     text: {
         bold: "editor-text-bold",
