@@ -4,5 +4,9 @@ const SubjectContext = createContext(null);
 const MainContext = createContext(null);
 const ExcContext = createContext(false);
 
+const PresentationSidebarContext = createContext({})
 
-export {SubjectContext,MainContext,ExcContext}
+
+
+
+export {SubjectContext,MainContext,ExcContext,PresentationSidebarContext}

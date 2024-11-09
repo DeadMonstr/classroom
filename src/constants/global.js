@@ -1,9 +1,9 @@
 import {useMemo} from "react";
-//
-export const BackUrlForDoc = "http://192.168.68.110:5001/"
+// //
+export const BackUrlForDoc = "http://192.168.1.17:5001/"
 export const BackUrl = `${BackUrlForDoc}api/`
 export const LogoutUrl = "http://localhost:3001/login"
-export const PlatformUrl = "http://192.168.68.110:5002/"
+export const PlatformUrl = "http://192.168.1.17:5002/"
 export const PlatformUrlApi = `${PlatformUrl}api/`
 
 // export const BackUrl = "/api/"
@@ -11,6 +11,7 @@ export const PlatformUrlApi = `${PlatformUrl}api/`
 // export const PlatformUrl = "https://www.gennis.uz/"
 // export const PlatformUrlApi = "https://www.gennis.uz/api/"
 // export const LogoutUrl = `${PlatformUrl}login`
+
 
 
 export const headers = () => {

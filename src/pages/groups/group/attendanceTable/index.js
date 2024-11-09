@@ -44,17 +44,24 @@ const AttendanceTable = ({backBtn}) => {
 
 			request(`${PlatformUrlApi}group_dates2/${data.platform_id}`,"GET",null,headers)
 				.then(res => {
+					console.log(res)
 					setLoading(false)
 					setMonths(res.data.months)
 					setYears(res.data.years)
 					setYear(res.data.current_year)
-					setMonth(res.data.current_month)
+
+					const currentYear  = res.data.months.filter(item => item.year === res.data.current_year)[0]
+
+					if (currentYear.months.includes(res.data.current_month)) {
+						setMonth(res.data.current_month)
+					} else {
+						setMonth(currentYear.months[0])
+					}
 				})
 		}
 	},[data.platform_id])
 
 	useEffect(() => {
-
 		if (data?.platform_id && month && year) {
 			const oldToken = sessionStorage.getItem("oldToken")
 
@@ -68,11 +75,12 @@ const AttendanceTable = ({backBtn}) => {
 			}
 
 			setLoading(true)
+			console.log(month,year)
 
-
-			request(`${PlatformUrlApi}attendances/${data.platform_id}`,"POST",JSON.stringify( newData),headers)
+			request(`${PlatformUrlApi}attendances/${data.platform_id}`,"POST",JSON.stringify(newData),headers)
 				.then(res => {
 					setLoading(false)
+					console.log(res)
 
 					setAttendances(res.data.attendance_filter.attendances)
 					setDates(res.data.attendance_filter.dates)
@@ -105,7 +113,7 @@ const AttendanceTable = ({backBtn}) => {
 				}
 				if (item.status === "") {
 					return  (
-						<td className="date true"></td>
+						<td className="date true"> </td>
 					)
 				}
 			})
@@ -152,25 +160,24 @@ const AttendanceTable = ({backBtn}) => {
 						:
 						<Table>
 							<thead>
-							<tr>
-								<th>No</th>
-								<th>Ism</th>
-								<th>Familya</th>
-								{
-									dates.map(item =>{
-										return (
-											<th>{item}</th>
-										)
-									})
-								}
-							</tr>
+								<tr>
+									<th>No</th>
+									<th>Ism</th>
+									<th>Familya</th>
+									{
+										dates.map(item =>{
+											return (
+												<th>{item}</th>
+											)
+										})
+									}
+								</tr>
 							</thead>
 							<tbody>
 							{renderStudents()}
 							</tbody>
 						</Table>
 				}
-
 			</div>
 		</div>
 	);

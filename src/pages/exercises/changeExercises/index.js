@@ -659,7 +659,7 @@ const ChangeExercises = () => {
                     Code
                 </div>
                 {/*<div className={styles.nav__item} onClick={() => onClickText("video")}>*/}
-                {/*	Video*/}
+                {/*	video*/}
                 {/*</div>*/}
 
             </div>

@@ -32,7 +32,6 @@ const Exercises =
          levelId,
          subjectId,
          lessonId,
-         archiveId
      }) => {
 
         const [excComponent, setExcComponent] = useState({})
@@ -50,7 +49,6 @@ const Exercises =
                 type={type}
                 onDeleteComponent={onDeleteComponent}
                 component={excComponent}
-                archiveId={archiveId}
                 onChangeCompletedComponent={onChangeCompletedComponent}
             />
             : Object.keys(excComponent).length > 0 ?
@@ -183,13 +181,11 @@ const CreateExc = ({onDeleteComponent, onSetCompletedComponent, component, level
                 }
             </div>
         </Modal>
-
-
     )
 }
 
 
-const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
+const ViewExc = ({component, onDeleteComponent, type, lessonId}) => {
 
 
     const [exc, setExc] = useState()
@@ -197,12 +193,15 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
     const [answers, setAnswers] = useState([])
     const [disabled, setDisabled] = useState(false)
     const [disabledExc, setDisabledExc] = useState(false)
+    const [changedAnswerData, setChangedAnswerData] = useState({})
 
 
     const [didExc, setDidExc] = useState([])
 
 
     useEffect(() => {
+
+        const dataLesson = JSON.parse(localStorage.getItem("dataLesson"))
 
         setExc(component)
         setDidExc(component.didExc)
@@ -215,11 +214,18 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
             const img = item.img
             const clone = item.clone
             const audio = item.audio
+            let oldData = null
+            if (dataLesson && dataLesson.lessonId === lessonId) {
+                oldData = dataLesson.answers.filter(comp => comp.index === index)[0]
+            }
 
 
             if (item.isAnswered || type === "check") {
                 setDisabled(true)
                 setDisabledExc(true)
+            } else {
+                setDisabled(false)
+                setDisabledExc(false)
             }
 
 
@@ -234,20 +240,20 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
                         if (word.type === "matchWord") {
                             return {
                                 ...word,
-                                status: filtered.status,
-                                item: filtered.value
+                                status: filtered?.status,
+                                item: filtered?.value
                             }
                         }
                         return {
                             ...word,
-                            status: filtered.status,
-                            value: filtered.value
+                            status: filtered?.status,
+                            value: filtered?.value
                         }
 
                     })
-
                 } else {
-                    words = item?.words_clone
+                    words = oldData?.answers || item?.words_clone
+                    // words = item?.words_clone
                 }
 
 
@@ -279,7 +285,6 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
 
                 for (let i = 0; i < options?.length; i++) {
                     if (options[i].innerType === "img") {
-
                         const ans = answers.filter(ans => ans.order === options[i].index && ans.type_img === "variant_img")
                         newOptions.push({
                             ...options[i],
@@ -294,6 +299,7 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
                 if (clone.variants.type === "select") {
                     const ans = answers[0]
 
+
                     if (ans.status) {
                         newOptions = newOptions.map(opt => {
                             if (opt.index === ans.order) {
@@ -306,24 +312,36 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
                             return opt
                         })
                     } else if (!ans.status && ans.status !== undefined) {
+
                         newOptions = newOptions.map(opt => {
-                            if (opt.isTrue) {
+                            if (opt.index === ans.order) {
                                 return {
                                     ...opt,
-                                    isAnswer: true
+                                    isAnswer: false
                                 }
                             }
+                            return opt
+                        })
+                    } else {
+
+
+                        newOptions = newOptions.map(opt => {
+                            const isChecked  = oldData?.answers.filter(old => old.index === opt.index)[0].checked
                             return {
                                 ...opt,
-                                isAnswer: false,
-                                checked: ans.order === opt.index ? ans.value : false
+                                checked: isChecked
                             }
+
                         })
                     }
                 } else {
+
+
                     const ans = answers[0]
+
                     answerInput = {
-                        value: ans.value,
+                        checked: ans.checked,
+                        value: oldData?.answers || ans.value,
                         isAnswer: ans.status
                     }
                 }
@@ -376,9 +394,30 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
         }))
     }, [component])
 
+    // useEffect(() => {
+    //     const dataLesson = JSON.parse(localStorage.getItem("dataLesson"))
+    //     console.log("render 2")
+    //
+    //     if (excComponents.length && Object.keys(dataLesson).length && dataLesson.lessonId === lessonId) {
+    //
+    //         setExcComponents(components => components.map(item => {
+    //             const oldData = dataLesson.answers.filter(comp => comp.index === item.index)
+    //             console.log(oldData)
+    //             return oldData[0]
+    //         }))
+    //
+    //     }
+    // },[excComponents.length])
+    //
+
 
     const onSetAnswers = (index, changedAnswer) => {
         const isInAnswers = answers.some(item => item.index === index)
+
+
+
+
+
         if (isInAnswers) {
             setAnswers(answers => answers.map((item) => {
                 if (item.index === index) {
@@ -386,10 +425,12 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
                 }
                 return item
             }))
+            setChangedAnswerData({index, answer:changedAnswer})
         } else {
             setAnswers(answers => [...answers, changedAnswer])
         }
     }
+
 
     useEffect(() => {
         if (answers.length > 0 && !disabledExc) {
@@ -398,14 +439,32 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
     }, [answers])
 
 
-    const onReset = () => {
-        request(`${BackUrl}reset_lesson/${archiveId}`, "GET", null, headers())
-            .then(res => {
-                dispatch(setLessonData({data: res.data}))
-                setDisabled(false)
-                setDisabledExc(false)
-            })
-    }
+
+
+    useEffect(() => {
+
+        if (answers.length && answers.some(item => item.someFilled) ){
+            console.log("ishladu",changedAnswerData,disabled)
+
+            const dataLesson = JSON.parse(localStorage.getItem("dataLesson"))
+
+            if (dataLesson && dataLesson?.lessonId === lessonId && answers.length === dataLesson.answers.length) {
+                const newDataLesson = dataLesson.answers.map(item => {
+                    if (item.index === changedAnswerData.index) {
+                        return changedAnswerData.answer
+                    }
+                    return item
+                })
+                localStorage.setItem("dataLesson",JSON.stringify({answers: newDataLesson, lessonId}))
+            } else {
+                localStorage.setItem("dataLesson",JSON.stringify({answers, lessonId}))
+            }
+        }
+
+    },[answers,changedAnswerData,disabled])
+
+
+
 
 
     const renderBlocks = () => {
@@ -466,7 +525,6 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
         const img = item.img
         const clone = item.clone
         const audio = item.audio
-
 
         if (item.isAnswered) {
             setDisabled(true)
@@ -536,6 +594,12 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
                 }
             }
 
+            //
+
+
+
+            //
+
 
             if (clone.variants.type === "select") {
                 const ans = answers[0]
@@ -553,17 +617,13 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
                     })
                 } else if (!ans.status && ans.status !== undefined) {
                     newOptions = newOptions.map(opt => {
-                        if (opt.isTrue) {
+                        if (opt.index === ans.order) {
                             return {
                                 ...opt,
-                                isAnswer: true
+                                isAnswer: false
                             }
                         }
-                        return {
-                            ...opt,
-                            isAnswer: false,
-                            checked: ans.order === opt.index ? ans.value : false
-                        }
+                        return opt
                     })
                 }
             } else {
@@ -573,6 +633,8 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
                     isAnswer: ans.status
                 }
             }
+
+
 
 
             if (words && innerType === "imageInText") {
@@ -621,6 +683,7 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
         }
     }
 
+
     const dispatch = useDispatch()
     const onSubmit = () => {
         setDisabled(true)
@@ -631,10 +694,13 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
             lessonId,
             excId: component.id
         }
+
         if (!disabled && !disabledExc) {
             request(`${BackUrl}complete_exercise`, "POST", JSON.stringify(data), headers())
                 .then(res => {
+                    setAnswers([])
                     dispatch(setArchiveId({id:res.archive_id}))
+                    localStorage.removeItem("dataLesson")
                     setExcComponents(excComponents.map((item, index) => {
                         const filtered = res.block.filter(comp => comp.id === item.block_id)[0]
                         if (filtered) {
@@ -650,9 +716,9 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
     return (
         <div className={styles.exc__view}>
 
-            <div className={styles.container}>
+            <form className={styles.container} id={`component-${component.index}`}>
                 <div className={styles.subheader}>
-                    {archiveId ?  <Button onClick={onReset} type={"warning"}>Qayta topshirish</Button> : null}
+
                 </div>
 
                 {
@@ -664,11 +730,11 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
                 <ExcContext.Provider value={{disabledExc, isView: type === "view"}}>
                     {renderBlocks()}
                 </ExcContext.Provider>
-            </div>
+            </form>
 
             {
                 type === "view" && !disabled ?
-                    <Button type={"submit"} disabled={disabled} onClick={onSubmit}>
+                    <Button form={`component-${component.index}`} type={"submit"} disabled={disabled} onClick={onSubmit}>
                         Tasdiqlash
                     </Button> : null
             }

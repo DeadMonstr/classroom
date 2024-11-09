@@ -10,6 +10,7 @@ import chapters from "slices/chaptersSlice";
 import lesson from "slices/lessonSlice";
 import finishedLessons from "slices/finishedLessonsSlice";
 import books from "slices/booksSlice";
+import presentation from "slices/presentationSlice";
 
 const stringMiddleware = () => (next) => (action) => {
     if (typeof action === 'string') {
@@ -32,13 +33,14 @@ const store = configureStore({
         chapters,
         lesson,
         finishedLessons,
-        books
+        books,
+        presentation
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
             stringMiddleware
         ),
-    devTools: process.env.NODE_ENV !== "production",
+
 })
 
 export default store

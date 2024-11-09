@@ -1,0 +1,80 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+.sidebar__right
+  height: 100%
+  display: flex
+  gap: 2rem
+  transition: all .1s
+  padding-right: 3rem
+  &.active
+    .sidebar__wrapper
+      width: 30rem
+      opacity: 1
+      visibility: visible
+      &>.container
+        opacity: 1
+        transition: opacity .2s
+        transition-delay: .5s
+
+  .sidebar__wrapper
+    opacity: 0
+    visibility: hidden
+    width: 0
+    height: 100%
+    background-color: white
+    transition: all .5s
+    border-radius: 5px
+    overflow: hidden
+    .container
+      width: 100%
+      height: 100%
+      opacity: 0
+
+    .title
+      width: 100%
+      display: flex
+      align-items: center
+      justify-content: space-between
+      padding: 2rem
+      height: 6rem
+      h1
+        font-size: 1.8rem
+      i
+        cursor: pointer
+        font-size: 2.4rem
+
+  .menu
+    width: 11rem
+    height: fit-content
+    &__item
+      display: flex
+      flex-direction: column
+      align-items: center
+      justify-content: center
+      padding: 1rem
+      gap: 1rem
+      cursor: pointer
+      user-select: none
+      transition: all .1s
+      color: $color-grey-dark
+      border: 2px solid white
+      background-color: white
+      &:first-child
+        border-radius: 5px 5px 0 0
+      &:last-child
+        border-radius: 0 0 5px 5px
+      &.active
+        border: 2px solid $color-slide
+        h1
+          color: $color-slide
+        svg
+          fill: $color-slide
+        path
+          stroke: $color-slide
+      svg
+        width: 3rem
+      h1
+        font-size: 1.7rem
+
+

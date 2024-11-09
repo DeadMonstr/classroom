@@ -108,7 +108,8 @@ function MyOnSubmitPlugin({onSubmit}) {
             const htmlString = $generateHtmlFromNodes(editor, null);
 
             const editorState = editor.getEditorState();
-            const inputsRegex = /[\%|\?]\/(.*?)\/[\%|\?]/g;
+            // const inputsRegex = /[\%|\?]\/(.*?)\/[\%|\?]/g;
+            const inputsRegex = /%\/[^\/]+\/%|\$\^\/[^\/]+\/\^\$|\?\/[^\/]+\/\?/g;
 
             let isAll = false
             let index = 0
@@ -123,17 +124,26 @@ function MyOnSubmitPlugin({onSubmit}) {
 
             const words = matchWordsRegexList?.map((item,index) => {
 
-
                 const type = item.slice(0,2) === "?/" ? "input" : "matchWord"
-                const selectedText = item.slice(2,-2)
-                const regex = new RegExp(`[\\%|\\?]\\/(${selectedText})\\/[\\%|\\?]`);
+                // const selectedText = item.slice(2,-2)
+                const selectedText = item.match(/\b\w+\b/g);
 
-                highlightedText = highlightedText.replace(regex, `{{${index+1}}}`);
+
+                console.log(selectedText, "hihihihi")
+                console.log(highlightedText)
+
+                console.log(item)
+                // const regex = new RegExp(`[\\%|\\?|\\$^]\\/(${selectedText})\\/[\\%|\\?|\\^$]`);
+                const regex = new RegExp(`/%\/[^\/]+\/% | \$\^\/[^\/]+\/\^\$ | \?\/[^\/]+\/\?/g`);
+
+                // highlightedText = highlightedText.replace(regex, `{{${index+1}}}`);
+                highlightedText = highlightedText.replace(item, `{{${index+1}}}`);
 
                 return {
                     text: selectedText,
                     wrapped: item,
                     index: index + 1,
+                    statusWord:  item.slice(0,3) === "$^/" ? "wrong" : "correct",
                     type
                 }
             })
@@ -144,7 +154,7 @@ function MyOnSubmitPlugin({onSubmit}) {
                 words: words
             }
 
-            console.log(data,"data")
+
             onSubmit(data)
         });
     }, [editor]);

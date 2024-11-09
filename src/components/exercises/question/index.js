@@ -14,8 +14,10 @@ const ExcQuestion = React.memo(({
                                     onChangeCompletedComponent,
                                     onSetCompletedComponent,
                                     onDeleteComponent,
-                                    setAnswers
+                                    setAnswers,
                                 }) => {
+
+
     const [questionComponent, setQuestionComponent] = useState({})
 
     useEffect(() => {
@@ -53,8 +55,6 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
 
 
     useEffect(() => {
-
-
         if (questionComponent.variants?.type === "select") {
             setVariants(questionComponent.variants.options)
         } else {
@@ -64,8 +64,6 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
                 setInput("")
             }
         }
-
-
     }, [questionComponent])
 
 
@@ -76,9 +74,8 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
             }
             return {...item, checked: false}
         }))
-
-
     }
+
 
     useEffect(() => {
 
@@ -90,7 +87,8 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
                 ...questionComponent,
                 answers: questionComponent?.variants?.typeVariants === "select" ? variants : input,
                 value: input,
-                everyFilled: questionComponent?.variants?.typeVariants === "select" ? variants.some(item => item.checked) : input.length > 0
+                everyFilled: questionComponent?.variants?.typeVariants === "select" ? variants.some(item => item.checked) : input.length > 0,
+                someFilled: questionComponent?.variants?.typeVariants === "select" ? variants.some(item => item.checked) : input.length > 0
             })
         }
     }, [variants, input, questionComponent])
@@ -131,10 +129,10 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
                                     return (
                                         <Radio
                                             disabled={disabledExc}
-                                            extraClassname={item.isAnswer !== undefined && !item.isAnswer ? styles.error : null}
+                                            extraClassname={item.isAnswer !== undefined && !item.isAnswer ? styles.error : item.isAnswer ? styles.active : null}
                                             onChange={() => onSetValue(item.index)}
-                                            id={`question-${questionComponent.index}-variant-${item.index}`}
-                                            name={`question-${questionComponent.index}`}
+                                            id={`question-${questionComponent.block_id}-variant-${item.index}`}
+                                            name={`question-${questionComponent.index}-block-${questionComponent.block_id}`}
                                             checked={item.checked}
                                         >
                                             {
@@ -165,7 +163,6 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
                         </div>
                 }
             </div>
-
         </div>
     )
 }

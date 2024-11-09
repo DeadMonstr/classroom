@@ -29,7 +29,7 @@ function testStyles( rule, callback, nodes, testnames ) {
 	(!body.fake ? div : body).innerHTML += style;
 	body.appendChild(div);
 	if ( body.fake ) {
-		//avoid crashing IE8, if background image is used
+		//avoid crashing IE8, if background dropImage is used
 		body.style.background = '';
 		//Safari 5.13/5.1.4 OSX stops loading if ::-webkit-scrollbar is used and scrollbars are visible
 		body.style.overflow = 'hidden';

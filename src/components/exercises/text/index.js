@@ -14,7 +14,7 @@ import {
     useSensors
 } from "@dnd-kit/core";
 import {DraggableWord, DroppableBox} from "./drag";
-import {arrayMove, sortableKeyboardCoordinates} from "@dnd-kit/sortable";
+import {arrayMove,sortableKeyboardCoordinates} from "@dnd-kit/sortable";
 import {ExcContext} from "helpers/contexts";
 import Input from "components/ui/form/input";
 
@@ -76,6 +76,8 @@ const CreateExc = ({textComponent, onSetCompletedComponent, onDeleteComponent}) 
 
     const onSubmitText = (data) => {
 
+
+        console.log(data)
         const newData = {
             ...data,
             clone
@@ -96,8 +98,7 @@ const CreateExc = ({textComponent, onSetCompletedComponent, onDeleteComponent}) 
             </div>
 
             <div className={styles.createText__container}>
-                <TextEditor options={{input: true,match: true}} onSubmit={onSubmitText} text={text} editorState={editorState}/>
-
+                <TextEditor options={{input: true, match: true, matchWrong: true}} onSubmit={onSubmitText} text={text} editorState={editorState}/>
             </div>
         </div>
     )
@@ -136,9 +137,8 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
         replace: (domNode) => {
             if (domNode.type === 'tag') {
                 let hasMatchingText = false;
-                const regex = /\{\{(\d)\}\}/g;
+                const regex = /\{\{(\d+)\}\}/g;
                 // Process children if they contain text nodes
-
 
                 const children = domNode?.children.map(child => {
                     if (child.type === 'text' && regex.test(child.data)) {
@@ -148,12 +148,16 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
 
                         const parts = child.data.split(regex);
 
+
                         const props = {...attributesToProps(domNode?.attribs)};
 
                         return parts.map((part, index) => {
+                            // console.log(part)
                             if (index % 2 === 1 && words?.length > 0) {
-                                const wordData = words.filter(item => item?.index === +part)[0]
 
+
+                                console.log(words)
+                                const wordData = words.filter(item => item?.index === +part)[0]
                                 if (container.items.length) {
                                     setContainer(container => ({
                                         ...container,
@@ -169,12 +173,8 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                                         })
                                     }))
                                 }
-
-
                                 if (wordData?.type === "input") {
-
                                     const style = {display: "inline-block",padding: 0}
-                                    console.log(!wordData.status && wordData.status !== undefined ? wordData.value : "", textComponent)
                                     return (
                                         <Input
                                             onChange={(e) => onChangeWordsInput(wordData.index,e)}
@@ -188,7 +188,6 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                                             extraClassName={wordData.status !== undefined && wordData.status ? styles.active :
                                                 wordData.status !== undefined && !wordData.status ? styles.error : null}
                                         />
-
                                     )
                                 }
 
@@ -196,7 +195,7 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                                     <DroppableBox
                                         key={`box-${wordData?.index}`}
                                         id={`box-${wordData?.index}`}
-                                        status={wordData.status}
+                                        status={wordData?.status}
                                         // items={wordData?.items}
                                     >
                                         {wordData?.item?.index &&
@@ -245,7 +244,7 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
             setWords(textComponent.words)
             setContainer(container => ({
                 ...container,
-                items: textComponent.words.filter(item => item.type === "matchWord")
+                items: textComponent.words.filter(item => item.type === "matchWord" && !item.isSelected)
             }))
         }
         setText(textComponent.text)
@@ -303,7 +302,6 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
 
                 if (activeContainer === "all") {
 
-
                     activeItem = container.items.filter(item => item.index === active.id)[0]
                     overItem = words.filter(item => item.index === overContainer)[0].item
 
@@ -315,16 +313,30 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                     }))
 
                     setWords(words => words.map(item => {
-                        if (item.index === overContainer) {
+                        if (item.index === activeItem.index) {
+                            if ( overContainer === activeItem.index) {
+                                return {
+                                    ...item,
+                                    item: activeItem,
+                                    isSelected: true
+                                }
+                            }
                             return {
                                 ...item,
-                                item: activeItem
+                                isSelected: true
+                            }
+                        }
+                        else if (item.index === overContainer) {
+                            return {
+                                ...item,
+                                item: activeItem,
                             }
                         }
                         return item
                     }))
 
                 } else {
+
                     activeItem = words.filter(item => item.index === activeContainer)[0].item
                     setContainer(container => ({
                         ...container,
@@ -332,6 +344,19 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                     }))
 
                     setWords(words => words.map(item => {
+                        if (item.index === activeItem.index) {
+                            if ( activeContainer === activeItem.index) {
+                                return {
+                                    ...item,
+                                    item: {},
+                                    isSelected: false
+                                }
+                            }
+                            return {
+                                ...item,
+                                isSelected: false
+                            }
+                        }
                         if (item.index === activeContainer) {
                             return {
                                 ...item,
@@ -348,6 +373,7 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
 
 
                 setWords(words => words.map(item => {
+
                     if (item.index === overContainer) {
                         return {
                             ...item,
@@ -385,7 +411,8 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
             setAnswers(textComponent.index, {
                 ...textComponent,
                 answers: words,
-                everyFilled: words.every(item => item.type === "matchWord" ? item.item?.index : item.value)
+                everyFilled: words.every(item => item.type === "matchWord" ? item.item?.index : item.value),
+                someFilled: words.some(item => item.type === "matchWord" ? item.item?.index : item.value || item.value === "")
             })
         }
     }, [words])
@@ -410,7 +437,7 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                     {parsedText}
                 </div>
                 {
-                    words?.length > 0 && !disabledExc > 0 && words.some(item => item.type === "matchWord") && <AllWordsContainer container={container}/>
+                    words?.length > 0 && !disabledExc > 0 && words.some(item => item.type === "matchWord") && <AllWordsContainer container={container} />
                 }
             </div>
         </DndContext>

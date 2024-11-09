@@ -71,7 +71,9 @@ const Curriculum = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        dispatch(fetchSubjectLevelsData(id))
+        if (id) {
+            dispatch(fetchSubjectLevelsData(id))
+        }
     }, [id])
 
 
