@@ -128,6 +128,7 @@ const Chapter = ({onToggleChapter,item,levelId}) => {
 
     const renderLesson = useCallback(() => {
         return item?.lessons?.map(les => {
+            console.log(les, "les")
             return (
                 <NavLink
                     className={({ isActive }) =>

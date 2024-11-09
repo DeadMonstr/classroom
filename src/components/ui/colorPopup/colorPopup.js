@@ -3,7 +3,7 @@ import Popup from "components/ui/popup/Popup";
 
 
 import cls from "./colorPopup.module.sass"
-import {HexColorPicker, RgbaStringColorPicker} from "react-colorful";
+import {RgbaStringColorPicker} from "react-colorful";
 import Input from "components/ui/form/input";
 
 

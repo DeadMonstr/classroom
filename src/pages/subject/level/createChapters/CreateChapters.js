@@ -36,7 +36,7 @@ const CreateChapters = () => {
     const [changeChapterData, setChangeChapterData] = useState({})
     const [activeChangeChapter, setActiveChangeChapter] = useState(false)
     const [changeLessonsSort, setChangeLessonsSort] = useState(false)
-    const [changedLessons,setChangedLessons] = useState()
+    const [changedLessons, setChangedLessons] = useState()
 
     const {request} = useHttp()
 
@@ -81,7 +81,7 @@ const CreateChapters = () => {
     const activeChangeData = useCallback((item) => {
         setActiveChangeChapter(true)
         setChangeChapterData(item)
-    },[])
+    }, [])
 
 
     const onConfirmDelete = useCallback(() => {
@@ -96,11 +96,11 @@ const CreateChapters = () => {
                 setConfirm(false)
             })
         setLessons(exs => exs.filter(item => item.id !== willDeleteId.id))
-    },[])
+    }, [])
 
     const onToggleConfirm = useCallback(() => {
         setConfirm(false)
-    },[])
+    }, [])
 
     const onToggleChangeLessonSort = () => {
         setChangeLessonsSort(prev => !prev)
@@ -108,19 +108,19 @@ const CreateChapters = () => {
 
     const onToggleCreateChapter = useCallback(() => {
         setCreateChapter(prev => !prev)
-    },[])
+    }, [])
 
     const onToggleChangeChapter = useCallback(() => {
         setActiveChangeChapter(prev => !prev)
-    },[])
+    }, [])
 
     const typeChangeLessonSort = useMemo(() => {
         return changeLessonsSort ? "danger" : "simple"
-    },[changeLessonsSort])
+    }, [changeLessonsSort])
 
     const memoized = useMemo(() => {
-        return {activeChangeData,changeLessonsSort}
-    },[activeChangeData,changeLessonsSort])
+        return {activeChangeData, changeLessonsSort}
+    }, [activeChangeData, changeLessonsSort])
 
 
     // useEffect(() => {
@@ -174,7 +174,7 @@ const CreateChapters = () => {
 
 
             {
-                changedLessons &&  <div className={styles.submit}>
+                changedLessons && <div className={styles.submit}>
                     <Button form={"formCreateExc"} type={"submit"} onClick={onSubmit}>
                         Tasdiqlash
                     </Button>
@@ -212,9 +212,7 @@ const CreateChapters = () => {
             }
 
 
-
-
-            <Confirm active={confirm} setActive={onToggleConfirm} onSubmit={onConfirmDelete} >
+            <Confirm active={confirm} setActive={onToggleConfirm} onSubmit={onConfirmDelete}>
                 O'chirishni hohlaysizmi
             </Confirm>
         </div>
@@ -222,7 +220,7 @@ const CreateChapters = () => {
 };
 
 
-const CreateChapter = React.memo(({levelId,setCreateChapter,setChapter}) => {
+const CreateChapter = React.memo(({levelId, setCreateChapter, setChapter}) => {
 
     const [name, setName] = useState("")
 
@@ -232,14 +230,14 @@ const CreateChapter = React.memo(({levelId,setCreateChapter,setChapter}) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        request(`${BackUrl}chapters_info/${levelId}`, "POST", JSON.stringify({name}), headers())
+        request(`${BackUrl}chapters_info/${levelId}`, "POST", JSON.stringify({name, status: false}), headers())
             .then(res => {
                 const alert = {
                     active: true,
                     message: res.msg,
                     type: res.status
                 }
-                setChapter(prev => [...prev,res.chapter])
+                setChapter(prev => [...prev, res.chapter])
                 setCreateChapter(false)
                 dispatch(setAlertOptions({alert}))
             })
@@ -254,11 +252,12 @@ const CreateChapter = React.memo(({levelId,setCreateChapter,setChapter}) => {
     )
 })
 
-const ChangeChapter = React.memo(({chapter,setChapter,setActive}) => {
+const ChangeChapter = React.memo(({chapter, setChapter, setActive}) => {
 
 
     const [name, setName] = useState("")
-    const [isDelete,setIsDelete] = useState(false)
+    const [isDelete, setIsDelete] = useState(false)
+    const [status, setStatus] = useState(false)
 
     useEffect(() => {
         if (chapter) {
@@ -286,7 +285,7 @@ const ChangeChapter = React.memo(({chapter,setChapter,setActive}) => {
     }
 
     const onSubmitChange = () => {
-        request(`${BackUrl}crud_chapter/${chapter.id}`, "POST", JSON.stringify({name}), headers())
+        request(`${BackUrl}crud_chapter/${chapter.id}`, "POST", JSON.stringify({name, status}), headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -296,7 +295,7 @@ const ChangeChapter = React.memo(({chapter,setChapter,setActive}) => {
                 dispatch(setAlertOptions({alert}))
                 setChapter(prev => prev.map(item => {
                     if (item.chapter_id === chapter.chapter_id) {
-                        return {...item,name: name}
+                        return {...item, name: name}
                     }
                     return item
                 }))
@@ -304,16 +303,23 @@ const ChangeChapter = React.memo(({chapter,setChapter,setActive}) => {
             })
     }
 
+    console.log(status, "status")
+
 
     return (
         <>
             <div className={styles.changeChapter}>
-                <Input title={"Nomi"} value={name} onChange={setName}/>
+                <div className={styles.changeChapter__inner}>
+                    <Input title={"Nomi"} value={name} onChange={setName}/>
+                    <Input extraClassName={styles.changeChapter__input} type={"checkbox"} title={"Status"}
+                           value={status} onChange={() => setStatus(!status)}/>
+                </div>
 
 
                 <div className={styles.changeChapter__wrapper}>
 
-                    {chapter.lessons.length === 0 &&  <Button onClick={() => setIsDelete(true)} type={"danger"}>O'chirish</Button>}
+                    {chapter.lessons.length === 0 &&
+                        <Button onClick={() => setIsDelete(true)} type={"danger"}>O'chirish</Button>}
 
 
                     <Button onClick={onSubmitChange} type={"submit"}>
@@ -329,7 +335,6 @@ const ChangeChapter = React.memo(({chapter,setChapter,setActive}) => {
         </>
     )
 })
-
 
 
 // const Chapter = (props) => {

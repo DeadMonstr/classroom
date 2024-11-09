@@ -20,7 +20,7 @@ import Books from "pages/books/Books";
 import TeacherObservation from "pages/teacherObservation/teacherObservation";
 import Lesson from "pages/subject/level/chapters/lesson";
 import Chat from "pages/chat";
-import Lesson from "../pages/subject/level/chapters/lesson";
+// import Lesson from "../pages/subject/level/chapters/lesson";
 import Presentations from "pages/presentations/Presentations";
 import Presentation from "pages/presentation/Presentation";
 import CreateTestTuron from "pages/testTuron/create/createTestTuron";
