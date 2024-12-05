@@ -20,13 +20,14 @@ export const  fetchMe = createAsyncThunk(
 	async (refresh_token) => {
 		const {request} = useHttp();
 		const oldRefreshToken = sessionStorage.getItem("oldRefreshToken")
+		const type = localStorage.getItem("typePlatform")
 		const headers = {
 			"Authorization": "Bearer " + refresh_token,
 			'Content-Type': 'application/json',
 			"Access-Control-Allow-Methods" : "GET, POST, OPTIONS",
 			"Access-Control-Allow-Headers": "Content-Type, Authorization"
 		}
-		return await request(`${BackUrl}refresh/${oldRefreshToken}`,"POST",null,headers)
+		return await request(`${BackUrl}refresh/${oldRefreshToken}/${type}`,"POST",null,headers)
 	}
 )
 

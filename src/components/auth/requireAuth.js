@@ -14,6 +14,8 @@ const RequireAuth = ({allowedRules}) => {
 
 
 
+
+
     if (allowedRules.includes(role)) {
         return <Outlet/>
     } else {

@@ -20,11 +20,12 @@ import Books from "pages/books/Books";
 import TeacherObservation from "pages/teacherObservation/teacherObservation";
 import Lesson from "pages/subject/level/chapters/lesson";
 import Chat from "pages/chat";
-// import Lesson from "../pages/subject/level/chapters/lesson";
+// import Lesson from m ../pages/subject/level/chapters/lesson";
 import Presentations from "pages/presentations/Presentations";
 import Presentation from "pages/presentation/Presentation";
 import CreateTestTuron from "pages/testTuron/create/createTestTuron";
 import ViewTestTuron from "pages/testTuron/view/viewTestTuron";
+import GetUserTuron from "pages/getUserTuron/GetUserTuron";
 
 
 
@@ -48,6 +49,12 @@ const App = () => {
                     path={"get_user/:token/:refreshToken"}
                     element={<GetUser/>}
                 />
+
+                <Route
+                    path={"get_user_turon/:username/:token/:refreshToken"}
+                    element={<GetUserTuron/>}
+                />
+
 
                 <Route
                     index

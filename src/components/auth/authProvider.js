@@ -16,8 +16,9 @@ const AuthProvider = ({children}) => {
 		if (refresh_token && token) {
 			dispatch(fetchMe(refresh_token))
 		} else {
-			// console.log("he he boy")
+
 			// window.location.replace(`http://localhost:3001/login`)
+
 			window.location.replace(`${PlatformUrl}login`)
 		}
 	},[])
@@ -28,7 +29,6 @@ const AuthProvider = ({children}) => {
 	} else if (fetchUserDataStatus === "success") {
 		return children
 	} else {
-		// console.log("he he boy")
 		// window.location.replace(`http://localhost:3001/login`)
 		window.location.replace(`${PlatformUrl}login`)
 	}

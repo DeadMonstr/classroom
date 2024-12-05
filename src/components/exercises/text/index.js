@@ -77,7 +77,7 @@ const CreateExc = ({textComponent, onSetCompletedComponent, onDeleteComponent}) 
     const onSubmitText = (data) => {
 
 
-        console.log(data)
+
         const newData = {
             ...data,
             clone
