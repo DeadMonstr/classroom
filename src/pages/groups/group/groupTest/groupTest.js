@@ -149,7 +149,6 @@ const GroupTest = () => {
     }
 
 
-    console.log(active)
 
     return (
         <div className={cls.groupTest}>
