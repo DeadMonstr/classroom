@@ -1,0 +1,34 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+.createSubject
+  padding: 3rem
+  .header
+    width: 100%
+    margin-bottom: 1rem
+    h1
+      color: $color-grey-dark
+  .container
+    width: 100%
+    display: flex
+    align-items: center
+    flex-direction: column
+    margin-top: 1rem
+    .addIcon
+      width: 5rem
+      height: 5rem
+      border: 1px solid $color-grey-dark
+      border-radius: 50%
+      transition: all .1s
+      cursor: pointer
+      @include btn-active
+
+
+
+//.createSubject
+//  padding: 3rem
+//  .header
+//    width: 100%
+//    margin-bottom: 1rem
+//    h1
+//      color: $color-grey-dark

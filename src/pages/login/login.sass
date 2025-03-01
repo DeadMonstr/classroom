@@ -1,0 +1,219 @@
+@import "styles/abstracts/variables"
+
+.login
+  height: 100vh
+  background-image: linear-gradient(180deg, #00C2FF 0%, #8DE3FE 100%)
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  &.turon_theme
+    background-image: linear-gradient(0deg,#111f4c 30%,#072e92)
+    .item
+      color: white !important
+      &.active
+        color: black !important
+  &__logo
+    width: 35rem
+    height: auto
+    margin-bottom: 10rem
+  .switch
+    display: flex
+    align-items: center
+    justify-content: center
+    margin: 2rem
+    border: 2px solid white
+    border-radius: 50px
+    overflow: hidden
+    position: relative
+    .item
+      padding: 2rem 3rem
+      color: black
+      font-size: 1.7rem
+      cursor: pointer
+      background-color: rgba(255, 255, 255, 0)
+      z-index: 2
+      &.active
+        color: black
+    .line
+      background-color: white
+      border-radius: 40px
+      width: 50%
+      height: 100%
+      position: absolute
+      left: 0
+      z-index: 1
+      transition: all .1s
+      &.active
+        left: 50%
+        background-color: white
+  form
+    width: 50rem
+    height: 40rem
+    border-radius: 15px
+    box-shadow: 0 0 13px 4px $color-white
+    background-color: white
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    padding: 0 4rem
+    gap: 2rem
+    .title
+      font-weight: 600
+      text-align: center
+      color: $color-grey-dark
+      font-size: 3.5rem
+      margin-bottom: 1rem
+    label
+      width: 75%
+      position: relative
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      i
+        position: absolute
+        color: $color-grey-dark
+        right: 1rem
+        top: 50%
+        transform: translateY(-50%)
+        font-size: 2rem
+    .input-fields
+      padding: 0 3.5rem 0 2.5rem
+      width: 100%
+      height: 4.5rem
+      border-radius: 10px
+      outline: none
+      border: 2px solid $color-grey-dark
+      background-color: white
+      font-size: 1.7rem
+      transition: all 0.6s ease
+    .link__register
+      margin-top: 2rem
+      font-size: 1.7rem
+      color: $color-grey-dark
+      font-weight: bold
+      span
+        margin-left: 1rem
+        color: $color-main-dark
+        border-bottom: 1px solid$color-main-dark
+
+
+
+@media (max-width: 768px)
+  .login
+    &__logo
+      top: 10rem
+      width: 30rem
+    form
+      width: 45rem
+      height: 40rem
+      padding: 0 4rem
+      .title
+        font-size: 3rem
+      label
+        width: 80%
+        .name-field
+          left: 2rem
+          top: -1rem
+          font-size: 1.9rem
+        .error-field
+          font-size: 1.5rem
+        i
+          font-size: 2rem
+      .input-fields
+        padding: 0 2.5rem
+        width: 100%
+        height: 6rem
+        font-size: 2.2rem
+
+      .link__register
+        font-size: 2.3rem
+        margin-top: 3rem
+
+@media (max-width: 430px)
+  .login
+    &__logo
+      top: 7rem
+      width: 22rem
+    form
+      width: 35rem
+      height: 40rem
+      padding: 0 4rem
+      .title
+        font-size: 3rem
+      label
+        width: 100%
+        .name-field
+
+          top: -1.5rem
+          font-size: 2.5rem
+        .error-field
+          font-size: 1.5rem
+        i
+          right: 2rem
+          font-size: 2rem
+          background-color: white
+      .input-fields
+        padding: 0 2.5rem
+        width: 100%
+        height: 8.5rem
+        &:nth-child(2)
+          padding: 0 5.5rem 0 2.5rem
+
+
+
+
+@media (max-width: 375px)
+  .login
+    &__logo
+      top: 7rem
+      width: 22rem
+    form
+      width: 90%
+      height: 40rem
+      padding: 0 4rem
+      .title
+        font-size: 3rem
+      label
+        width: 85%
+        .name-field
+          top: -1.5rem
+          font-size: 2.5rem
+        .error-field
+          font-size: 1.5rem
+
+      .input-fields
+        padding: 0 2.5rem
+        width: 100%
+        height: 8.5rem
+        &:nth-child(2)
+          padding: 0 5.5rem 0 2.5rem
+
+@media (max-width: 320px)
+  .login
+    &__logo
+      top: 7rem
+      width: 22rem
+    form
+      width: 95%
+      height: 40rem
+      padding: 0 4rem
+      .title
+        font-size: 3rem
+      label
+        width: 100%
+        .name-field
+          top: -1.5rem
+          font-size: 2.5rem
+        .error-field
+          font-size: 1.5rem
+
+      .input-fields
+        padding: 0 2.5rem
+        width: 100%
+        height: 8.5rem
+        &:nth-child(2)
+          padding: 0 5.5rem 0 2.5rem
+

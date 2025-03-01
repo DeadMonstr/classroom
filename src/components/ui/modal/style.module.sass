@@ -1,0 +1,112 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+.modal
+  width: 100%
+  height: 100dvh
+  position: fixed
+  z-index: 2003
+  background-color: rgba(0, 0, 0, 0.65)
+  top: 0
+  left: 0
+  display: flex
+  align-items: center
+  justify-content: center
+  opacity: 0
+  visibility: hidden
+  transition: all .2s
+  &.active
+    opacity: 1
+    visibility: visible
+  img
+    height: 80%
+  &__box
+    min-width: 30%
+    max-height: 50rem
+    background-color: white
+    box-shadow: 0 0 12px 3px #424242
+    position: relative
+    padding: 1rem
+    .container
+      width: 100%
+      max-height: 40rem
+      overflow: auto
+      position: relative
+      padding: 1rem 3rem
+      @media only screen and (min-width: 768px)
+        &::-webkit-scrollbar
+          width: 8px
+        &::-webkit-scrollbar-track
+          background-color: #ffffff
+        &::-webkit-scrollbar-thumb
+          cursor: pointer
+          background-color: #313131
+    .elem
+      width: 100%
+      height: 100vh
+    .header
+      width: 100%
+      display: flex
+      align-items: center
+      justify-content: space-between
+      h1
+        padding: 2rem
+        font-size: 2rem
+        color: $color-grey-dark
+      .close
+        width: fit-content
+        height: 5rem
+        padding: 2rem
+        z-index: 20
+        background-color: white
+        display: flex
+        align-items: center
+        justify-content: flex-end
+        i
+          cursor: pointer
+          font-size: 3rem
+          color: $color-danger
+          transition: all .1s
+          @include btn-active
+
+
+
+
+@media screen and (max-width: 1024px)
+  .modal
+    &__box
+      min-width: 40%
+      background-color: white
+
+
+
+
+@media screen and (max-width: 768px)
+  .modal
+    &__box
+      min-width: 60%
+      max-height: 55rem
+      background-color: white
+      .container
+        width: 100%
+        max-height: 45rem
+
+@media screen and (max-width: 425px)
+  .modal
+    &__box
+      min-width: 60%
+      max-height: 60rem
+      .container
+        width: 100%
+        max-height: 45rem
+
+
+@media screen and (max-width: 390px)
+  .modal
+    &__box
+      width: 90%
+      max-height: 60rem
+      .container
+        width: 100%
+        max-height: 45rem
+        padding: 1rem

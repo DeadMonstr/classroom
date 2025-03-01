@@ -1,0 +1,55 @@
+@import "styles/abstracts/variables"
+
+
+
+.observeTeacherLesson
+  padding: 3rem
+  padding-bottom: 10rem
+  .wrapper
+    &>div
+      padding: 0 !important
+  .btns
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 2rem
+    margin-bottom: 3rem
+    .item
+      display: flex
+      align-items: center
+      justify-content: center
+      font-size: 2.2rem
+      color: $color-grey-dark
+      &.active
+        color: $color-main
+      span
+        margin-left: .5rem
+        font-size: 1.8rem
+  .fields
+    margin: 2rem 0
+    display: flex
+    flex-wrap: wrap
+    gap: 2rem
+    .field
+      width: 35rem
+      display: flex
+      flex-direction: column
+      gap: 1rem
+      h2
+        flex-grow: 1
+        font-size: 2rem
+      label
+        width: 100%
+        padding: 0
+
+  .footer
+    background-color: rgba(255, 255, 255, 0.88)
+    bottom: 0
+    left: 0
+    position: fixed
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    padding: 2rem
+    z-index: 13

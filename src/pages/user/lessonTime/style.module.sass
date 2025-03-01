@@ -1,0 +1,35 @@
+@import "styles/abstracts/variables"
+
+
+.time
+  width: 100%
+  padding: 4rem
+  .header
+    width: 100%
+    margin-bottom: 2rem
+    display: flex
+    align-items: center
+    justify-content: space-between
+    h1
+      color: $color-grey-dark
+  .container
+    overflow: auto
+  .lessonTuron
+    display: flex
+    flex-direction: column
+    gap: 1rem
+    background-color: #001B61
+    color: white
+    white-space: nowrap
+    padding: 1rem
+    border-radius: 10px
+
+@media only screen and (max-width: 768px)
+  .time
+    width: 100%
+    padding: 3rem
+
+@media only screen and (max-width: 425px)
+  .time
+    width: 100%
+    padding: 2rem

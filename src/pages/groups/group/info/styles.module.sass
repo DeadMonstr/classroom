@@ -1,0 +1,155 @@
+@import "styles/abstracts/mixins"
+@import "styles/abstracts/variables"
+
+
+
+.info
+  width: 100%
+  padding: 2rem 8rem
+
+
+.rating
+  width: 100%
+  border-radius: 15px
+  background-color: #FFF
+  padding: 3rem
+  box-shadow: 0 0 0 0 rgba(92, 0, 0, 0.10), 0 14px 31px 0 rgba(92, 0, 0, 0.10), 0 56px 56px 0 rgba(92, 0, 0, 0.09), 0 125px 75px 0 rgba(92, 0, 0, 0.05), 0 222px 89px 0 rgba(92, 0, 0, 0.01), 0 348px 97px 0 rgba(92, 0, 0, 0.00)
+  .header
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: space-between
+    cursor: pointer
+    h1
+      font-size: 2rem
+      font-weight: 400
+      color: $color-grey-dark
+    i
+      color: $color-grey-dark
+      font-size: 2.5rem
+  .balance
+    margin: 1rem 0
+    font-size: 1.5rem
+    &.red
+      color: red
+    &.yellow
+      color: #fda339
+    &.green
+      color: #00a100
+    &.navy
+      color: blue
+    &.black
+      color: black
+  .accordion
+    width: 100%
+    max-height: 0
+    transition: all .2s cubic-bezier(0,1,0,1)
+    overflow: hidden
+    &.active
+      height: auto
+      max-height: 9999px
+      transition: all .2s cubic-bezier(1,0,1,0)
+  .wrapper
+    margin-top: 2rem
+    .subHeader
+      display: flex
+      align-items: center
+      justify-content: flex-start
+    .chart
+      width: 100%
+      .item
+        display: flex
+        align-items: center
+        position: relative
+        img
+          width: 4rem
+          height: 4rem
+          border-radius: 50%
+          margin-right: 1rem
+        .num
+          font-size: 1.6rem
+          color: $color-grey-dark
+          font-weight: 400
+          margin-left: 1rem
+        .user
+          width: 100%
+          padding: 1rem
+          border-radius: 5px
+          .info
+            display: flex
+            padding: 0
+            margin-bottom: 1rem
+            span
+              margin-right: 1rem
+              font-size: 1.5rem
+              color: $color-grey-dark
+          .line
+            border-radius: 5px
+            height: 4rem
+            background-color: $color-main
+            padding: .5rem
+            display: flex
+            align-items: center
+            position: relative
+
+    .container
+      margin-top: 1rem
+    //.table
+    //  height: 2rem
+
+
+
+
+
+@media only screen and (max-width: 768px)
+
+  .info
+    width: 100%
+    padding: 2rem 5rem
+
+  .rating
+    .wrapper
+      .chart
+        .item
+          .user
+            .line
+              height: 3.5rem
+
+
+
+
+@media only screen and (max-width: 768px)
+
+  .info
+    width: 100%
+    padding: 2rem 5rem
+
+  .rating
+    .wrapper
+      .chart
+        .item
+          .user
+            .line
+              height: 3.5rem
+    .container
+      overflow: auto
+
+@media only screen and (max-width: 425px)
+
+  .info
+    width: 100%
+    padding: 2rem
+
+  .rating
+    padding: 2.5rem
+    .wrapper
+      .chart
+        .item
+          .user
+            margin: 1rem 0
+            padding: 0
+            .line
+              height: 3.5rem
+    .container
+
+      overflow: auto

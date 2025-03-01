@@ -1,0 +1,80 @@
+
+@import "styles/abstracts/variables"
+
+
+.groupTest
+  padding: 3rem
+  .header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-top: 2rem
+    &>div
+      display: flex
+      align-items: center
+  .subheader
+    margin-top: 2rem
+    display: flex
+    justify-content: flex-end
+  .wrapper
+    margin-top: 2rem
+    display: flex
+    flex-direction: column
+    gap: 3rem
+    z-index: 1
+    .accordion
+      width: 100%
+
+.createTest
+  display: flex
+  flex-direction: column
+  gap: 2rem
+  .student
+    display: flex
+    flex-direction: column
+    .info
+      input
+        width: 20px
+        height: 20px
+    &>div
+      display: flex
+      align-items: center
+      justify-content: flex-start
+      gap: 2rem
+  .btns
+    display: flex
+
+.file
+  width: 100%
+  border-radius: 15px
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  &__change
+    width: 100%
+    padding: 1rem
+    display: flex
+    justify-content: center
+  &__create
+    width: 100%
+    min-height: 10rem
+    border: 2px dotted $color-grey-dark
+    margin-top: 1rem
+    display: flex
+    align-items: center
+    justify-content: center
+    font-size: 1.8rem
+    cursor: pointer
+    padding: 2rem
+    &>div
+      display: flex
+      align-items: center
+      gap: 2rem
+    i
+      font-size: 3rem
+      color: $color-grey-dark
+    input
+      display: none
+  &>div
+    margin-top: 2rem

@@ -1,0 +1,97 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+.createLesson
+  margin-top: 3rem
+  .header
+    h1
+      font-size: 1.7rem
+      color: $color-grey-dark
+  .levels
+    width: 100%
+    padding: 1rem
+    display: flex
+    align-items: center
+    justify-content: flex-start
+    flex-wrap: wrap
+    &__item
+      min-width: 20rem
+      height: 15rem
+      margin: 1rem
+      border: 2px solid $color-grey-light
+      border-radius: 5px
+      padding: 1rem
+      .header
+        width: 100%
+        display: flex
+        justify-content: space-between
+        align-items: center
+        position: relative
+        .icon
+          font-size: 2rem
+          cursor: pointer
+        .innerModal
+          min-width: 10rem
+          height: fit-content
+          position: absolute
+          background-color: white
+          border-radius: 5px
+          box-shadow: 0 38px 15px rgba(0, 0, 0, 0.01), 0 21px 13px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.09), 0 2px 5px rgba(0, 0, 0, 0.1), 0 0 0 rgba(0, 0, 0, 0.1)
+          right: -13.5rem
+          top: 2rem
+          z-index: 20
+          overflow: hidden
+          opacity: 0
+          visibility: hidden
+          &.active
+            opacity: 1
+            visibility: visible
+          .item
+            width: 100%
+            padding: 1rem
+            display: flex
+            align-items: center
+            cursor: pointer
+            color: $color-grey-dark
+            transition: all .1s
+            user-select: none
+            &:hover
+              color: white
+              background-color: $color-grey-dark
+            .icon
+              font-size: 1.5rem
+            .text
+              font-size: 1.5rem
+              margin-left: 1rem
+      .container
+        p
+          width: 100%
+          font-size: 1.5rem
+    &__add
+      margin: 1rem
+      width: 15rem
+      height: 15rem
+      border: 2px solid rgba($color-grey-light,.6)
+      display: flex
+      align-items: center
+      justify-content: center
+      font-size: 2rem
+      border-radius: 5px
+      background-color: rgba($color-grey-light,.5)
+      color: white
+      cursor: pointer
+      transition: all .2s
+      @include btn-active
+
+.addLevel
+  width: 40rem
+  padding: 1rem
+  .header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    .trash
+      color: red
+      font-size: 1.8rem
+  .container
+    width: 100%

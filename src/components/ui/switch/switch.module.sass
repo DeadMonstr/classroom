@@ -1,0 +1,45 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+
+.mainSwitchBox
+  width: 4.2rem
+  height: 2.5rem
+  border-radius: 18px
+  display: flex
+  align-items: center
+  padding: 5px
+  justify-content: start
+  border: none
+  background: $color-grey-light
+  transition: 0.3s ease-in-out
+  margin: 0
+
+
+  &__onSwitch
+    width: 1.5rem
+    height: 1.5rem
+    background: white
+    border-radius: 50%
+    transition: 0.3s ease-in-out
+  &__offSwitch
+    width: 1.5rem
+    height: 1.5rem
+    background: white
+    border-radius: 50%
+    margin-left: 55%
+    transition: 0.3s ease-in-out
+
+.switchOn
+  background: $color-slide
+  transition: 0.3s ease-in-out
+
+
+
+.disabled
+  opacity: 1
+  filter: contrast(50%)
+  cursor: not-allowed
+
+

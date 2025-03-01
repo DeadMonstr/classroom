@@ -1,0 +1,161 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+
+.design
+  width: 100%
+  padding: 2rem
+  height: calc(100% - 6rem)
+  overflow: auto
+
+  .titleComponent
+    font-size: 1.8rem
+    font-weight: normal
+  .subTitleComponent
+    font-size: 1.6rem
+    font-weight: normal
+
+  .separator
+    width: 100%
+    height: 1px
+    background-color: rgba($color-grey-light, .7)
+    margin: 3rem 0
+
+
+  &Type
+    display: flex
+    align-items: center
+    justify-content: center
+    width: 100%
+    border-radius: 50px
+    border: 1px solid $color-grey-light
+    padding: .5rem
+    margin: 2rem 0
+    &__item
+      width: 50%
+      border-radius: 50px
+      padding: 1rem
+      display: flex
+      align-items: center
+      justify-content: center
+      cursor: pointer
+      font-size: 1.6rem
+      transition: all .1s
+      &.active
+        background-color: $color-slide
+        color: white
+  .layout
+    width: 100%
+    margin-top: 2rem
+    &__wrapper
+      margin-top: 2rem
+      display: flex
+      flex-wrap: wrap
+      align-items: center
+      gap: 1rem
+      justify-content: center
+      .item
+        width: 6rem
+        border: 1px solid $color-grey-light
+        border-radius: 5px
+        display: flex
+        align-items: center
+        justify-content: center
+        cursor: pointer
+        transition: all .1s
+        user-select: none
+        @include btn-active
+        &:hover
+          border: 1px solid $color-slide
+          box-shadow: 0 0 2px 1px $color-slide
+        &.active
+          border: 2px solid $color-slide
+          box-shadow: 0 0 2px 1px $color-slide
+        svg
+          width: 100%
+          height: 100%
+
+
+  .component
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-top: 2rem
+    &>*
+      width: 50%
+    &>div
+      display: flex
+      align-items: center
+      justify-content: flex-end
+
+  .controller
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    .item
+      padding: .7rem 1.5rem
+      font-size: 1.2rem
+      border: 1px solid $color-grey-light
+      transition: all .1s
+      cursor: pointer
+      &:not(&.disabled)
+        @include btn-active
+      &.disabled
+        opacity: .4
+        cursor: not-allowed
+        background-color: white
+        &:hover
+
+          background-color: white
+          color: $color-grey-light
+      &:hover
+        background-color: $color-grey-light
+        color: white
+      &:first-child
+        border-radius: 10px 0 0 10px
+      &:last-child
+        border-radius: 0 10px 10px 0
+
+
+
+  .color
+    width: 3rem
+    height: 3rem
+    border-radius: 5px
+  .icons
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    //gap: 1rem
+    //border: 1px solid $color-grey-light
+    border-radius: 5px
+    padding: 2px
+    .icon
+      width: 4rem
+      height: 3rem
+      padding: .5rem
+      //background-color: rgba( $color-grey-light, .2)
+      border-radius: 5px
+      cursor: pointer
+      &.active
+        border: 1px solid $color-slide !important
+        color: white
+        svg
+          &>*
+            stroke: $color-slide
+
+      &:hover
+        border: 1px solid $color-slide
+        color: white
+        svg
+          &>*
+            stroke: $color-slide
+      &:active
+        border: 1px solid $color-slide
+        &>*
+          stroke: $color-slide
+      svg
+        width: 100%
+        height: 100%
+

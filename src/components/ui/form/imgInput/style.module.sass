@@ -1,0 +1,24 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+.imgInput
+  width: 100%
+  padding: 1rem
+  input
+    display: none
+  &__box
+    max-width: 40rem
+    height: 15rem
+    border: 3px dotted $color-grey-dark
+    cursor: pointer
+    transition: all .1s
+    display: flex
+    align-items: center
+    justify-content: center
+    h1
+      color: $color-grey-dark
+    img
+      width: 80%
+      height: 90%
+      object-fit: cover
+    @include btn-active

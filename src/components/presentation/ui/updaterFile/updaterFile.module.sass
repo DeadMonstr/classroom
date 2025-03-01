@@ -1,0 +1,51 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+
+.update
+  position: relative
+  height: fit-content
+  width: 100%
+  max-width: 27rem
+  z-index: 15
+  .btn
+    padding: 1rem 2rem
+    width: 100%
+    border: 1px solid rgba($color-grey-light, .5)
+    display: flex
+    align-items: center
+    justify-content: space-between
+    border-radius: 5px
+    background-color: white
+    text-decoration: underline
+    cursor: pointer
+    user-select: none
+    padding-right: 6rem
+    h1
+      font-size: 1.6rem
+      font-weight: normal
+    img
+      width: 5rem
+      height: 5rem
+      object-fit: contain
+      border-radius: 5px
+
+  .trash
+    right: 1rem
+    top: 50%
+    translate: 0 -50%
+    width: 3rem
+    height: 3rem
+    display: flex
+    align-items: center
+    justify-content: center
+    border-radius: 5px
+    cursor: pointer
+    position: absolute
+    @include btn-active
+    &:hover
+      background-color: rgba( $color-grey-light, .1)
+    i
+      font-size: 1.8rem
+      color: $color-grey-dark

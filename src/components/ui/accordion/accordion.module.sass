@@ -1,0 +1,59 @@
+@import "styles/abstracts/variables"
+
+
+.accordion
+  width: 45rem
+  display: flex
+  flex-direction: column
+  border-radius: 5px
+  border: 2px solid white
+  background-color: white
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.10), 0 6px 14px 0 rgba(0, 0, 0, 0.10), 0 25px 25px 0 rgba(0, 0, 0, 0.09), 0 56px 33px 0 rgba(0, 0, 0, 0.05), 0 99px 40px 0 rgba(0, 0, 0, 0.01), 0 155px 43px 0 rgba(0, 0, 0, 0.00)
+  &.active
+    border: 2px solid $color-main-light
+  .header
+    width: 100%
+    min-height: 7rem
+    padding: 2rem
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    .info
+      display: flex
+      align-items: center
+      justify-content: flex-start
+      img
+        width: 5rem
+        height: 5rem
+        object-fit: cover
+        object-position: center
+        border-radius: 50%
+        margin-right: 1rem
+      &>div
+        h1
+          font-weight: normal
+          font-size: 1.8rem
+    .btns
+      display: flex
+      align-items: center
+      justify-content: center
+      gap: 2rem
+      .arrow
+        right: 2rem
+        height: fit-content
+        &.active
+          i
+            transform: rotate(180deg)
+        i
+          color: $color-grey-dark
+          font-size: 3rem
+          transform: rotate(0)
+  .wrapper
+    height: fit-content
+    overflow: hidden
+    width: 100%
+    transition: all .1s
+    &>div
+      padding: 2rem

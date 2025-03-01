@@ -1,0 +1,300 @@
+@import "styles/abstracts/variables"
+
+.bookProfile
+  width: 100%
+  padding: 4rem
+  .header
+    display: flex
+    align-items: center
+    margin-bottom: 2rem
+  .wrapper
+    width: 100%
+    display: flex
+    align-items: flex-start
+    gap: 2rem
+  .slides
+    display: flex
+    flex-direction: column
+    width: 40%
+
+    .main
+      width: 100%
+      height: 40rem
+      border: 1px solid #919191
+      object-fit: contain
+    &__wrapper
+      width: 100%
+      margin-top: 2rem
+      display: flex
+      align-items: center
+      gap: 1rem
+      .active
+        border: 1px solid gold
+      img
+        width: 100px
+        height: 15rem
+        display: block
+        flex: 1 1 auto
+        border: 1px solid #adadad
+        object-fit: contain
+  .info
+    width: 55%
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    gap: 2rem
+    h1
+      color: $color-grey-dark
+      font-size: 3.2rem
+      font-style: normal
+      font-weight: 700
+      line-height: normal
+    p
+      width: 80%
+      color: $color-grey-dark
+      font-size: 2rem
+      font-style: normal
+      font-weight: 400
+    .line
+      width: 100%
+      background-color: $color-grey-light
+      height: 1px
+    &__btn
+      padding: 1rem 2.5rem
+      background-color: #51e752
+      border-radius: 5px
+      font-size: 2rem
+      color: white
+      transition: all .1s
+      cursor: pointer
+      user-select: none
+      &:active
+        transform: scale(0.9)
+
+
+
+.buy
+  display: flex
+  align-items: center
+  &>form,&>.students
+    width: 50rem
+    background-color: white
+    border-radius: 15px
+    padding: 2rem 3rem
+    margin: 0 1rem
+    max-height: 60rem
+    overflow: hidden
+    overflow-y: auto
+    h1
+      margin-bottom: 2rem
+  .wrapper
+    display: flex
+    //flex-direction: column
+    align-items: center
+    margin: 2rem 0
+  .footer
+    margin-top: 2rem
+  &__header
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: center
+  .students
+    &__item
+      width: 100%
+      display: flex
+      align-items: center
+      justify-content: center
+      font-size: 1.8rem
+      border-bottom: 1px solid #252525
+      padding: 1rem
+
+      span
+        margin-left: 1rem
+
+        &:last-child
+          display: flex
+          justify-content: flex-end
+          flex-grow: 2
+        input
+          width: 2rem
+          height: 2rem
+
+
+
+
+@media only screen and (max-width: 430px)
+  .bookProfile
+    width: 100%
+    padding: 4rem
+
+    .header
+      display: flex
+      align-items: center
+      margin-bottom: 2rem
+
+    .wrapper
+      flex-direction: column
+
+    .slides
+      display: flex
+      flex-direction: column
+      width: 100%
+      .main
+        height: 25rem
+      &__wrapper
+        width: 100%
+        margin-top: 2rem
+        display: flex
+        align-items: center
+        gap: 1rem
+        .active
+          border: 1px solid gold
+        img
+          width: 100px
+          height: 13rem
+          display: block
+          flex: 1 1 auto
+          border: 1px solid #adadad
+          object-fit: contain
+    .info
+      width: 100%
+      display: flex
+      flex-direction: column
+      align-items: flex-start
+      gap: 2rem
+      margin-top: 4rem
+      h1
+        color: $color-grey-dark
+        font-size: 3.2rem
+        font-style: normal
+        font-weight: 700
+        line-height: normal
+      p
+        width: 80%
+        color: $color-grey-dark
+        font-size: 2.4rem
+        font-style: normal
+        font-weight: 400
+      .line
+        width: 100%
+        background-color: $color-grey-light
+        height: 1px
+      &__btn
+        width: 100%
+        padding: 1.6rem
+        font-size: 2.3rem
+        text-align: center
+
+
+  .changeBookModal
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 5rem
+    form,&>div
+      width: 35%
+      background-color: white
+      border-radius: 15px
+      padding: 2rem 3rem
+      margin: 0 1rem
+      max-height: 60rem
+      overflow: hidden
+      overflow-y: auto
+      h1
+        width: 100%
+        text-align: center
+        font-size: 2rem
+      textarea
+        width: 100%
+        resize: none
+        margin-top: 2rem
+    .img
+      width: 100%
+      padding: 2rem
+      border: 2px dotted black
+      display: flex
+      align-items: center
+      justify-content: center
+      input
+        display: none
+    .images
+      width: 100%
+      display: flex
+      flex-wrap: wrap
+      align-items: center
+      justify-content: space-around
+      margin-top: 2rem
+      &__item
+        padding: 1rem
+        width: fit-content
+        position: relative
+        margin: 1rem
+        &-del
+          position: absolute
+          right: -1rem
+          top: -1rem
+          i
+            font-size: 2rem
+            color: $color-grey-dark
+      img
+        width: 100px
+        height: 100px
+        display: block
+        object-fit: cover
+
+
+  .buy
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    &>form,&>.students
+      margin: 1rem 0
+      width: 90%
+      background-color: white
+      border-radius: 15px
+      padding: 2rem 3rem
+
+      max-height: 60rem
+      overflow: hidden
+      overflow-y: auto
+      h1
+        font-size: 2.5rem
+        margin-bottom: 2rem
+    &>.students
+      order: 1
+    &>form
+      order: 2
+    &__header
+      width: 100%
+      display: flex
+      gap: 1rem
+      flex-wrap: wrap
+      align-items: center
+      justify-content: center
+    .wrapper
+      //flex-wrap: wrap
+      gap: 1rem
+    .students
+      &__item
+        width: 100%
+        display: flex
+        align-items: center
+        justify-content: center
+        font-size: 1.8rem
+        border-bottom: 1px solid #252525
+        padding: 1rem
+
+        span
+          margin-left: 1rem
+
+          &:last-child
+            display: flex
+            justify-content: flex-end
+            flex-grow: 2
+          input
+            width: 2rem
+            height: 2rem

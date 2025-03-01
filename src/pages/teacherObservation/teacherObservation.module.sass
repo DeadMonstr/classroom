@@ -1,0 +1,93 @@
+@import "styles/abstracts/mixins"
+@import "styles/abstracts/variables"
+
+
+.groups
+  width: 100%
+  padding: 4rem
+  display: flex
+  align-items: flex-start
+  justify-content: space-around
+  flex-wrap: wrap
+  .header
+    margin: 1rem 0
+    width: 100%
+    display: flex
+    justify-content: space-between
+    align-items: center
+    h1
+      color: $color-grey-dark
+    &>div
+      display: flex
+      align-items: center
+  &__item
+    width: 38rem
+    height: 25rem
+    background-color: white
+    border-radius: 15px
+    overflow: hidden
+    box-shadow: 0 0 0 0 rgba(92, 0, 0, 0.10), 0 6px 13px 0 rgba(92, 0, 0, 0.10), 0 24px 24px 0 rgba(92, 0, 0, 0.09), 0 54px 32px 0 rgba(92, 0, 0, 0.05), 0 95px 38px 0 rgba(92, 0, 0, 0.01), 0 149px 42px 0 rgba(92, 0, 0, 0.00)
+    cursor: pointer
+    transition: all .1s
+    margin: 2rem
+    @include btn-active
+    img
+      width: 100%
+      height: 10rem
+      object-fit: cover
+      object-position: bottom
+
+    .info
+      height: 15rem
+      padding: 2rem
+      &__header
+        display: flex
+        align-items: center
+        justify-content: space-between
+        h1
+          font-size: 2rem
+          color: $color-grey-dark
+          font-weight: 600
+          &:last-child
+            font-size: 1.8rem
+      h2
+        margin-top: 1rem
+        font-size: 1.6rem
+        font-weight: 400
+        color: $color-grey-dark
+      h3
+        margin-top: 3rem
+        font-size: 1.6rem
+        color: $color-grey-dark
+        font-weight: 400
+
+@media only screen and (max-width: 1024px)
+  .groups
+    padding: 4rem
+    &__item
+      width: 38rem
+      height: 25rem
+      .info
+        &__header
+          h1
+            font-size: 1.8rem
+            &:last-child
+              font-size: 1.6rem
+
+
+
+@media only screen and (max-width: 768px)
+  .groups
+    padding: 3rem
+    &__item
+      width: 35rem
+      height: 25rem
+
+
+@media only screen and (max-width: 425px)
+  .groups
+    padding: 2rem
+
+    &__item
+      width: 30rem
+      height: 25rem

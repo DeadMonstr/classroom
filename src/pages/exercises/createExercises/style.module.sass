@@ -1,0 +1,103 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+.createExc
+  width: 100%
+  min-height: 100%
+  display: flex
+  position: relative
+  overflow: auto
+  main
+    min-height: 100%
+    width: 80%
+    padding: 3rem
+    padding-bottom: 6%
+    position: relative
+    .formInfo
+      display: flex
+      justify-content: space-between
+      align-items: flex-end
+      border-bottom: 1px solid $color-grey-dark
+      margin-bottom: 2rem
+      padding: 1rem 0
+      &>div
+        display: flex
+        align-items: center
+        justify-content: center
+      .makeRandom
+        display: flex
+        gap: 1rem
+        flex-direction: column
+        margin: 0 1rem
+    .submit
+      left: 0
+      width: 80%
+      height: 10%
+      position: fixed
+      bottom: 0
+      border-top: 1px solid $color-grey-dark
+      background-color: rgba(255, 255, 255, 0.31)
+      backdrop-filter: blur(5px)
+      display: flex
+      align-items: center
+      justify-content: flex-end
+      padding: 1rem
+      &__btn
+        padding: 0.6rem 1.5rem
+        color: white
+        background-color: $color-grey-dark
+        font-size: 1.6rem
+        cursor: pointer
+        user-select: none
+        transition: all .1s
+        border: 0
+        outline: 0
+        @include btn-active
+  .nav
+    width: 20%
+    border-left: 2px solid #313131
+    display: flex
+    flex-wrap: wrap
+    padding: 2rem
+    min-height: 100%
+    position: fixed
+    right: 0
+    align-content: flex-start
+    &__item
+      width: fit-content
+      height: fit-content
+      border: 1px solid $color-grey-dark
+      padding: .7rem 2rem
+      font-size: 1.5rem
+      cursor: pointer
+      user-select: none
+      margin: 1rem
+      @include btn-active
+      &:hover
+        background-color: $color-grey-dark
+        color: white
+
+  .modalMenu
+    width: fit-content
+    height: fit-content
+    background-color: #606060
+    position: absolute
+    opacity: 0
+    visibility: hidden
+    cursor: pointer
+    padding: 0.6rem 1rem
+    border-radius: 10px
+    color: white
+    font-size: 1.7rem
+    &:before
+      content: ""
+      display: block
+      position: absolute
+      left: 50%
+      transform: translateX(-50%)
+      top: -12px
+      width: 0
+      height: 0
+      border-left: 7px solid transparent
+      border-right: 7px solid transparent
+      border-bottom: 12px solid  $color-grey-dark

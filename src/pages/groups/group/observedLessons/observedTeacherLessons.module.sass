@@ -1,0 +1,32 @@
+@import "styles/abstracts/variables"
+
+
+.observedLessons
+  padding: 3rem
+  .title
+    font-size: 1.6rem
+  .header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 1rem
+    flex-wrap: wrap
+    margin: 2rem 0
+    &>div
+      display: flex
+      @media only screen and (max-width: 430px)
+        width: 100%
+        justify-content: center
+
+
+  .wrapper
+    margin: 2rem 0
+    display: flex
+    flex-wrap: wrap
+    gap: 2rem
+    overflow: auto
+
+
+.comment
+  max-width: 60rem
+  font-size: 1.7rem

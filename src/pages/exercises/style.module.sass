@@ -1,0 +1,71 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+
+.exercises
+  width: 100%
+  padding: 3rem
+  .mainTitle
+    color: $color-grey-dark
+    font-size: 2rem
+  .header
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    justify-content: space-between
+    &>div
+      display: flex
+      align-items: center
+      margin-top: 2rem
+      .btn
+        padding: 0.7rem 1.2rem
+        border: 1px solid $color-grey-dark
+        border-radius: 5px
+        font-size: 1.7rem
+        margin: .5rem
+        cursor: pointer
+        user-select: none
+        transition: all .1s
+        color: $color-grey-dark
+        @include btn-active
+        &:hover
+          background-color: $color-grey-dark
+          color: white
+  .container
+    display: flex
+    justify-content: flex-start
+    align-items: flex-start
+    flex-wrap: wrap
+    width: 100%
+    margin-top: 1rem
+  .item
+    width: fit-content
+    height: fit-content
+    border: 1px solid $color-grey-dark
+    padding: 1rem 2rem
+    font-size: 1.6rem
+    cursor: pointer
+    transition: all .2s
+    user-select: none
+    margin: 1rem
+    &:hover
+      background-color: $color-grey-dark
+      color: white
+  .icon
+    width: 15rem
+
+
+
+
+
+
+
+
+
+
+
+
+
+

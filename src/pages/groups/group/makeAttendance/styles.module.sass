@@ -1,0 +1,322 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+
+.attendance
+  width: 100%
+  padding: 4rem
+  padding-bottom: 8rem
+  .nav
+    display: flex
+    align-items: center
+    justify-content: center
+    &__item
+      margin: 0 1rem
+      color: $color-grey-light
+      font-size: 2rem
+      border-bottom: 2px solid white
+      display: flex
+      align-items: center
+      justify-content: center
+      span
+        font-size: 1.6rem
+        margin-left: 1rem
+      i
+        font-size: 2.7rem
+      &.active
+        i
+          color: $color-main
+        span
+
+          color: $color-main
+
+  .container
+    &>div
+      padding: 0 !important
+
+
+
+.makeAttendance
+  padding: 4rem
+  .red
+    color: red
+  .yellow
+    color: #fda339
+  .green
+    color: #00a100
+  .navy
+    color: blue
+  .black
+    color: black
+  .header
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: space-between
+    h1
+      font-weight: 600
+      color: $color-grey-dark
+    .btns
+      display: flex
+  .footer
+    background-color: white
+    bottom: 0
+    left: 0
+    position: fixed
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    padding: 2rem
+    z-index: 13
+  .container
+    margin-top: 3rem
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: center
+
+  .students
+    width: 100%
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    .item
+      margin: 1.5rem 0
+      border-radius: 5px
+      padding: 2rem
+      width: 80%
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.10), 0 6px 14px 0 rgba(0, 0, 0, 0.10), 0 25px 25px 0 rgba(0, 0, 0, 0.09), 0 56px 33px 0 rgba(0, 0, 0, 0.05), 0 99px 40px 0 rgba(0, 0, 0, 0.01), 0 155px 43px 0 rgba(0, 0, 0, 0.00)
+      background-color: white
+      position: relative
+      .top
+        display: flex
+
+        align-items: center
+        .info
+          flex-grow: 3
+          margin-left: 1rem
+          h1
+            color: $color-grey-dark
+            font-size: 1.7rem
+        .arrow
+          transform: rotate(-90deg)
+          font-size: 2rem
+
+        img
+          border-radius: 50%
+          width: 5rem
+          height: 5rem
+          object-fit: cover
+      .inside
+        height: 0
+        overflow: hidden
+        transition: all .2s
+      .balance
+        text-align: center
+        margin: 1rem 0
+        font-size: 1.5rem
+        .red
+          color: red
+        .yellow
+          color: #fda339
+        .green
+          color: #00a100
+        .navy
+          color: blue
+        .black
+          color: black
+      .scores
+        margin-top: 1rem
+        align-items: flex-start
+        flex-direction: column
+        h1
+          font-size: 1.8rem
+        .score
+          cursor: auto
+          color: $color-grey-dark
+          border: 2px solid rgba(255, 255, 255, 0)
+          &.error
+            border: 2px solid $color-danger
+          .stars
+            margin-top: 1.5rem
+            i
+              margin: 0 .4rem
+              font-size: 2.4rem
+            .active
+              color: #ffc62e
+      .btns
+        margin-top: 2rem
+        justify-content: center
+
+        &__item
+          width: 6rem
+          padding: .8rem
+      .type
+        height: fit-content
+        cursor: auto
+        position: absolute
+        top: -2rem
+        right: -2rem
+
+  .user
+    width: 100%
+    padding: 1rem
+    display: flex
+    align-items: center
+    border-bottom: 2px solid $color-grey-light
+    position: relative
+    .index
+      font-size: 1.6rem
+      width: 5rem
+    .name,.surname,.balance
+      flex-grow: 1
+      font-size: 1.7rem
+      color: $color-grey-dark
+  .type
+    flex-grow: 2
+    height: 100%
+    display: flex
+    align-items: center
+    justify-content: center
+    z-index: 10
+    backdrop-filter: blur(5px)
+    cursor: pointer
+    &.yes
+      .type__btn
+        background-color: $color-success !important
+    &__btn
+      width: 4rem
+      height: 4rem
+      background-color: $color-danger
+      border-radius: 50%
+      display: flex
+      align-items: center
+      justify-content: center
+    i
+      font-size: 2.5rem
+      color: white
+  .scores
+    display: flex
+    align-items: center
+    justify-content: space-evenly
+
+
+    .score
+      cursor: pointer
+      padding: 1rem
+      position: relative
+      display: flex
+      align-items: center
+      justify-content: center
+      &.error
+        border: 2px solid $color-danger
+        border-radius: 5px
+      .outside
+        font-size: 1.8rem
+        span
+          color: $color-grey-dark
+          margin-right: .7rem
+        i
+          margin: 0
+          font-size: 2.5rem
+          color: $color-grey-light
+        .active
+          color: #ffc62e
+      .popup
+        position: absolute
+        top: -200%
+        left: 50%
+        transform: translateX(-50%)
+        background-color: $color-grey-dark
+        padding: 1rem
+        border-radius: 5px
+        visibility: hidden
+        opacity: 0
+        transition: all .1s
+        user-select: none
+        z-index: 11
+        &.active
+          opacity: 1
+          visibility: visible
+        h1
+          font-size: 1.6rem
+          color: white
+        .stars
+          margin-top: 1rem
+          width: 100%
+          display: flex
+          align-items: center
+          justify-content: flex-end
+          .active
+            color: #ffc62e
+          i
+            font-size: 2rem
+            margin: .5rem
+            color: white
+  .btns
+    flex-grow: 2
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    &__item
+      border-radius: 5px
+      margin: 0 1rem
+      padding: .6rem 1rem
+      display: flex
+      align-items: center
+      justify-content: center
+      background-color: #30c430
+      transition: all .1s
+      cursor: pointer
+      @include btn-active
+      i
+        font-size: 2rem
+        color: white
+      &:last-child
+        background-color: $color-danger
+
+@media only screen and (max-width: 425px)
+  .attendance
+    padding: 3rem
+    padding-bottom: 10rem
+    .nav
+      &__item
+        cursor: default
+  .makeAttendance
+    padding: 3rem
+    .header
+      margin-top: 2rem
+      flex-direction: column
+      .btns
+        margin-top: 2rem
+
+
+    .students
+      .item
+        width: 100%
+
+
+@media only screen and (max-width: 320px)
+
+
+
+
+  .makeAttendance
+    padding: 2rem
+
+    .header
+      margin-top: 2rem
+      flex-direction: column
+      .btns
+        margin-top: 2rem
+
+
+    .students
+      .item
+        width: 100%
+
+
+
