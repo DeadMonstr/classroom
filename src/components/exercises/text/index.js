@@ -30,9 +30,14 @@ const ExcText = React.memo(
 
         const [textComponent, setTextComponent] = useState({})
 
+
+
         useEffect(() => {
             setTextComponent(component)
         }, [component])
+
+        
+
 
         return component.completed ?
             <ViewExc

@@ -58,6 +58,19 @@ const UserSlice = createSlice({
 		},
 		changeUserData: (state,action) => {
 			state.data[action.payload.name] = action.payload.value
+		},
+		onExit: (state) => {
+			state.data = {
+				role: null,
+				name: 'Ulug',
+				surname: "dasdas",
+				username: 'asdasdas'
+			}
+			sessionStorage.removeItem('token');
+			sessionStorage.removeItem('refresh_token');
+			localStorage.removeItem('user');
+			localStorage.removeItem('role');
+			state.fetchUserDataStatus = 'idle';
 		}
 	},
 	extraReducers: builder => {
@@ -85,4 +98,4 @@ const {actions,reducer} = UserSlice;
 
 export default reducer
 
-export const {setUserData,changeUserData,setCheckedPassword,setClearPassword} = actions
+export const {setUserData,changeUserData,onExit,setCheckedPassword,setClearPassword} = actions

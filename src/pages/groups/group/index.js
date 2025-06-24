@@ -15,15 +15,13 @@ import FinishedLessons from "pages/groups/group/finishedLessons/FinishedLessons"
 
 import Back from "components/ui/back";
 import { useParams } from "react-router";
-import { useHttp } from "hooks/http.hook";
-import { BackUrl, ROLES } from "constants/global";
+import { ROLES } from "constants/global";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGroup } from "slices/groupSlice";
 import Loader from "components/ui/loaderPage/LoaderPage";
 import RequireAuth from "components/auth/requireAuth";
 import LessonPlan from "pages/groups/group/lessonPlan/LessonPlan";
 import ObservedTeacherLessons from "pages/groups/group/observedLessons/observedTeacherLessons";
-import OnlineLesson from "pages/groups/group/onlineLesson/OnlineLesson";
 import GroupTest from "./groupTest/groupTest";
 
 
@@ -39,7 +37,6 @@ const Group = () => {
 	},[id])
 
 
-
 	return (
 		<>
 
@@ -50,7 +47,7 @@ const Group = () => {
 					<Route path={"makeAttendance/*"} element={<MakeAttendance/>} />
 				</Route>
 
-				<Route path={"info/*"} element={<GroupIndex />} />
+				<Route path={"*"} element={<GroupIndex />} />
 				<Route path={"attendanceTable"} element={<AttendanceTable backBtn={true}/>} />
 				<Route path={"lessonsTime"} element={<LessonTime />} />
 				<Route path={"finishedLessons/*"} element={<FinishedLessons />} />
@@ -65,7 +62,7 @@ const Group = () => {
 
 				<Route
 					path="*"
-					element={<Navigate to="info/" replace/>}
+					element={<Navigate to="info" replace/>}
 				/>
 			</Routes>
 
@@ -77,7 +74,7 @@ const Group = () => {
 
 const GroupIndex = () => {
 
-	const {data,fetchGroupDataStatus} = useSelector(state => state.group)
+	const {data,errors,fetchGroupDataStatus} = useSelector(state => state.group)
 
 	const {name,teacher} = data
 
@@ -96,6 +93,14 @@ const GroupIndex = () => {
 					<h1>{teacher?.name} {teacher?.surname}</h1>
 				</div>
 			</div>
+			<div>
+				{
+					errors.length > 0 &&
+					<div className={styles.errors}>
+						{errors.map((item,index) => <p key={index}>{item}</p>)}
+					</div>
+				}
+			</div>
 			<div className={styles.subHeader}>
 				<Back className={styles.newBack} to={"/groups"}/>
 			</div>
@@ -105,7 +110,7 @@ const GroupIndex = () => {
 					className={({ isActive }) =>
 						isActive ? `${styles.item} ${styles.active}` : `${styles.item}`
 					}
-					to={" "}
+					to={"info"}
 				>
 					<svg width="42" height="52" viewBox="0 0 42 54" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<g clip-path="url(#clip0_673_161)">
@@ -175,7 +180,7 @@ const GroupIndex = () => {
 
 			<div className={styles.container}>
 				<Routes>
-					<Route index element={<GroupInformation/>}/>
+					<Route index path={"info"} element={<GroupInformation/>}/>
 					<Route path={"curriculum"} element={<Curriculum/>}/>
 					<Route path={"addition"} element={<Addition/>}/>
 				</Routes>

@@ -521,7 +521,6 @@ const CreateExercises = () => {
             <div className={styles.nav__item} onClick={() => onClickText("question")}>
                 Question
             </div>
-
             <div className={styles.nav__item} onClick={() => onClickText("image")}>
                 Image
             </div>

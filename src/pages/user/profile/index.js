@@ -11,8 +11,17 @@ import { isMobile } from "react-device-detect";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {BackUrl, BackUrlForDoc, headersImg, LogoutUrl, PlatformUrl, PlatformUrlApi, ROLES} from "constants/global";
-import { changeUserData } from "slices/userSlice";
+import {
+	BackUrl,
+	BackUrlForDoc,
+	headersImg,
+	LogoutUrl,
+	LogoutUrlPisa,
+	PlatformUrl,
+	PlatformUrlApi,
+	ROLES
+} from "constants/global";
+import {changeUserData, onExit} from "slices/userSlice";
 import CheckPassword from "components/ui/checkPassword";
 import RequireAuthChildren from "components/auth/requireAuthChildren";
 
@@ -25,7 +34,15 @@ const Profile = () => {
 	const [openInnerModal,setOpenInnerModal] = useState(false)
 	const [active,setActive] = useState(false)
 
-	const logout = () => window.location.replace(LogoutUrl)
+
+	const dispatch = useDispatch()
+
+	const logout = () => {
+
+		dispatch(onExit())
+
+		window.location.replace(data.system_name === "pisa" ? LogoutUrlPisa : LogoutUrl)
+	}
 
 	const ref = useRef()
 

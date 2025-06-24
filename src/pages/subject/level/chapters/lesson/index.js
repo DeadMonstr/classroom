@@ -44,6 +44,8 @@ const Lesson = ({isNavigate}) => {
         archiveId,
         isChangedComponents
     } = useSelector(state => state.lesson)
+
+
     const user = useSelector(state => state.user)
 
     const {request} = useHttp()
@@ -57,7 +59,6 @@ const Lesson = ({isNavigate}) => {
     })
 
 
-
     // useEffect(() => {
     //     if (components && components.length && !isChangedComponents) {
     //         document.querySelector('#main').scrollTo({ top: 0, behavior: "smooth" })
@@ -69,6 +70,7 @@ const Lesson = ({isNavigate}) => {
     //     }))
     //
     // }, [lesson])
+
 
 
     useEffect(() => {

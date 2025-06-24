@@ -12,14 +12,16 @@ import {AutoLinkNode, LinkNode} from "@lexical/link";
 import {TRANSFORMERS} from "@lexical/markdown";
 import {$generateHtmlFromNodes} from "@lexical/html";
 import {RichTextPlugin} from "@lexical/react/LexicalRichTextPlugin";
-import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+import {LexicalErrorBoundary} from "@lexical/react/LexicalErrorBoundary";
 import {HistoryPlugin} from "@lexical/react/LexicalHistoryPlugin";
 import {AutoFocusPlugin} from "@lexical/react/LexicalAutoFocusPlugin";
 import {ListPlugin} from "@lexical/react/LexicalListPlugin";
 import {LinkPlugin} from "@lexical/react/LexicalLinkPlugin";
 import {MarkdownShortcutPlugin} from "@lexical/react/LexicalMarkdownShortcutPlugin";
 import {useLexicalComposerContext} from "@lexical/react/LexicalComposerContext";
-
+import {TablePlugin} from '@lexical/react/LexicalTablePlugin';
+import TableCellResizer from './plugins/TableCellResizer';
+// import TableCellActionMenuPlugin from 'components/ui/textEditor/plugins/TableActionMenuPlugin';
 import ToolbarPlugin from "components/ui/textEditor/plugins/Toolbar";
 import ListMaxIndentLevelPlugin from "./plugins/ListMaxIndentLevelPlugin";
 import CodeHighlightPlugin from "./plugins/CodeHightlightPlugin";
@@ -30,6 +32,7 @@ import "./textEditor.sass"
 import exampleTheme from "./themes/ExampleTheme";
 import {$getSelection} from "lexical";
 import Button from "components/ui/button";
+import TableHoverActionsPlugin from "components/ui/textEditor/plugins/TableHoverActionsPlugin";
 
 
 const editorConfig = {
@@ -52,6 +55,7 @@ const editorConfig = {
         TableRowNode,
         AutoLinkNode,
         LinkNode,
+
     ]
 };
 
@@ -97,6 +101,11 @@ function MyOnChangePlugin() {
 
     return <button onClick={onClick}>Hello</button>;
 }
+export const CAN_USE_DOM =
+    typeof window !== 'undefined' &&
+    typeof window.document !== 'undefined' &&
+    typeof window.document.createElement !== 'undefined';
+
 
 
 function MyOnSubmitPlugin({onSubmit}) {
@@ -129,8 +138,6 @@ function MyOnSubmitPlugin({onSubmit}) {
                 const selectedText = item.match(/\b\w+\b/g);
 
 
-                console.log(selectedText, "hihihihi")
-                console.log(highlightedText)
 
                 console.log(item)
                 // const regex = new RegExp(`[\\%|\\?|\\$^]\\/(${selectedText})\\/[\\%|\\?|\\^$]`);
@@ -184,18 +191,54 @@ function OnSetEditorState({oldEditorState}) {
 
 const TextEditor = ({onSubmit,options,editorState,text}) => {
 
+    const [floatingAnchorElem, setFloatingAnchorElem] = useState(null);
+
+    const [isSmallWidthViewport, setIsSmallWidthViewport] = useState(false);
+    const onRef = (_floatingAnchorElem) => {
+        if (_floatingAnchorElem !== null) {
+            setFloatingAnchorElem(_floatingAnchorElem);
+        }
+    };
+
+    useEffect(() => {
+        const updateViewPortWidth = () => {
+            const isNextSmallWidthViewport =
+                CAN_USE_DOM && window.matchMedia('(max-width: 1025px)').matches;
+
+            if (isNextSmallWidthViewport !== isSmallWidthViewport) {
+                setIsSmallWidthViewport(isNextSmallWidthViewport);
+            }
+        };
+        updateViewPortWidth();
+        window.addEventListener('resize', updateViewPortWidth);
+        return () => {
+            window.removeEventListener('resize', updateViewPortWidth);
+        };
+    }, [isSmallWidthViewport]);
+
+
+    console.log(floatingAnchorElem, "floatingAnchorElem")
 
     return (
         <LexicalComposer initialConfig={editorConfig}>
             <div className={"editor"}>
                 <div className="editor-container">
                     <ToolbarPlugin options={options}/>
-                    <div className="editor-inner">
+                    <div className="editor-inner" >
                         <RichTextPlugin
-                            contentEditable={<ContentEditable className="editor-input"/>}
+                            contentEditable={<div ref={onRef}>
+                                <ContentEditable className="editor-input"/>
+                            </div>}
                             placeholder={<Placeholder/>}
                             ErrorBoundary={LexicalErrorBoundary}
                         />
+                        <TablePlugin
+                            hasCellMerge={true}
+                            hasCellBackgroundColor={true}
+                            hasHorizontalScroll={true}
+                        />
+                        <TableCellResizer />
+
                         <HistoryPlugin/>
                         <AutoFocusPlugin/>
                         <CodeHighlightPlugin/>
@@ -205,6 +248,13 @@ const TextEditor = ({onSubmit,options,editorState,text}) => {
                         <ListMaxIndentLevelPlugin maxDepth={7}/>
                         <MarkdownShortcutPlugin transformers={TRANSFORMERS}/>
                         <OnSetEditorState text={text} oldEditorState={editorState}/>
+                        {floatingAnchorElem  && (
+                            <>
+                                <TableHoverActionsPlugin anchorElem={floatingAnchorElem} />
+
+                            </>
+                        )}
+
                     </div>
                     <MyOnSubmitPlugin onSubmit={onSubmit}/>
                 </div>

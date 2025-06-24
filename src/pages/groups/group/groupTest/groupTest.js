@@ -5,7 +5,6 @@ import cls from "./groupTest.module.sass"
 // import Accordion from "components/platform/platformUI/accordion/Accordion";
 
 
-
 import {useForm} from "react-hook-form";
 import {useHttp} from "hooks/http.hook";
 import {
@@ -70,7 +69,7 @@ const GroupTest = () => {
 
                 if (res.years_list.length === 1) {
                     setYear(res.years_list[0])
-                }else {
+                } else {
                     setYear(res.current_year)
                 }
 
@@ -95,8 +94,8 @@ const GroupTest = () => {
                     console.log(err)
                 })
         }
-
     }, [year])
+
 
     useEffect(() => {
         if (year && month) {
@@ -137,8 +136,6 @@ const GroupTest = () => {
 
 
     const onClick = (test, type) => {
-
-        // setStudents(test.students)
         setChangedTest(test)
 
         if (type === "result") {
@@ -147,7 +144,6 @@ const GroupTest = () => {
             setActiveTest(true)
         }
     }
-
 
 
     return (
@@ -187,24 +183,26 @@ const GroupTest = () => {
             </div>
 
 
-            {/*<div className={cls.subheader}>*/}
-            {/*    <Button onClick={() => setActiveTest(true)}>Test Qo'shish</Button>*/}
-            {/*</div>*/}
+            <div className={cls.subheader}>
+                <Button onClick={() => setActiveTest(true)}>Test Qo'shish</Button>
+            </div>
 
             <div className={cls.wrapper}>
-
                 {
                     tests.map(item => {
                         return (
                             <Accordion
                                 clazz={cls.accordion}
-                                subtitle={"Jami: " + item.percentage + "%"}
+                                subtitle={"Jami: " + item?.percentage + "%"}
                                 btns={[
-                                    <a href={`${PlatformUrl}${item.file}`} download><i style={{color: "grey", fontSize: "3rem"}} className="fas fa-file"></i></a>,
+                                    <a href={`${PlatformUrl}${item.file}`} download><i
+                                        style={{color: "grey", fontSize: "3rem"}} className="fas fa-file"></i></a>,
                                     <h1>Level: {item.level}</h1>,
                                     <Button type={"submit"} onClick={() => onClick(item, "result")}>
                                         {item.students.length > 0 ? "Natijani O'zgartirish" : "Natijani Qo'shish"}
-                                    </Button>
+                                    </Button>,
+                                    <Button onClick={() => onClick(item, "test")}>Test O'zgartirish</Button>
+
                                 ]}
                                 title={item.name}
                             >
@@ -248,17 +246,15 @@ const GroupTest = () => {
                     setChangedTest={setChangedTest}
                 />
 
-                {/*<ChangeCreateTestModal*/}
-                {/*    activeTest={activeTest}*/}
-                {/*    setActiveTest={setActiveTest}*/}
-                {/*    setTests={setTests}*/}
-                {/*    changedTest={changedTest}*/}
-                {/*    setChangedTest={setChangedTest}*/}
-                {/*/>*/}
+                <ChangeCreateTestModal
+                    activeTest={activeTest}
+                    setActiveTest={setActiveTest}
+                    setTests={setTests}
+                    changedTest={changedTest}
+                    setChangedTest={setChangedTest}
+                />
 
             </div>
-
-
 
 
         </div>
@@ -270,30 +266,28 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
 
     const {register, handleSubmit, setValue, reset} = useForm()
     const [level, setLevel] = useState()
-    const {groupId} = useParams()
-    const [file,setFile] = useState(null)
+    const {id: groupId} = useParams()
+    const [file, setFile] = useState(null)
     const inputRef = useRef()
-    const [createdPdf,setCreatedPdf] = useState(null)
+    const [createdPdf, setCreatedPdf] = useState(null)
 
     const levels = [
         "A1", "A2", "B1", "B2", "C1", "C2"
     ]
-
     useEffect(() => {
         if (Object.keys(changedTest).length) {
-            setLevel(changedTest.level_id)
-
+            setLevel(changedTest.level)
             setValue("name", changedTest.name)
             setValue("date", changedTest.date)
             setValue("number", changedTest.number)
             setCreatedPdf(changedTest.file)
-
         }
     }, [changedTest])
 
 
     const dispatch = useDispatch()
     const {request} = useHttp()
+
     const onCreateTest = (data) => {
         if (changedTest.id) {
 
@@ -305,10 +299,6 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
                 level: changedTest.level,
                 test_id: changedTest.id
             }))
-
-
-
-
 
             request(`${BackUrl}create_test/${groupId}`, "PUT", formData, headersImg())
                 .then(res => {
@@ -326,7 +316,7 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
                     // }))
                 })
                 .catch(err => {
-                    console.log(err , "err")
+                    console.log(err, "err")
                 })
         } else {
 
@@ -339,7 +329,7 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
                 level,
             }))
 
-            request(`${BackUrl}create_test/${groupId}`, "POST",formData, headersImg())
+            request(`${BackUrl}create_test/${groupId}`, "POST", formData, headersImg())
                 .then(res => {
                     setActiveTest(false)
                     setTests(tests => [...tests, res.test])
@@ -381,15 +371,16 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
         setCreatedPdf(null)
     }
 
+
     return (
-        <Modal activeModal={activeTest} setActiveModal={() => {
+        <Modal title={changedTest.name ? "Test o'zgartirmoq" : "Test qo'shmoq"} active={activeTest} setActive={() => {
             reset()
             setLevel(null)
             setChangedTest({})
             setActiveTest(false)
         }}>
             <form id={"form"} className={cls.createTest} onSubmit={handleSubmit(onCreateTest)}>
-                <h1>{changedTest.name ? "Test o'zgartirmoq" : "Test qo'shmoq"}</h1>
+
                 <Select
                     value={level}
                     options={levels}
@@ -404,13 +395,13 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
                     {
                         createdPdf ?
                             <div className={cls.file__change}>
-                                <a href={`${BackUrlForDoc}${createdPdf}`} target={"_blank"} rel="noreferrer">
+                                <a href={`${PlatformUrl}${createdPdf}`} target={"_blank"} rel="noreferrer">
                                     <Button formId={""}>
-                                        Ko'rish
+                                        Faylni ko'rish
                                     </Button>
                                 </a>
-                                <Button onClickBtn={resetPdf}>
-                                    O'zgartirish
+                                <Button onClick={resetPdf}>
+                                    Faylni o'zgartirish
                                 </Button>
                             </div>
                             :
@@ -418,12 +409,9 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
                                 <div className={cls.file__create} onClick={Open}>
                                     {
                                         file ?
-
                                             <div>
-
                                                 <i className="fas fa-file"></i>
                                                 <p>{file.name}</p>
-
                                                 {/*<p>Filename: {file.name}</p>*/}
                                                 {/*<p>Filetype: {file.type}</p>*/}
                                                 {/*<p>Size in bytes: {file.size}</p>*/}
@@ -448,8 +436,8 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
                 </div>
 
                 <div className={cls.btns}>
-                    <Button formId={""} onClickBtn={onDeleteTest} type={"danger"}>O'chirish</Button>
-                    <Button formId={"form"} type={"submit"}>Tasdiqlash</Button>
+                    {changedTest?.id &&  <Button formId={""} onClick={onDeleteTest} type={"danger"}>O'chirish</Button>}
+                    <Button form={"form"}  type={"submit"}>Tasdiqlash</Button>
                 </div>
 
             </form>
@@ -458,8 +446,16 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
 }
 
 
-const SetResultModal = React.memo(({active, setActive, data, tests, changedTest, setTests, setChangedTest,studentsData}) => {
-
+const SetResultModal = React.memo(({
+                                       active,
+                                       setActive,
+                                       data,
+                                       tests,
+                                       changedTest,
+                                       setTests,
+                                       setChangedTest,
+                                       studentsData
+                                   }) => {
 
 
     const {id} = useParams()
@@ -475,7 +471,7 @@ const SetResultModal = React.memo(({active, setActive, data, tests, changedTest,
             setSelectedTest(changedTest.id)
             setStudents(students => students.map(item => {
                 const true_answers = changedTest.students.filter(st => st.student_id === item.id)[0]?.true_answers
-                return {...item, true_answers: true_answers || 0,can_edit: true}
+                return {...item, true_answers: true_answers || 0, can_edit: true}
             }))
         }
     }, [changedTest])
@@ -540,12 +536,11 @@ const SetResultModal = React.memo(({active, setActive, data, tests, changedTest,
 
     const resetBalls = () => {
         setStudents(students => students.map(item => {
-
             return {...item, true_answers: null}
         }))
     }
 
-    const onChangeCanEditResult = (id,value) => {
+    const onChangeCanEditResult = (id, value) => {
         setStudents(students => students.map(item => {
             if (item.id === id) {
                 return {...item, true_answers: 0, can_edit: value}
@@ -579,7 +574,7 @@ const SetResultModal = React.memo(({active, setActive, data, tests, changedTest,
                                     <h1>{item.surname}</h1>
                                     <h1>
                                         <input
-                                            onChange={e => onChangeCanEditResult(item.id,e.target.checked)}
+                                            onChange={e => onChangeCanEditResult(item.id, e.target.checked)}
                                             type="checkbox"
                                             checked={item.can_edit}
                                         />
@@ -588,11 +583,14 @@ const SetResultModal = React.memo(({active, setActive, data, tests, changedTest,
                                 <div>
                                     <Input
                                         onChange={(e) => onSetStudentsResult(item.id, "true_answers", e || 0)}
-                                        value={item.true_answers }
+                                        value={item.true_answers}
                                         title={"Tog'ri javoblar"}
                                         type={"number"}
                                         disabled={!item.can_edit}
-                                        others={{min: 0,max: tests.filter(test => test.id === +selectedTest)[0]?.number,}}
+                                        others={{
+                                            // min: 0,
+                                            max: tests.filter(test => test.id === +selectedTest)[0]?.number,
+                                        }}
                                     />
                                 </div>
                             </div>

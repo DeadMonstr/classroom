@@ -99,6 +99,7 @@ const TeacherSalary = () => {
                         <th>Oylik</th>
                         <th>Qolgan</th>
                         <th>Olingan Oylik</th>
+                        <th>Qarz</th>
                         <th>Black salary</th>
                     </tr>
                     </thead>
@@ -112,6 +113,7 @@ const TeacherSalary = () => {
                                     <td>{item.salary}</td>
                                     <td>{item.residue}</td>
                                     <td>{item.taken_salary}</td>
+                                    <td>{item.debt}</td>
                                     <td>{item.black_salary}</td>
                                 </tr>
                             )

@@ -3,7 +3,7 @@ import styles from "./styles.module.sass"
 import classNames from "classnames";
 
 
-const Input = React.memo((
+const Input = (
 	{
 	    type,
 	    defaultValue,
@@ -25,8 +25,6 @@ const Input = React.memo((
 	}) => {
 
 	const [showPassword,setShowPassword] = useState(false)
-
-
 
 	return register ? (
 		<label style={style} className={classNames(styles.inputLabel,extraClassNameLabel)} htmlFor={name}>
@@ -112,10 +110,8 @@ const Input = React.memo((
 						</div> : null
 				}
 			</div>
-
-
 		</label>
 	);
-});
+}
 
 export default Input;

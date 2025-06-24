@@ -1,18 +1,23 @@
 import {useMemo} from "react";
 
 
-export const BackUrlForDoc = "http://192.168.1.61:5001/"
-export const BackUrl = `${BackUrlForDoc}api/`
-export const LogoutUrl = "/login"
-export const PlatformUrl = "http://192.168.1.61:5002/"
-export const PlatformUrlApi = `${PlatformUrl}api/`
+// export const BackUrlForDoc = "http://26.253.30.50:5001/"
+// export const BackUrlForDoc = "https://classroom.gennis.uz/"
+// export const BackUrl = `${BackUrlForDoc}api/`
+// export const LogoutUrl = "/login"
+// export const LogoutUrlPisa = "/loginPisa"
+// export const PlatformUrl = "http://26.253.30.50:5002/"
+// export const PlatformUrlApi = `${PlatformUrl}api/`
 
 
-// export const BackUrl = "/api/"
-// export const BackUrlForDoc = "/"
-// export const PlatformUrl = "https://www.gennis.uz/"
-// export const PlatformUrlApi = "https://www.gennis.uz/api/"
-// export const LogoutUrl = `/login`
+
+export const BackUrl = "/api/"
+export const BackUrlForDoc = "/"
+export const PlatformUrl = "https://www.admin.gennis.uz/"
+// export const PlatformUrl = "http://test.gennis.uz"
+export const LogoutUrlPisa = "/loginPisa"
+export const PlatformUrlApi = "http://test.gennis.uz/api/"
+export const LogoutUrl = `/login`
 
 
 
@@ -43,6 +48,7 @@ export const headersImg = () => {
     const token = sessionStorage.getItem("token")
     return {
         "Authorization" : "Bearer " + token,
+        // 'Content-Type': 'multipart/form-data'
     }
 }
 export const headersOldTokenImg = () => {
@@ -56,6 +62,7 @@ export const headersOldTokenImg = () => {
 
 export const ROLES = {
     Student: "a43c33b82",
+    StudentTest: "a52v23q13",
     Teacher: "b00c11a31",
     Methodist: "d32q69n53"
 }

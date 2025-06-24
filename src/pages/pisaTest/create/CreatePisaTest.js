@@ -1,0 +1,687 @@
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
+
+
+import cls from "./createPisaTest.module.sass"
+import Button from "components/ui/button";
+import classNames from "classnames";
+import {useNavigate, useParams} from "react-router";
+import {useDispatch, useSelector} from "react-redux";
+import {BackUrl, headers} from "constants/global";
+import {unstable_batchedUpdates} from "react-dom";
+
+import {useHttp} from "hooks/http.hook";
+import {setAlertOptions} from "slices/layoutSlice";
+import {closestCenter, DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    useSortable,
+    verticalListSortingStrategy
+} from "@dnd-kit/sortable";
+import Loader from "components/ui/loader/Loader";
+import Input from "components/ui/form/input";
+import {CSS} from "@dnd-kit/utilities";
+
+
+import Question from "components/pisa/question";
+import ExcText from "components/pisa/text";
+import Video from "components/pisa/video";
+import Img from "components/pisa/img";
+import File from "components/pisa/file/File";
+import Snippet from "components/pisa/snippet";
+import TextEditorExc from "components/pisa/textEditor/TextEditor";
+
+import useDebounce from "hooks/useDebounce";
+import Checkbox from "components/ui/form/checkbox";
+import Back from "components/ui/back";
+
+const CreatePisaTest = () => {
+
+    const {id} = useParams()
+
+
+    const [type, setType] = useState("left")
+
+    const [leftExc, setLeftExc] = useState([])
+    const [rightExc, setRightExc] = useState([])
+    const [name, setName] = useState()
+    const [status, setStatus] = useState(false)
+    const [isChanging, setIsChanging] = useState(false)
+
+
+
+    useEffect(() => {
+        if (id) {
+            request(`${BackUrl}pisa/test/crud/${id}`, "GET", null, headers())
+                .then(res => {
+                    setIsChanging(true)
+                    setName(res.name)
+                    setStatus(res.status)
+
+                    const left = translateToComponents(res.pisa_blocks_left)
+                    const right = translateToComponents(res.pisa_blocks_right)
+
+                    // console.log(left)
+
+                    setLeftExc(left)
+                    setRightExc(right)
+                })
+        }
+    }, [id])
+
+
+    const translateToComponents = (data) => {
+
+        let components = []
+
+        for (let item of data) {
+
+
+            if (item.type === "question") {
+
+
+                components.push({
+                    completed: true,
+                    id: item.id,
+                    index: item.index,
+                    type: "question",
+                    image: item.image_url,
+                    text: item.text,
+                    innerType: item.innerType,
+                    variants: {
+                        ...item.variants,
+                        options: item.options.map(item => {
+                            return {
+                                ...item,
+                                img: item.image_url
+                            }
+                        }),
+                        type: item.type_question,
+                        typeVariants: item.typeVariants
+                    }
+                })
+
+            } else if (item.type === "text" || item.type === "words") {
+                components.push({
+                    completed: true,
+                    id: item.id,
+                    index: item.index,
+                    type: item.type,
+                    text: item.text,
+                    editorState: item.editorState,
+                    words: item.words
+                })
+            } else if (item.type === "video") {
+                components.push({
+                    completed: true,
+                    id: item.id,
+                    index: item.index,
+                    type: item.type,
+                    text: item.text,
+                    videoLink: item.video_url
+
+                })
+            } else if (item.type === "img") {
+                components.push({
+                    completed: true,
+                    id: item.id,
+                    index: item.index,
+                    type: item.type,
+                    text: item.text,
+                    img: item.image_url
+
+                })
+            }
+            else if (item.type === "file") {
+                components.push({
+                    completed: true,
+                    id: item.id,
+                    index: item.index,
+                    type: item.type,
+                    text: item.text,
+                    file: item.file_url
+
+                })
+            }
+
+        }
+        return components
+
+    }
+
+    const onChangeExc = (type, exc) => {
+        if (type === "left") {
+            setLeftExc(exc)
+        } else {
+            setRightExc(exc)
+        }
+    }
+
+
+    const {request} = useHttp()
+    const dispatch = useDispatch()
+
+    useDebounce(() => {
+        if (name && id) {
+            request(`${BackUrl}pisa/test/crud/${id}`, "PUT", JSON.stringify({name, status}), headers())
+                .then(res => {
+                    console.log(res)
+                })
+        }
+    }, 500, [name, id,status]);
+
+
+    // const onSubmit = () => {
+    //     const data = {
+    //         name,
+    //         leftExc,
+    //         rightExc
+    //     }
+    //
+    //
+    //     request(`${BackUrl}crud_pisa_test`, "POST", JSON.stringify(data), headers())
+    //         .then(res => {
+    //             const alert = {
+    //                 active: true,
+    //                 message: res.msg,
+    //                 type: res.status
+    //             }
+    //             dispatch(setAlertOptions({alert}))
+    //             console.log(res)
+    //         })
+    // }
+    const navigate = useNavigate()
+
+    const onDelete = () => {
+        request(`${BackUrl}pisa/test/crud/${id}`, "DELETE", null, headers())
+            .then(res => {
+                const alert = {
+                    active: true,
+                    message: res.msg,
+                    type: res.status
+                }
+                dispatch(setAlertOptions({alert}))
+                navigate("/pisaTest")
+            })
+    }
+
+
+    const onSubmit = () => {
+        navigate(-1)
+    }
+
+
+
+    return (
+        <div className={cls.createPisaTest}>
+            <div className={cls.header}>
+                <div>
+                    <Input onChange={setName} value={name} title={"Name"}/>
+                    <div className={cls.status}>
+                        <h1>Status</h1>
+                        <Checkbox checked={status} onChange={setStatus} title={"Random"} name={"Status"}/>
+
+                    </div>
+                </div>
+                <div>
+                    <Button active={type === "left"} onClick={() => setType("left")}>Left</Button>
+                    <Button active={type === "center"} onClick={() => setType("center")}>Center</Button>
+                    <Button active={type === "right"} onClick={() => setType("right")}>Right</Button>
+                </div>
+
+                <div>
+                    <Button onClick={onDelete} type={"danger"}>Delete</Button>
+                </div>
+            </div>
+
+            <div className={cls.container}>
+                <div className={classNames(cls.left, {
+                    [cls.active]: type === "left",
+                    [cls.center]: type === "center"
+                })}>
+                    <div className={cls.wrapper}>
+                        <CreateExcPisa exception={["question","words"]} oldExc={leftExc} pisaId={id} typeSide={"left"} onChangeExc={onChangeExc}/>
+                    </div>
+                </div>
+
+                <div className={classNames(cls.right, {
+                    [cls.active]: type === "right",
+                    [cls.center]: type === "center"
+                })}>
+                    <div className={cls.wrapper}>
+                        <CreateExcPisa exception={["img","text","video","file"]} oldExc={rightExc} pisaId={id} typeSide={"right"} onChangeExc={onChangeExc}/>
+                    </div>
+                </div>
+            </div>
+
+
+
+            {
+                (leftExc[leftExc.length - 1]?.completed || rightExc[rightExc.length - 1]?.completed) ?
+                    <div className={cls.submit}>
+                        <Button onClick={onSubmit} form={"createLesson"} type={"submit"}>
+                            Tasdiqlash
+                        </Button>
+                    </div>
+                    : null
+            }
+        </div>
+    );
+};
+
+
+const CreateExcPisa = ({typeSide, onChangeExc, pisaId, oldExc = [],exception}) => {
+
+    const [activeTools, setActiveTools] = useState(false)
+
+    const [selectedChapter, setSelectedChapter] = useState("")
+    const [isGetted, setIsGetted] = useState(false)
+
+    const [components, setComponents] = useState([])
+    const [changeLessonsSort, setChangeLessonsSort] = useState(false)
+
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if (oldExc.length > 0 && !isGetted) {
+            setIsGetted(true)
+            setComponents(oldExc)
+        }
+    }, [oldExc, isGetted])
+
+
+    const tools = [
+        {
+            value: "text",
+            title: "Matn"
+        },
+
+        {
+            value: "video",
+            title: "Video"
+        },
+        {
+            value: "img",
+            title: "Rasm"
+        },
+        {
+            value: "file",
+            title: "Fayl"
+        },
+        {
+            value: "question",
+            title: "Savol"
+        },
+        {
+            value: "words",
+            title: "So'zlar"
+        }
+    ]
+
+
+    const {request} = useHttp()
+
+    const addComponent = (type) => {
+
+
+        if (type === "text") {
+            unstable_batchedUpdates(() => {
+                setComponents(components => [...components, {
+                    type: type,
+                    text: "",
+                    words: [],
+                    completed: false,
+                    index: components.length + 1
+                }]);
+            })
+        } else {
+            setComponents(components => [...components, {
+                type: type,
+                completed: false,
+                index: components.length + 1
+            }])
+        }
+
+    }
+
+    useEffect(() => {
+        if (components.length > 0) {
+            onChangeExc(typeSide, components)
+        }
+    }, [components])
+
+    const onDeleteComponent = (index) => {
+        const sortedList = components.filter((item, i) => i !== index - 1)
+        setComponents(sortedList)
+    }
+
+
+    const onSetCompletedComponent = useCallback((data, id) => {
+        setComponents(state => state.map((item, index) => {
+            if (!item.completed) {
+                return {...item, ...data, completed: true, id}
+            }
+            return item
+        }))
+    }, [components])
+
+
+    const onChangeCompletedComponent = (index) => {
+        if (components.every(item => item.completed)) {
+            setComponents(state => state.map((item, i) => {
+                if (i === index - 1) {
+                    return {...item, completed: false}
+                }
+                return item
+            }))
+        }
+    }
+
+
+    const renderComponents = useCallback(() => {
+        return components?.map((item) => {
+            if (item.type === "text") {
+                return (
+                    <SortableItem
+                        isChange={changeLessonsSort}
+                        item={item}
+                        key={item.index}
+                        id={item.index}
+                    >
+                        <TextEditorExc
+                            onChangeCompletedComponent={onChangeCompletedComponent}
+                            onSetCompletedComponent={onSetCompletedComponent}
+                            onDeleteComponent={onDeleteComponent}
+                            component={item}
+                            extra={{pisaId: pisaId, side: typeSide}}
+                        />
+                    </SortableItem>
+                )
+            }
+            if (item.type === "video") {
+                return (
+                    <SortableItem
+                        isChange={changeLessonsSort}
+                        item={item}
+                        key={item.index}
+                        id={item.index}
+                    >
+                        <Video
+                            component={item}
+                            onChangeCompletedComponent={onChangeCompletedComponent}
+                            onSetCompletedComponent={onSetCompletedComponent}
+                            onDeleteComponent={onDeleteComponent}
+                            extra={{pisaId: pisaId, side: typeSide}}
+                        />
+                    </SortableItem>
+                )
+            }
+            if (item.type === "img") {
+                return (
+                    <SortableItem
+                        isChange={changeLessonsSort}
+                        item={item}
+                        key={item.index}
+                        id={item.index}
+                    >
+                        <Img
+                            component={item}
+                            onChangeCompletedComponent={onChangeCompletedComponent}
+                            onSetCompletedComponent={onSetCompletedComponent}
+                            onDeleteComponent={onDeleteComponent}
+                            extra={{pisaId: pisaId, side: typeSide}}
+                        />
+                    </SortableItem>
+                )
+            }
+            if (item.type === "file") {
+                return (
+                    <SortableItem
+                        isChange={changeLessonsSort}
+                        item={item}
+                        key={item.index}
+                        id={item.index}
+                    >
+                        <File
+                            component={item}
+                            onChangeCompletedComponent={onChangeCompletedComponent}
+                            onSetCompletedComponent={onSetCompletedComponent}
+                            onDeleteComponent={onDeleteComponent}
+                            extra={{pisaId: pisaId, side: typeSide}}
+
+                        />
+                    </SortableItem>
+
+                )
+            }
+            if (item.type === "question") {
+                return (
+                    <SortableItem
+                        isChange={changeLessonsSort}
+                        item={item}
+                        key={item.index}
+                        id={item.index}
+                    >
+                        <Question
+                            component={item}
+                            onChangeCompletedComponent={onChangeCompletedComponent}
+                            onSetCompletedComponent={onSetCompletedComponent}
+                            onDeleteComponent={onDeleteComponent}
+                            extra={{pisaId: pisaId, side: typeSide}}
+                        />
+
+                    </SortableItem>
+                )
+            }
+            if (item.type === "words") {
+                return (
+                    <SortableItem
+                        isChange={changeLessonsSort}
+                        item={item}
+                        key={item.index}
+                        id={item.index}
+                    >
+                        <ExcText
+                            component={item}
+                            onChangeCompletedComponent={onChangeCompletedComponent}
+                            onSetCompletedComponent={onSetCompletedComponent}
+                            onDeleteComponent={onDeleteComponent}
+                            extra={{pisaId: pisaId, side: typeSide}}
+                        />
+                    </SortableItem>
+                )
+            }
+        })
+    }, [components, changeLessonsSort, pisaId])
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+
+        const formData = new FormData()
+
+
+        const componentImg = components.filter(item => item.type === "img")
+        const componentAudio = components.filter(item => item.type === "audio")
+        const componentFile = components.filter(item => item.type === "file")
+
+
+        if (componentImg.length > 0) {
+            for (let item of componentImg) {
+                formData.append(
+                    `component-${item.index}-img`,
+                    item.img
+                )
+            }
+        }
+
+        if (componentAudio.length > 0) {
+            for (let item of componentAudio) {
+                formData.append(
+                    `component-${item.index}-audio`,
+                    item.audio
+                )
+            }
+        }
+
+
+        if (componentFile.length > 0) {
+            for (let item of componentFile) {
+                formData.append(
+                    `component-${item.index}-file`,
+                    item.file
+                )
+            }
+        }
+
+        const newData = {
+            components,
+
+            chapter: selectedChapter,
+        }
+
+
+        formData.append("info", JSON.stringify(newData))
+
+
+        const token = sessionStorage.getItem("token")
+
+
+        setLoading(true)
+        request(`${BackUrl}lessons/`, "POST", formData, {
+            "Authorization": "Bearer " + token,
+        })
+            .then(res => {
+                setLoading(false)
+                const alert = {
+                    active: true,
+                    message: res.msg,
+                    type: res.status
+                }
+                dispatch(setAlertOptions({alert}))
+            })
+            .then(() => {
+                navigate(-1)
+            })
+    }
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+
+    function handleDragEnd(event) {
+        const {active, over} = event;
+
+        if (active.id !== over.id) {
+            setComponents((items) => {
+                const oldIndex = items.findIndex(item => item.index === active.id);
+                const newIndex = items.findIndex(item => item.index === over.id);
+
+                return arrayMove(items, oldIndex, newIndex);
+            });
+        }
+    }
+
+
+    const itemsIndex = useMemo(() => {
+        return components.map(item => item.index)
+    }, [components])
+
+
+    const renderedComponents = renderComponents()
+
+
+
+    if (loading) return <Loader/>
+
+    return (
+        <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+        >
+            <div className={cls.createLesson}>
+                <SortableContext
+                    items={itemsIndex}
+                    strategy={verticalListSortingStrategy}
+                >
+                    <div className={cls.createLesson__container}>
+                        {renderedComponents}
+                        {
+                            components[components.length - 1]?.completed || components.length === 0 ?
+                                <div className={cls.createLesson__add}>
+                                    <div
+                                        onClick={() => setActiveTools(!activeTools)}
+                                        className={classNames(cls.icon, {
+                                            [`${cls.active}`]: activeTools
+                                        })}
+                                    >
+                                        <i className="fa-solid fa-plus"/>
+                                    </div>
+                                    <div className={classNames(cls.tools, {
+                                        [`${cls.active}`]: activeTools
+                                    })}>
+                                        {
+                                            tools.map(item => {
+                                                if (exception?.length > 0 && exception?.includes(item.value)) return
+                                                return (
+                                                    <div
+                                                        onClick={() => addComponent(item.value)}
+                                                        className={cls.tools__item}
+                                                    >
+                                                        {item.title}
+                                                    </div>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </div> : null
+                        }
+                    </div>
+                </SortableContext>
+
+
+            </div>
+        </DndContext>
+    );
+};
+
+
+function SortableItem(props) {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+    } = useSortable({
+        id: props.item.index,
+        disabled: !props.item.completed ? true : !props.isChange
+    });
+
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+        >
+            {props.children}
+        </div>
+    );
+}
+
+
+export default CreatePisaTest;

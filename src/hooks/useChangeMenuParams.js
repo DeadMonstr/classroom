@@ -21,6 +21,12 @@ const useChangeMenuParams = (type, title) => {
 			},
 			{
 				type: "simple",
+				title: "Register Block Test",
+				href: "/registerPisaTest",
+				role: [ROLES.Methodist]
+			},
+			{
+				type: "simple",
 				title: "Taqdimotlar",
 				href: "/presentations",
 				role: [ROLES.Methodist]
@@ -37,12 +43,12 @@ const useChangeMenuParams = (type, title) => {
 				href: "/books",
 				role: [ROLES.Teacher,ROLES.Student]
 			},
-			{
-				type: "simple",
-				title: "Task Manager",
-				href: "/taskManager",
-				// role: [ROLES.Teacher]
-			},
+			// {
+			// 	type: "simple",
+			// 	title: "Task Manager",
+			// 	href: "/taskManager",
+			// 	role: [ROLES.Methodist]
+			// },
 			{
 				type: "simple",
 				title: "Chat",
@@ -63,18 +69,13 @@ const useChangeMenuParams = (type, title) => {
 				title: "Turon test",
 				href: "/createTestTuron",
 				role: [ROLES.Methodist],
-
 			},
-
 			{
 				type: "simple",
-				title: "Pisa test",
+				title: "Block test",
 				href: "/pisaTest",
 				role: [ROLES.Methodist],
-
 			},
-
-
 		],
 		subject: [
 			{

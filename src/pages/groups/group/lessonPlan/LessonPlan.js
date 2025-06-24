@@ -92,7 +92,6 @@ const LessonPlan = ({backBtn}) => {
             year,
         }
 
-        console.log(data, "data")
         if (year && month && day && groupData.id) {
             request(`${BackUrl}get_lesson_plan/${groupData.id}`,"POST",JSON.stringify(data),headers() )
                 .then(res => {
@@ -207,14 +206,14 @@ const LessonPlan = ({backBtn}) => {
 
             <Form id={"lessonPlan"} typeSubmit={"handle"} onSubmit={handleSubmit(onSubmit)}>
 
-                <Input required={true} register={register} name={"objective"} title={"Objective"} />
+                <Input required={true} register={register} name={"objective"} title={"Objective (Maqsad)"} />
 
                 <div className={cls.wrapper}>
-                    <Textarea required register={register} name={"homework"} title={"Homework"} />
-                    <Textarea required register={register} name={"resources"} title={"Resources"} />
-                    <Textarea required register={register} name={"main_lesson"} title={"Main Lesson"} />
-                    <Textarea required register={register} name={"activities"} title={"Activities"} />
-                    <Textarea required register={register} name={"assessment"} title={"Assessment"} />
+                    <Textarea required register={register} name={"homework"} title={"Homework (Uy vazifasi)"} />
+                    <Textarea required register={register} name={"resources"} title={"Resources (Resurslar)"} />
+                    <Textarea required register={register} name={"main_lesson"} title={"Main Lesson (Asosiy dars)"} />
+                    <Textarea required register={register} name={"activities"} title={"Activities (Mashg‘ulotlar)"} />
+                    <Textarea required register={register} name={"assessment"} title={"Assessment (Baholash jarayoni)"} />
                 </div>
             </Form>
 
@@ -270,8 +269,6 @@ const Students = ({students = [],setStudents}) => {
     const insideRefArray = useRef([])
 
     // const [students,setStudents] = useState([])
-    //
-    //
     // useEffect(() => {
     //     setStudents(data)
     // },[data])

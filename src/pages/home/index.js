@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 import styles from "./styles.module.sass"
 import img from "assets/english.png"
 import useHorizontalScroll from "hooks/useHorizontalScroll";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import useChangeMenuParams from "hooks/useChangeMenuParams";
 import { useDispatch, useSelector } from "react-redux";
 import {setAlertOptions, setOptions} from "slices/layoutSlice";
@@ -16,12 +16,12 @@ import {useHttp} from "hooks/http.hook";
 import { BackUrl, BackUrlForDoc, headers, ROLES } from "constants/global";
 import Form from "components/ui/form";
 import RequireAuthChildren from "components/auth/requireAuthChildren";
-
+import backImg from "assets/img.png"
+import Button from "components/ui/button";
 
 const Home = () => {
 
-	const [activeCreate,setActiveCreate] = useState(false)
-	const [subjects,setSubjects] = useState([])
+
 
 
 
@@ -33,6 +33,34 @@ const Home = () => {
 		dispatch(setOptions(options))
 	},[dispatch, options])
 
+
+
+	return (
+		<div className={styles.home}>
+
+
+			<div className={styles.home__wrapper}>
+				<RequireAuthChildren allowedRules={[ROLES.Methodist,ROLES.Teacher,ROLES.Student]}>
+					<Subjects />
+				</RequireAuthChildren>
+
+
+				<PisaTests/>
+			</div>
+
+
+		</div>
+	);
+};
+
+
+const Subjects = React.memo(() => {
+
+
+	const [subjects,setSubjects] = useState([])
+	const ref = useHorizontalScroll(subjects,3)
+	const [activeCreate,setActiveCreate] = useState(false)
+
 	const onSubmit = (data) => {
 		setSubjects(data.map(item => {
 			return {...item,title: item.name}
@@ -43,6 +71,8 @@ const Home = () => {
 	const {request} = useHttp()
 
 	useEffect(() => {
+
+
 		request(`${BackUrl}info/subjects`,"GET",null,headers())
 			.then(res => {
 				setSubjects(res?.subjects.map(item => {
@@ -53,10 +83,9 @@ const Home = () => {
 
 
 	return (
-		<div className={styles.home}>
-
-			<div className={styles.home__header}>
-				<h1 className={styles.title}>Fanlar :</h1>
+		<div ref={ref} className={styles.subjects}>
+			<div className={styles.subjects__header}>
+				<h1 className={styles.title}>Fanlar: </h1>
 
 				<RequireAuthChildren allowedRules={[ROLES.Methodist]}>
 					<div className={styles.addIcon} onClick={() => setActiveCreate(true)}>
@@ -64,10 +93,26 @@ const Home = () => {
 					</div>
 				</RequireAuthChildren>
 			</div>
-			<div className={styles.home__wrapper}>
+			<div className={styles.subjects__wrapper}>
+				{
+					subjects.map((item,index) => {
+						return (
+							<Link key={index} to={`/subject/${item.id}`} data={{ name: "value" }} className={styles.subjects__item}>
+								<div className={styles.subjects__itemImage}>
+									<img src={item.img ? `${BackUrlForDoc}${item.img}` : null} alt="Subject"/>
+									<div className={styles.percentage}></div>
+								</div>
+								<div className={styles.subjects__itemInfo}>
+									<h1>{item.title}</h1>
+									<p>
+										{item?.desc?.length > 150 ? `${item?.desc?.substring(0,140)}...` : item.desc}
+									</p>
+								</div>
 
-				<Subjects subjects={subjects}/>
-
+							</Link>
+						)
+					})
+				}
 			</div>
 
 
@@ -75,37 +120,95 @@ const Home = () => {
 				<CreateSubject onSubmit={onSubmit}/>
 			</Modal>
 
+
 		</div>
-	);
-};
+	)
+})
+
+const PisaTests = React.memo(() => {
 
 
-const Subjects = React.memo(({subjects = []}) => {
+	const [tests,setTests] = useState([])
+	const ref = useHorizontalScroll(tests,3)
+	const [activeCreate,setActiveCreate] = useState(false)
 
-	const ref = useHorizontalScroll(subjects,3)
+	const onSubmit = (data) => {
+		setTests(data.map(item => {
+			return {...item,title: item.name}
+		}))
+		setActiveCreate(false)
+	}
+
+	const {request} = useHttp()
+
+	useEffect(() => {
+
+
+		request(`${BackUrl}pisa/student/get/list`,"GET",null,headers())
+			.then(res => {
+				setTests(res?.map(item => {
+					return {...item,title: item.name}
+				}))
+			})
+	},[])
+
+
+	const navigate = useNavigate()
+
+	const onLink = (id) => {
+		navigate(`/viewPisaTest/${id}`)
+	}
+	const onLinkResult = (id) => {
+		navigate(`/myResultsPisaTest/${id}`)
+	}
 
 
 	return (
 		<div ref={ref} className={styles.subjects}>
-			{
-				subjects.map((item,index) => {
-					return (
-						<Link key={index} to={`/subject/${item.id}`} data={{ name: "value" }} className={styles.subjects__item}>
-							<div className={styles.subjects__itemImage}>
-								<img src={item.img ? `${BackUrlForDoc}${item.img}` : null} alt="Subject"/>
-								<div className={styles.percentage}></div>
-							</div>
-							<div className={styles.subjects__itemInfo}>
-								<h1>{item.title}</h1>
-								<p>
-									{item?.desc?.length > 150 ? `${item?.desc?.substring(0,140)}...` : item.desc}
-								</p>
-							</div>
+			<div className={styles.subjects__header}>
+				<h1 className={styles.title}>Pisa Testlar: </h1>
 
-						</Link>
-					)
-				})
-			}
+
+			</div>
+			<div className={styles.subjects__wrapper}>
+				{
+					tests.map((item,index) => {
+						return (
+							<div
+								key={index}
+								onClick={() => {
+									if (item.finished) return
+									onLink(item.id)
+								}}
+								className={styles.subjects__item}
+							>
+								<div className={styles.subjects__itemImage}>
+									<img src={backImg} alt="Subject"/>
+									<div className={styles.percentage}></div>
+								</div>
+								<div className={styles.subjects__itemInfo}>
+									<h1>{item.title}</h1>
+									<p>
+										{item?.desc?.length > 150 ? `${item?.desc?.substring(0,140)}...` : item.desc}
+									</p>
+								</div>
+								{item.finished && <div className={styles.finished}>
+									<i className="fa-solid fa-lock"></i>
+
+									<Button onClick={() => onLinkResult(item.id)} type={"submit"}>Natija {item.title}</Button>
+								</div>
+								}
+							</div>
+						)
+					})
+				}
+			</div>
+
+
+			<Modal setActive={() => setActiveCreate(false)} active={activeCreate}>
+				<CreateSubject onSubmit={onSubmit}/>
+			</Modal>
+
 
 		</div>
 	)

@@ -28,6 +28,8 @@ const Pagination = React.memo(props => {
 
 
 
+
+
     const renderPageNumbers = useCallback(() => {
         return paginationRange.map((pageNumber,index) => {
             if (pageNumber === DOTS) {

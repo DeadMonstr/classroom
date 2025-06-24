@@ -56,7 +56,6 @@ const ChangeLesson = () => {
         request(`${BackUrl}info_lesson/${chapterId}/${lessonId}`, "GET", null, headers())
             .then(res => {
                 setNameLesson(res.data.name)
-                console.log(res.data)
                 setIsTest(res.data.is_test)
                 setNumberTest(res.data.number_test)
                 setSelectedChapter(res.data.chapter_id)

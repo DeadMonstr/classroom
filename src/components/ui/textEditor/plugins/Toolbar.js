@@ -1,5 +1,5 @@
 import {useLexicalComposerContext} from "@lexical/react/LexicalComposerContext";
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {createContext, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import {
     CAN_REDO_COMMAND,
     CAN_UNDO_COMMAND,
@@ -15,7 +15,7 @@ import {
 } from "lexical";
 import {$isLinkNode, TOGGLE_LINK_COMMAND} from "@lexical/link";
 import { $wrapNodes, $isAtNodeEnd, $patchStyleText, $getSelectionStyleValueForProperty} from "@lexical/selection";
-import {$getNearestNodeOfType, mergeRegister} from "@lexical/utils";
+import {$findMatchingParent, $getNearestNodeOfType, mergeRegister} from "@lexical/utils";
 import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, REMOVE_LIST_COMMAND, $isListNode, ListNode} from "@lexical/list";
 import {createPortal} from "react-dom";
 import {$createHeadingNode, $createQuoteNode, $isHeadingNode} from "@lexical/rich-text";
@@ -24,6 +24,10 @@ import {$createCodeNode, $isCodeNode, getDefaultCodeLanguage, getCodeLanguages} 
 import ColorPicker from "../ui/ColorPicker/ColorPicker";
 import DropDown, {DropDownItem} from "../ui/DropDown/DropDown";
 import FontSize from "../ui/FontSize/FontSize";
+import {INSERT_HORIZONTAL_RULE_COMMAND} from "@lexical/react/LexicalHorizontalRuleNode";
+import useModal from "hooks/useModal";
+import {InsertTableDialog} from "components/ui/textEditor/plugins/TablePlugin";
+import {$isTableNode} from "@lexical/table";
 
 
 const LowPriority = 1;
@@ -368,6 +372,8 @@ function DropdownColorPicker({disabled = false, stopCloseOnClickSelf = true, col
 const InputToolBarPlugin = () => {
     const [editor] = useLexicalComposerContext()
     const [value,setValue] = useState(0)
+
+
     const onClick = () => {
         editor.update(() => {
             const selection = $getSelection()
@@ -523,11 +529,23 @@ const MatchWrongToolBarPlugin = () => {
     )
 
 }
+const Context = createContext(undefined);
 
+
+export const useToolbarState = () => {
+    const context = useContext(Context);
+
+    if (context === undefined) {
+        throw new Error('useToolbarState must be used within a ToolbarProvider');
+    }
+
+    return context;
+};
 
 export default function ToolbarPlugin({options}) {
     const [editor] = useLexicalComposerContext();
 
+    const [modal, showModal] = useModal();
 
     const [canUndo, setCanUndo] = useState(false);
     const [canRedo, setCanRedo] = useState(false);
@@ -568,6 +586,9 @@ export default function ToolbarPlugin({options}) {
                     }
                 }
             }
+
+
+
             // Update text format
             setIsBold(selection.hasFormat("bold"));
             setIsItalic(selection.hasFormat("italic"));
@@ -584,7 +605,12 @@ export default function ToolbarPlugin({options}) {
                 setIsLink(false);
             }
 
-
+            const tableNode = $findMatchingParent(node, $isTableNode);
+            // if ($isTableNode(tableNode)) {
+            //     updateToolbarState('rootType', 'table');
+            // } else {
+            //     updateToolbarState('rootType', 'root');
+            // }
             setFontSize(
                 $getSelectionStyleValueForProperty(selection, 'font-size', '15px'),
             );
@@ -808,6 +834,170 @@ export default function ToolbarPlugin({options}) {
 
 
                     <Divider/>
+                    <DropDown
+                        buttonClassName="toolbar-item spaced"
+                        buttonLabel="Insert"
+                        buttonAriaLabel="Insert specialized editor node"
+                        buttonIconClassName="icon plus">
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        activeEditor.dispatchCommand(*/}
+                        {/*            INSERT_HORIZONTAL_RULE_COMMAND,*/}
+                        {/*            undefined,*/}
+                        {/*        );*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon horizontal-rule" />*/}
+                        {/*    <span className="text">Horizontal Rule</span>*/}
+                        {/*</DropDownItem>*/}
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        activeEditor.dispatchCommand(INSERT_PAGE_BREAK, undefined);*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon page-break" />*/}
+                        {/*    <span className="text">Page Break</span>*/}
+                        {/*</DropDownItem>*/}
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        showModal('Insert Image', (onClose) => (*/}
+                        {/*            <InsertImageDialog*/}
+                        {/*                activeEditor={activeEditor}*/}
+                        {/*                onClose={onClose}*/}
+                        {/*            />*/}
+                        {/*        ));*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon image" />*/}
+                        {/*    <span className="text">Image</span>*/}
+                        {/*</DropDownItem>*/}
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        showModal('Insert Inline Image', (onClose) => (*/}
+                        {/*            <InsertInlineImageDialog*/}
+                        {/*                activeEditor={activeEditor}*/}
+                        {/*                onClose={onClose}*/}
+                        {/*            />*/}
+                        {/*        ));*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon image" />*/}
+                        {/*    <span className="text">Inline Image</span>*/}
+                        {/*</DropDownItem>*/}
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() =>*/}
+                        {/*        insertGifOnClick({*/}
+                        {/*            altText: 'Cat typing on a laptop',*/}
+                        {/*            src: catTypingGif,*/}
+                        {/*        })*/}
+                        {/*    }*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon gif" />*/}
+                        {/*    <span className="text">GIF</span>*/}
+                        {/*</DropDownItem>*/}
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        activeEditor.dispatchCommand(*/}
+                        {/*            INSERT_EXCALIDRAW_COMMAND,*/}
+                        {/*            undefined,*/}
+                        {/*        );*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon diagram-2" />*/}
+                        {/*    <span className="text">Excalidraw</span>*/}
+                        {/*</DropDownItem>*/}
+                        <DropDownItem
+                            onClick={() => {
+                                showModal('Insert Table', (onClose) => (
+                                    <InsertTableDialog
+                                        activeEditor={activeEditor}
+                                        onClose={onClose}
+                                    />
+                                ));
+                            }}
+                            className="item">
+                            <i className="icon table" />
+                            <span className="text">Table</span>
+                        </DropDownItem>
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        showModal('Insert Poll', (onClose) => (*/}
+                        {/*            <InsertPollDialog*/}
+                        {/*                activeEditor={activeEditor}*/}
+                        {/*                onClose={onClose}*/}
+                        {/*            />*/}
+                        {/*        ));*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon poll" />*/}
+                        {/*    <span className="text">Poll</span>*/}
+                        {/*</DropDownItem>*/}
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        showModal('Insert Columns Layout', (onClose) => (*/}
+                        {/*            <InsertLayoutDialog*/}
+                        {/*                activeEditor={activeEditor}*/}
+                        {/*                onClose={onClose}*/}
+                        {/*            />*/}
+                        {/*        ));*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon columns" />*/}
+                        {/*    <span className="text">Columns Layout</span>*/}
+                        {/*</DropDownItem>*/}
+
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        showModal('Insert Equation', (onClose) => (*/}
+                        {/*            <InsertEquationDialog*/}
+                        {/*                activeEditor={activeEditor}*/}
+                        {/*                onClose={onClose}*/}
+                        {/*            />*/}
+                        {/*        ));*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon equation" />*/}
+                        {/*    <span className="text">Equation</span>*/}
+                        {/*</DropDownItem>*/}
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        editor.update(() => {*/}
+                        {/*            const root = $getRoot();*/}
+                        {/*            const stickyNode = $createStickyNode(0, 0);*/}
+                        {/*            root.append(stickyNode);*/}
+                        {/*        });*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon sticky" />*/}
+                        {/*    <span className="text">Sticky Note</span>*/}
+                        {/*</DropDownItem>*/}
+                        {/*<DropDownItem*/}
+                        {/*    onClick={() => {*/}
+                        {/*        editor.dispatchCommand(*/}
+                        {/*            INSERT_COLLAPSIBLE_COMMAND,*/}
+                        {/*            undefined,*/}
+                        {/*        );*/}
+                        {/*    }}*/}
+                        {/*    className="item">*/}
+                        {/*    <i className="icon caret-right" />*/}
+                        {/*    <span className="text">Collapsible container</span>*/}
+                        {/*</DropDownItem>*/}
+                        {/*{EmbedConfigs.map((embedConfig) => (*/}
+                        {/*    <DropDownItem*/}
+                        {/*        key={embedConfig.type}*/}
+                        {/*        onClick={() => {*/}
+                        {/*            activeEditor.dispatchCommand(*/}
+                        {/*                INSERT_EMBED_COMMAND,*/}
+                        {/*                embedConfig.type,*/}
+                        {/*            );*/}
+                        {/*        }}*/}
+                        {/*        className="item">*/}
+                        {/*        {embedConfig.icon}*/}
+                        {/*        <span className="text">{embedConfig.contentName}</span>*/}
+                        {/*    </DropDownItem>*/}
+                        {/*))}*/}
+                    </DropDown>
+                    <Divider/>
 
 
                     {isLink && createPortal(<FloatingLinkEditor editor={editor}/>, document.body)}
@@ -847,6 +1037,8 @@ export default function ToolbarPlugin({options}) {
                     >
                         <i className="format justify-align"/>
                     </button>
+
+                    {modal}
                 </>
             )}
         </div>

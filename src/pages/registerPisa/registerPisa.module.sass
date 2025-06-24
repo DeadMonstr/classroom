@@ -1,0 +1,192 @@
+@import "styles/abstracts/variables"
+
+.registerPisa
+  min-height: 100vh
+  background-image: linear-gradient(180deg, #00C2FF 0%, #8DE3FE 100%)
+  display: flex
+  align-items: center
+  justify-content: space-around
+  padding: 3rem
+  @media only screen and (max-width: 768px)
+    flex-direction: column
+    padding: 2rem
+    gap: 3rem
+  &.turon_theme
+    background-image: linear-gradient(0deg,#111f4c 30%,#072e92)
+    .item
+      color: white !important
+      &.active
+        color: black !important
+  .logo
+    width: 35rem
+    height: auto
+    position: fixed
+    top: 50%
+    transform: translateY(-50%)
+    right: 20rem
+    @media only screen and (max-width: 768px)
+      position: static
+      transform: translateY(0)
+      order: 1
+
+  form
+    width: 50rem
+    border-radius: 15px
+    box-shadow: 0 0 13px 4px $color-white
+    background-color: white
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    padding: 3rem
+    gap: 2rem
+    @media only screen and (max-width: 768px)
+
+
+      order: 2
+    .title
+      font-weight: 600
+      text-align: center
+      color: $color-grey-dark
+      font-size: 3.5rem
+      margin-bottom: 1rem
+    label
+      width: 75%
+      position: relative
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      i
+        position: absolute
+        color: $color-grey-dark
+        right: 1rem
+        top: 50%
+        transform: translateY(-50%)
+        font-size: 2rem
+    .input-fields
+      padding: 0 3.5rem 0 2.5rem
+      width: 100%
+      height: 4.5rem
+      border-radius: 10px
+      outline: none
+      border: 2px solid $color-grey-dark
+      background-color: white
+      font-size: 1.7rem
+      transition: all 0.6s ease
+    .link__register
+      margin-top: 2rem
+      font-size: 1.7rem
+      color: $color-grey-dark
+      font-weight: bold
+      span
+        margin-left: 1rem
+        color: $color-main-dark
+        border-bottom: 1px solid$color-main-dark
+
+
+
+@media (max-width: 768px)
+  .registerPisa
+
+    form
+      width: 45rem
+      .title
+        font-size: 3rem
+      label
+        width: 80%
+        .name-field
+          left: 2rem
+          top: -1rem
+          font-size: 1.9rem
+        .error-field
+          font-size: 1.5rem
+        i
+          font-size: 2rem
+      .input-fields
+        padding: 0 2.5rem
+        width: 100%
+        height: 6rem
+        font-size: 2.2rem
+
+      .link__register
+        font-size: 2.3rem
+        margin-top: 3rem
+
+@media (max-width: 430px)
+  .registerPisa
+    .logo
+      width: 22rem
+    form
+      width: 35rem
+      padding: 3rem
+      .title
+        font-size: 3rem
+      label
+        width: 100%
+        .name-field
+          top: -1.5rem
+          font-size: 2.5rem
+        .error-field
+          font-size: 1.5rem
+        i
+          right: 2rem
+          font-size: 2rem
+          background-color: white
+      .input-fields
+        padding: 0 2.5rem
+        width: 100%
+        height: 8.5rem
+        &:nth-child(2)
+          padding: 0 5.5rem 0 2.5rem
+
+
+
+
+@media (max-width: 375px)
+  .registerPisa
+    .logo
+      width: 22rem
+    form
+      width: 90%
+      padding: 3rem
+      .title
+        font-size: 3rem
+      label
+        width: 85%
+        .name-field
+          top: -1.5rem
+          font-size: 2.5rem
+        .error-field
+          font-size: 1.5rem
+
+      .input-fields
+        padding: 0 2.5rem
+        width: 100%
+        height: 8.5rem
+        &:nth-child(2)
+          padding: 0 5.5rem 0 2.5rem
+
+@media (max-width: 320px)
+  .registerPisa
+    .logo
+      width: 22rem
+    form
+      width: 95%
+      .title
+        font-size: 3rem
+      label
+        width: 100%
+        .name-field
+          top: -1.5rem
+          font-size: 2.5rem
+        .error-field
+          font-size: 1.5rem
+
+      .input-fields
+        padding: 0 2.5rem
+        width: 100%
+        height: 8.5rem
+        &:nth-child(2)
+          padding: 0 5.5rem 0 2.5rem
+

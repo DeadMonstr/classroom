@@ -1,0 +1,257 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+.createText
+  width: fit-content
+  padding: 2rem
+  border-radius: 5px
+  margin: 2rem 0
+  .matchedWord
+    padding: 0.5rem 1rem
+    border: 1px solid $color-grey-light
+    width: fit-content
+    height: fit-content
+    font-size: 1.8rem
+    touch-action: none
+    margin: .3rem
+    cursor: grab
+    &:active
+      cursor: grabbing
+    &__preview
+      border: 1px solid
+      font-size: 1.6rem
+    &__box
+      display: inline-flex
+      align-items: center
+      justify-content: center
+      min-width: 10rem
+      min-height: 3rem
+      max-width: fit-content
+      max-height: fit-content
+      background-color: $color-grey-lighter
+      padding: 0.2rem
+      margin: 0.2rem
+      border-radius: 5px
+      vertical-align: middle
+      .matchedWord
+        border: none
+      &.active
+        border: 2px solid $color-success !important
+      &.error
+        border: 2px solid $color-danger !important
+  .subHeader
+    display: flex
+    align-items: center
+    justify-content: flex-end
+    margin-bottom: 1rem
+    .trash
+      font-size: 1.7rem
+      color: red
+      cursor: pointer
+      @include btn-active
+  &__header
+    width: 100%
+    display: flex
+    align-items: flex-start
+    justify-content: space-between
+
+  &__innerHeader
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 2rem
+    .error
+      font-size: 1.5rem
+      font-weight: 400
+      color: red
+      margin-top: 1rem
+    .about
+      width: 3rem
+      height: 3rem
+      display: flex
+      align-items: center
+      justify-content: center
+      position: relative
+      border: 1px solid $color-grey-dark
+      border-radius: 5px
+      cursor: pointer
+      transition: all .1s
+      @include btn-active
+      &:hover
+        background-color: $color-grey-dark
+        i
+          color: white
+        .popup
+          transition-delay: 0.7s
+          opacity: 1
+          visibility: visible
+      i
+        font-size: 1.7rem
+        color: $color-grey-light
+      .popup
+        top: -110%
+        background-color: $color-grey-dark
+        padding: 0.3rem 2rem
+        position: absolute
+        opacity: 0
+        visibility: hidden
+        color: white
+        font-size: 1.5rem
+        border-radius: 5px
+        transition: all .1s
+  &__container
+    display: flex
+    margin-top: 1rem
+    &_options
+      margin-left: 1.5rem
+
+
+  &__text
+    width: 900px
+    padding: 2rem
+    border: 1px solid $color-grey-dark
+    font-size: 1.8rem
+    white-space: pre-line
+    position: relative
+    //user-select: none
+    padding-top: 3rem
+    .change
+      position: absolute
+      right: 1rem
+      top: 1rem
+
+    .text_input
+      display: inline-block
+      input
+        margin: .4rem 0
+        font-size: 1.6rem
+        padding: .3rem
+        //border-radius: 5px
+        &.active
+          border: 2px solid $color-success !important
+        &.error
+          border: 2px solid $color-danger !important
+    .text_drag
+      color: white
+      border: 1px solid black
+
+    h1
+      text-align: center
+      font-size: 1.6rem
+      color: $color-grey-dark
+      user-select: none
+    .word
+      height: fit-content
+      margin: 0 0.2rem
+      cursor: pointer
+      user-select: none
+      &.active
+        background-color: $color-grey-dark
+        color: white
+        padding: 0 .3rem
+
+      &:hover
+        background-color: $color-grey-light
+        color: white
+  .btn
+    width: fit-content
+    height: fit-content
+    padding: .5rem 1rem
+    border: 1px solid $color-grey-dark
+    font-size: 1.5rem
+    margin-top: 2rem
+    cursor: pointer
+    transition: all .1s
+    user-select: none
+    @include btn-active
+    &:hover
+      background-color: $color-grey-dark
+      color: white
+
+.viewText
+  margin-top: 1rem
+  width: 100%
+  .allWords
+    margin-top: 2rem
+    width: 400px
+    min-height: 100px
+    padding: 1rem
+    border-radius: 10px
+    border: 2px solid $color-grey-light
+    display: flex
+    flex-wrap: wrap
+    gap: 1rem
+    @media only screen and (max-width: 430px)
+      width: 100%
+  .matchedWord
+    padding: 1rem
+    background-color: $color-main-light
+    border-radius: 5px
+    height: fit-content
+    width: fit-content
+    font-size: 1.8rem
+    touch-action: none
+    cursor: grab
+    &>div
+      padding: 3px 5px
+      background-color: white
+      border-radius: 5px
+    &:active
+      cursor: grabbing
+    &__preview
+      border: 1px solid
+      font-size: 1.6rem
+    &__box
+      display: inline-flex
+      align-items: center
+      justify-content: center
+      min-width: 13rem
+      min-height: 4rem
+      max-width: fit-content
+      max-height: fit-content
+      border: 2px solid $color-grey-light
+      padding: 0.2rem
+      margin: 0.2rem
+      border-radius: 5px
+      vertical-align: middle
+      background-color: white
+
+
+      //.matchedWord
+      //  border: none
+      &.active
+        border: 2px solid $color-success !important
+      &.error
+        border: 2px solid $color-danger !important
+  .text
+    position: relative
+    width: fit-content
+    margin-bottom: 1rem
+    p
+      white-space: pre-line
+      font-size: 1.8rem
+    .popup
+      //visibility: hidden
+      //opacity: 0
+      transition-delay: 1s
+      top: -10px
+      right: -25px
+      position: absolute
+      transition: all .1s
+      i
+        font-size: 1.7rem
+  span
+    font-size: 1.8rem
+  ul,ol
+    font-size: 1.6rem
+  input
+    margin: .4rem 0
+    font-size: 1.6rem
+    padding: .3rem
+    border-radius: 5px
+    &.active
+      border: 2px solid $color-success !important
+    &.error
+      border: 2px solid $color-danger !important

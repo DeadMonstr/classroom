@@ -28,8 +28,14 @@ import ViewTestTuron from "pages/testTuron/view/viewTestTuron";
 import GetUserTuron from "pages/getUserTuron/GetUserTuron";
 import Login from "pages/login/Login";
 import Alert from "components/ui/alert";
-import PisaTest from "pages/pisaTest/PisaTest";
-
+import PisaTestList from "pages/pisaTest/PisaTestList";
+import CreatePisaTest from "pages/pisaTest/create/CreatePisaTest";
+import RegisterPisa from "pages/registerPisa/registerPisa";
+import LoginPisa from "pages/loginPisa/LoginPisa";
+import ViewPisaTest from "pages/pisaTest/view/ViewPisaTest";
+import MyResultPisaTest from "pages/pisaTest/myResult/MyResultPisaTest";
+import CheckResultsPisaTest from "pages/pisaTest/checkExc/CheckResultsPisaTest";
+import RegisteredStudentsPisa from "pages/pisaTest/registeredStudents/RegisteredStudentsPisa";
 
 
 const Layout = lazy(() => import("components/layout"))
@@ -78,7 +84,13 @@ const App = () => {
                     element={<Login/>}
                 />
 
+                <Route
+                    index
+                    path={"login_block_test"}
+                    element={<LoginPisa/>}
+                />
 
+                <Route path={"registerPisaTest"} element={<RegisterPisa/>} />
 
                 <Route path="/*" element={<Layout/>}>
                     <Route
@@ -86,7 +98,6 @@ const App = () => {
                         path={"user/:id/*"}
                         element={<User/>}
                     />
-
 
                     <Route
                         index
@@ -107,6 +118,11 @@ const App = () => {
                     />
                     <Route path={"taskManager/*"} element={<TaskManager/>} />
 
+
+                    <Route path={"viewPisaTest/:id"} element={<ViewPisaTest/>} />
+                    <Route path={"myResultsPisaTest/:id"} element={<MyResultPisaTest/>} />
+                    <Route path={"checkMyResultsPisaTest/:id"} element={<CheckResultsPisaTest/>} />
+
                     <Route element={<RequireAuth allowedRules={[ROLES.Teacher,ROLES.Student]} />}>
                         <Route path={"groups/*"} element={<Groups/>} />
                         <Route path={"books/*"} element={<Books/>} />
@@ -123,7 +139,10 @@ const App = () => {
                         <Route path={"createExercises"} element={<CreateExercises/>} />
                         <Route path={"changeExercises/:id"} element={<ChangeExercises/>} />
                         <Route path={"createExercisesTypes"} element={<CreateExercisesTypes/>} />
-                        <Route path={"pisaTest"} element={<PisaTest/>} />
+                        <Route path={"pisaTest"} element={<PisaTestList/>} />
+                        <Route path={"createPisaTest/:id"} element={<CreatePisaTest/>} />
+                        <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa/>} />
+
 
                         <Route path={"presentations/*"} element={<Presentations/>}/>
                         <Route path={"presentation/:id"} element={<Presentation/>}/>

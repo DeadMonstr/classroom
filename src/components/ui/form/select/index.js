@@ -48,7 +48,6 @@ const Select = React.memo((
             if (typeof options[0] !== "object") {
                 setCurrentOptions(() => [...allObj ,...options.map((item, index) => {
                     if (index === 0 && !value && !all) {
-
                         onChange(item)
                     }
                     return {

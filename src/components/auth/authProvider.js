@@ -17,7 +17,8 @@ const AuthProvider = ({children}) => {
 	useEffect(()=> {
 		if (refresh_token && token) {
 			dispatch(fetchMe(refresh_token))
-		} else {
+		}
+		else {
 			navigate("/login")
 		}
 	},[])
@@ -27,7 +28,8 @@ const AuthProvider = ({children}) => {
 		return <Loader/>
 	} else if (fetchUserDataStatus === "success") {
 		return children
-	} else {
+	}
+	else {
 		navigate(`/login`)
 	}
 

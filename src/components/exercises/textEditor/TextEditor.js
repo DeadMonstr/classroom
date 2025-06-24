@@ -33,6 +33,11 @@ const TextEditorExc = React.memo(({ onChangeCompletedComponent, onSetCompletedCo
 
 
 const TextEditorCreate = ({textComponent,onSetCompletedComponent,onDeleteComponent,options}) => {
+
+
+
+
+
     return (
         <div className={styles.createText}>
             <div className={styles.subHeader}>

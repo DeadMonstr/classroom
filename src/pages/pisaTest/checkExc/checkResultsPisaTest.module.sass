@@ -1,0 +1,162 @@
+@import "styles/abstracts/variables"
+@import "styles/abstracts/mixins"
+
+
+.createPisaTest
+  padding: 2rem
+  height: 100%
+  display: flex
+  flex-direction: column
+  .header
+    width: 100%
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 2rem
+    &>div
+      display: flex
+      width: 33% !important
+      flex-grow: 1
+      align-items: center
+      justify-content: center
+      &:first-child
+        justify-content: flex-start
+      &:last-child
+        justify-content: flex-end
+  .container
+    display: flex
+    width: 100%
+    height: 90%
+    flex: 1 0
+    position: relative
+    .left,.right
+      width: 1%
+      height: 100%
+      transition: all 1s
+
+      .wrapper
+        opacity: 0
+        visibility: hidden
+        width: 100%
+        height: 100%
+        padding: 1rem
+        display: flex
+        flex-direction: column
+        overflow: auto
+        transition: all .1s
+        transition-delay: .6s
+      &.center
+        width: 50%
+        .wrapper
+          opacity: 1
+          visibility: visible
+      &.active
+        width: 99%
+        .wrapper
+          opacity: 1
+          visibility: visible
+
+
+    .left
+      border-right: 2px solid rgba($color-grey-light,.8)
+
+  .submit
+    width: 100%
+    position: absolute
+    bottom: 0
+    left: 0
+    padding: 2rem
+    background-color: rgba(255, 255, 255, 0.56)
+    backdrop-filter: blur(10px)
+    display: flex
+    align-items: center
+    justify-content: flex-end
+  .status
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    gap: 1rem
+    h1
+      font-size: 2rem
+      font-weight: normal
+
+.createLesson
+  width: 100%
+  padding: 5rem
+  padding-bottom: 10rem
+  position: relative
+  .header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    position: sticky
+    top: 0
+    &__item
+      display: flex
+      align-items: flex-end
+    .test
+      margin: 0 1rem
+      display: flex
+      flex-direction: column
+      align-items: center
+      gap: 1rem
+      justify-content: center
+
+  .title
+    margin-bottom: 3rem
+  &__container
+    margin-top: 3rem
+  &__add
+    width: 100%
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    margin-top: 2rem
+    .icon
+      width: 5rem
+      height: 5rem
+      border-radius: 50%
+      background-color: white
+      display: flex
+      align-items: center
+      justify-content: center
+      cursor: pointer
+      transition: all .1s
+      @include btn-active
+      &.active
+        i
+          transform: rotate(45deg)
+      &:hover
+        box-shadow:  0 0 8px 1px $color-grey-dark
+      i
+        color: $color-grey-dark
+        font-size: 2.7rem
+        transition: all .1s
+        transform: rotate(0)
+    .tools
+      width: 100%
+      display: flex
+      align-items: center
+      justify-content: center
+      margin-top: 2rem
+      transition: all .2s
+      opacity: 0
+      visibility: hidden
+      &.active
+        opacity: 1
+        visibility: visible
+      &__item
+        padding: .7rem 2rem
+        box-shadow: 0 2px 3px 1px $color-grey-dark
+        font-size: 1.6rem
+        border-radius: 5px
+        transition: all .1s
+        cursor: pointer
+        user-select: none
+        margin: 0 1.5rem
+        @include btn-active
+        &:hover
+          background-color: $color-grey-dark
+          color: white

@@ -414,13 +414,9 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
 
 
     const onSetAnswers = (index, changedAnswer) => {
-
         const isInAnswers = answers.some(item => item.index === index)
 
-
-
         if (isInAnswers) {
-
             setAnswers(answers => answers.map((item) => {
                 if (item.index === index) {
                     return changedAnswer

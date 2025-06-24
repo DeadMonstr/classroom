@@ -10,7 +10,6 @@ import Form from "components/ui/form";
 import {useParams} from "react-router";
 import {Link, Navigate, NavLink, Route, Routes} from "react-router-dom";
 import Back from "components/ui/back";
-import styles from "pages/groups/group/makeAttendance/styles.module.sass";
 import LessonPlan from "pages/groups/group/lessonPlan/LessonPlan";
 import {setAlertOptions} from "slices/layoutSlice";
 import {useDispatch} from "react-redux";

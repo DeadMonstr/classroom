@@ -33,7 +33,7 @@ const TeacherMonthSalary = () => {
     },[monthId])
 
 
-    const {month,residue,taken_salary,black_salary,data: salaries} = data
+    const {month,residue,taken_salary,black_salary,data: salaries,salary_debt} = data
 
 
 
@@ -46,6 +46,7 @@ const TeacherMonthSalary = () => {
                 <h2>Qolgan oylik: <span>{residue}</span></h2>
                 <h2>Olingan oylik: <span>{taken_salary}</span></h2>
                 <h2>Black salary: <span>{black_salary}</span></h2>
+                <h2>Qarz: <span>{salary_debt}</span></h2>
             </div>
 
 

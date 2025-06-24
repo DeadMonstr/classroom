@@ -432,8 +432,8 @@ const Words = React.memo(({words, handleDoubleClick, type}) => {
             if (inValidDots.test(item.word)) {
                 return (
                     <span>
-					{item.word}
-				</span>
+                        {item.word}
+                    </span>
                 )
             }
             return (

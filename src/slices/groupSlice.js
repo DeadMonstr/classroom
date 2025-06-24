@@ -4,6 +4,7 @@ import { BackUrl, headers } from "constants/global";
 
 const initialState = {
 	data: {},
+	errors: [],
 	subjectLevels: [],
 	curriculum: [],
 	fetchGroupDataStatus: "idle"
@@ -41,6 +42,7 @@ const GroupSlice = createSlice({
 				state.data = action.payload.data
 				state.subjectLevels = action.payload.subject_levels
 				state.curriculum = action.payload.curriculum
+				state.errors = action.payload.errors
 			})
 			.addCase(fetchGroup.rejected,state => {state.fetchGroupDataStatus = 'error'})
 
