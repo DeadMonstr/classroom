@@ -65,10 +65,10 @@ const CreateImg = ({component,onSetCompletedComponent,onDeleteComponent,extra}) 
 
 			request(`${BackUrl}pisa/block/infos/${component?.id}`, "DELETE", null, headers())
 				.then(res => {
-					onDeleteComponent(component.index)
+					onDeleteComponent(component.id)
 				})
 		} else {
-			onDeleteComponent(component.index)
+			onDeleteComponent(component.id)
 		}
 	}
 
@@ -139,7 +139,7 @@ const ViewImg = ({component,onChangeCompletedComponent,type}) => {
 				<div className={styles.img__item}>
 					{
 						type !== "view" ?
-							<div onClick={() => onChangeCompletedComponent(component.index)} className={styles.popup}>
+							<div onClick={() => onChangeCompletedComponent(component.id)} className={styles.popup}>
 								<i className="fa-sharp fa-solid fa-pen-to-square" />
 							</div> : null
 					}

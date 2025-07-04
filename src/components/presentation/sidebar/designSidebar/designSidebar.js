@@ -34,6 +34,7 @@ import {
     setDesignVerticalAlign,
     setDesignLayoutOption, setDesignLayoutSize, setDesignFontSize, setDesignFontColor, setDesignBackgroundColor
 } from "slices/presentationSlice";
+import {useExamSecurity} from "hooks/useExamSecurity";
 
 
 const typeDesign = [
@@ -186,26 +187,42 @@ const DesignSidebar = () => {
     }
 
 
+    // useExamSecurity();
+    //
+    // useEffect(() => {
+    //     const enterFullscreen = () => {
+    //         const el = document.documentElement;
+    //         if (el.requestFullscreen) {
+    //             el.requestFullscreen().catch((err) => {
+    //                 console.error("Fullscreen error:", err);
+    //             });
+    //         }
+    //     };
+    //
+    //     enterFullscreen();
+    // }, []);
+
+    // 12214
 
 
     return (
         <div className={cls.design}>
-            <div className={cls.designType}>
-                {
-                    typeDesign.map(item => {
-                        return (
-                            <div
-                                className={classNames(cls.designType__item, {
-                                    [cls.active]: type === item
-                                })}
-                                onClick={() => setType(item)}
-                            >
-                                {item}
-                            </div>
-                        )
-                    })
-                }
-            </div>
+                {/*<div className={cls.designType}>*/}
+                {/*    {*/}
+                {/*        typeDesign.map(item => {*/}
+                {/*            return (*/}
+                {/*                <div*/}
+                {/*                    className={classNames(cls.designType__item, {*/}
+                {/*                        [cls.active]: type === item*/}
+                {/*                    })}*/}
+                {/*                    onClick={() => setType(item)}*/}
+                {/*                >*/}
+                {/*                    {item}*/}
+                {/*                </div>*/}
+                {/*            )*/}
+                {/*        })*/}
+                {/*    }*/}
+                {/*</div>*/}
 
             {
                 currentSlide.design.isLayout &&

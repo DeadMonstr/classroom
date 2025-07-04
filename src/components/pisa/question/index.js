@@ -149,8 +149,8 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
         <div className={styles.viewQuestion}>
             <div className={styles.text}>
                 {
-                    onChangeCompletedComponent ?
-                        <div onClick={() => onChangeCompletedComponent(questionComponent.index)}
+                    onChangeCompletedComponent && questionComponent.canDelete ?
+                        <div onClick={() => onChangeCompletedComponent(questionComponent.id)}
                              className={styles.popup}>
                             <i className="fa-sharp fa-solid fa-pen-to-square"/>
                         </div> : null
@@ -306,7 +306,6 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
         const isEmpty = innerType === "text" ? text.length === 0 : innerType === "imageInText" ? !words.some(item => item.img) : !image
 
         if (variants && !isEmpty) {
-            console.log(questionComponent)
 
             const data = {
                 text,
@@ -360,10 +359,10 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
         if (questionComponent?.id) {
             request(`${BackUrl}pisa/block/questions/${questionComponent?.id}`, "DELETE", null, headers())
                 .then(res => {
-                    onDeleteComponent(questionComponent.index)
+                    onDeleteComponent(questionComponent.id)
                 })
         } else {
-            onDeleteComponent(questionComponent.index)
+            onDeleteComponent(questionComponent.id)
         }
     }
 

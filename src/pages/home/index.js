@@ -58,7 +58,7 @@ const Subjects = React.memo(() => {
 
 
 	const [subjects,setSubjects] = useState([])
-	const ref = useHorizontalScroll(subjects,3)
+	const ref = useHorizontalScroll()
 	const [activeCreate,setActiveCreate] = useState(false)
 
 	const onSubmit = (data) => {
@@ -83,7 +83,7 @@ const Subjects = React.memo(() => {
 
 
 	return (
-		<div ref={ref} className={styles.subjects}>
+		<div  className={styles.subjects}>
 			<div className={styles.subjects__header}>
 				<h1 className={styles.title}>Fanlar: </h1>
 
@@ -93,7 +93,7 @@ const Subjects = React.memo(() => {
 					</div>
 				</RequireAuthChildren>
 			</div>
-			<div className={styles.subjects__wrapper}>
+			<div ref={ref} className={styles.subjects__wrapper}>
 				{
 					subjects.map((item,index) => {
 						return (
@@ -129,7 +129,7 @@ const PisaTests = React.memo(() => {
 
 
 	const [tests,setTests] = useState([])
-	const ref = useHorizontalScroll(tests,3)
+	const ref = useHorizontalScroll()
 	const [activeCreate,setActiveCreate] = useState(false)
 
 	const onSubmit = (data) => {
@@ -164,13 +164,13 @@ const PisaTests = React.memo(() => {
 
 
 	return (
-		<div ref={ref} className={styles.subjects}>
+		<div className={styles.subjects}>
 			<div className={styles.subjects__header}>
-				<h1 className={styles.title}>Pisa Testlar: </h1>
+				<h1 className={styles.title}>Block Testlar: </h1>
 
 
 			</div>
-			<div className={styles.subjects__wrapper}>
+			<div ref={ref} className={styles.subjects__wrapper}>
 				{
 					tests.map((item,index) => {
 						return (

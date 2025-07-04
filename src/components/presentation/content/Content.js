@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import cls from "./content.module.sass";
-import {HeadingContent, NumberContent, ParagraphContent} from "components/presentation/types";
-import {useSelector} from "react-redux";
+import {activeTypesSideBar, HeadingContent, NumberContent, ParagraphContent} from "components/presentation/types";
+import {useDispatch, useSelector} from "react-redux";
 import classNames from "classnames";
 import {BackUrlForDoc} from "constants/global";
-
+import {setActiveType} from "slices/presentationSlice";
+import ActiveBox from "components/presentation/ui/activeBox/activeBox";
 
 
 const layoutSizeTypes = [
@@ -29,7 +30,6 @@ const layoutSizeTypes = [
         size: "50%"
     },
 ]
-
 
 
 const Content = () => {
@@ -70,27 +70,41 @@ const Content = () => {
                 setLayoutSizeHeight("")
             }
         }
-    },[currentSlide.design.layout,currentSlide.design.layoutSize,currentSlide.extraDesign.layout])
+    }, [currentSlide.design.layout, currentSlide.design.layoutSize, currentSlide.extraDesign.layout])
 
 
     useEffect(() => {
         setImage(currentSlide.image)
-    },[currentSlide.image])
+    }, [currentSlide.image])
 
     useEffect(() => {
         setBgColor(currentSlide.design.backgroundColor)
-    },[currentSlide.design.backgroundColor])
+    }, [currentSlide.design.backgroundColor])
 
+
+    const dispatch = useDispatch()
+
+
+    const onClickLayout = () => {
+        dispatch(setActiveType(activeTypesSideBar.layout))
+    }
 
 
     return (
-        <div
-            className={classNames(cls.main, cls[layout])}
-        >
+        <ActiveBox
+            onClick={onClickLayout}
+            clazz={[cls.main, cls[layout]]}
+            active={currentSlide.activeType}
+            type={activeTypesSideBar.layout}>
             {
                 layout !== "default" &&
                 <div
-                    style={{minWidth: layoutSizeWidth,maxWidth: layoutSizeWidth, minHeight: layoutSizeHeight, maxHeight: layoutSizeHeight}}
+                    style={{
+                        minWidth: layoutSizeWidth,
+                        maxWidth: layoutSizeWidth,
+                        minHeight: layoutSizeHeight,
+                        maxHeight: layoutSizeHeight
+                    }}
                     className={cls.image}
                 >
                     <img src={image} alt=""/>
@@ -101,11 +115,11 @@ const Content = () => {
 
             <div className={cls.content} style={{backgroundColor: bgColor}}>
                 <HeadingContent/>
-                <ParagraphContent/>
+                {/*<ParagraphContent/>*/}
                 {/*<NumberContent/>*/}
             </div>
 
-        </div>
+        </ActiveBox>
     );
 };
 

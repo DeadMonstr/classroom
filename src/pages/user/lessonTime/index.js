@@ -3,7 +3,7 @@ import styles from "./style.module.sass";
 import Back from "components/ui/back";
 import Table from "components/ui/table";
 import { useHttp } from "hooks/http.hook";
-import {BackUrl, headers, headersOldToken, PlatformUrlApi} from "constants/global";
+import {BackUrl, headers, headersOldToken, PlatformUrlApi, ROLES} from "constants/global";
 import { useSelector } from "react-redux";
 import Select from "components/ui/form/select";
 import brightnessColor from "helpers/brightnessColor";
@@ -19,13 +19,17 @@ const UserLessonTime = () => {
 
 	const {system_name} = useAuth()
 
-	const {data:{platform_id,location_id,platform_location}} = useSelector(state => state.user)
+	const {data:{platform_id,location_id,platform_location,role}} = useSelector(state => state.user)
 
 	const {request} = useHttp()
 
 
+	console.log(role)
+
 	useEffect(() => {
-		if (system_name === "gennis") {
+
+
+		if (system_name === "gennis" && ROLES.Teacher === role) {
 			request(`${BackUrl}teacher_locations`,"GET",null,headers())
 				.then(res => {
 					setLocations(res.locations)
@@ -46,7 +50,7 @@ const UserLessonTime = () => {
 			<div className={styles.header}>
 				<h1>Dars vaqtlari</h1>
 
-				{system_name === "gennis" ? <Select options={locations} onChange={setLocation}/> : null}
+				{system_name === "gennis" && locations.length ? <Select options={locations} onChange={setLocation}/> : null}
 
 			</div>
 
@@ -79,8 +83,8 @@ const GennisTable = ({data,location}) => {
 
 
 	useEffect(() => {
-		if (location)
-			request(`${BackUrl}user_time_table/${location}`,"GET",null,headers())
+		// if (location)
+			request(`${BackUrl}user_time_table/${location || ""}`,"GET",null,headers())
 				.then(res => {
 					setTimes(res.data)
 					setDays(res.days)

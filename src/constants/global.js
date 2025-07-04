@@ -1,23 +1,22 @@
 import {useMemo} from "react";
 
 
-// export const BackUrlForDoc = "http://26.253.30.50:5001/"
+export const BackUrlForDoc = "http://26.253.30.50:5001/"
 // export const BackUrlForDoc = "https://classroom.gennis.uz/"
-// export const BackUrl = `${BackUrlForDoc}api/`
-// export const LogoutUrl = "/login"
-// export const LogoutUrlPisa = "/loginPisa"
-// export const PlatformUrl = "http://26.253.30.50:5002/"
-// export const PlatformUrlApi = `${PlatformUrl}api/`
-
-
-
-export const BackUrl = "/api/"
-export const BackUrlForDoc = "/"
-export const PlatformUrl = "https://www.admin.gennis.uz/"
-// export const PlatformUrl = "http://test.gennis.uz"
+export const BackUrl = `${BackUrlForDoc}api/`
+export const LogoutUrl = "/login"
 export const LogoutUrlPisa = "/loginPisa"
-export const PlatformUrlApi = "http://test.gennis.uz/api/"
-export const LogoutUrl = `/login`
+export const PlatformUrl = "http://26.253.30.50:5002/"
+export const PlatformUrlApi = `${PlatformUrl}api/`
+
+
+// export const BackUrl = "/api/"
+// export const BackUrlForDoc = "/"
+// export const PlatformUrl = "https://www.admin.gennis.uz/"
+// // export const PlatformUrl = "http://test.gennis.uz"
+// export const LogoutUrlPisa = "/loginPisa"
+// export const PlatformUrlApi = "http://test.gennis.uz/api/"
+// export const LogoutUrl = `/login`
 
 
 
@@ -38,9 +37,6 @@ export const headersOldToken = () => {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         "Authorization" : "Bearer " + token,
-        // 'Access-Control-Allow-Origin':'http://192.168.1.13:5001/api/',
-        // "Access-Control-Allow-Methods" : "GET, POST, OPTIONS",
-        // "Access-Control-Allow-Headers": "Content-Type, Authorization"
     }
 }
 

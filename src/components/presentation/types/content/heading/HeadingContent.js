@@ -19,9 +19,9 @@ export const HeadingContent = () => {
             <TextSlide extraClass={cls.label} type={"small"}>
                 {label}
             </TextSlide>
-            <TextSlide type={"extraBig"}>
-                Sarik
-            </TextSlide>
+            {/*<TextSlide type={"extraBig"}>*/}
+            {/*    Sarik*/}
+            {/*</TextSlide>*/}
             <TextSlide type={"big"}>
                 {heading}
             </TextSlide>

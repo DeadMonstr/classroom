@@ -90,7 +90,7 @@ const App = () => {
                     element={<LoginPisa/>}
                 />
 
-                <Route path={"registerPisaTest"} element={<RegisterPisa/>} />
+                <Route path={"register_block_test"} element={<RegisterPisa/>} />
 
                 <Route path="/*" element={<Layout/>}>
                     <Route
@@ -153,11 +153,7 @@ const App = () => {
                         element={<Navigate to="/home" replace/>}
                     />
 
-
-
                 </Route>
-
-
 
             </>
         )

@@ -41,7 +41,6 @@ const Layout = () => {
 		// 		<MainContext.Provider value={mainRef}>
 		// 			<Outlet/>
 		// 		</MainContext.Provider>
-		//
 		// 	</main>
 		// </>
 

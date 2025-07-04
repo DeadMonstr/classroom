@@ -1,4 +1,8 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {activeTypesSideBar} from "components/presentation/types";
+
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
 
 const initialState = {
 
@@ -10,9 +14,10 @@ const initialState = {
         image: 'https://asset.gecdesigns.com/img/wallpapers/beautiful-fantasy-wallpaper-ultra-hd-wallpaper-4k-sr10012418-1706506236698-cover.webp',
         imageType: 'center',
         label: "",
-
+        activeType: activeTypesSideBar.layout,
 
         design: {
+
             layout: "default",
             verticalAlign: "center",
             horizontalAlign: "center",
@@ -20,10 +25,8 @@ const initialState = {
             fontSize: 3,
             fontColor: "#000000",
             backgroundColor: "",
-
-
             isLayout: true,
-            isLayoutSize: false,
+            isLayoutSize: true,
             isVerticalAlign: true,
             isHorizontalAlign: true
         },
@@ -78,41 +81,51 @@ const PresentationSlice = createSlice({
     initialState,
     reducers: {
         setDesignHorizontalAlign: (state, action) => {
-            if (action.payload.type === "current") {
-                state.currentSlide.design.horizontalAlign = action.payload.align
-                state.currentSlide.extraDesign.horizontalAlign = ""
+            const { type, align } = action.payload;
+            if (type === "current") {
+                state.currentSlide.design.horizontalAlign = align;
+                state.currentSlide.extraDesign.horizontalAlign = "";
             } else {
-                state.currentSlide.extraDesign.horizontalAlign = action.payload.align
+                state.currentSlide.extraDesign.horizontalAlign = align;
             }
         },
 
 
         setDesignVerticalAlign: (state, action) => {
-            if (action.payload.type === "current") {
-                state.currentSlide.design.verticalAlign = action.payload.align
-                state.currentSlide.extraDesign.verticalAlign = ""
+            const { type, align } = action.payload;
+            if (type === "current") {
+                state.currentSlide.design.verticalAlign = align;
+                state.currentSlide.extraDesign.verticalAlign = "";
             } else {
-                state.currentSlide.extraDesign.verticalAlign = action.payload.align
+                state.currentSlide.extraDesign.verticalAlign = align;
             }
         },
 
 
         setDesignLayoutOption: (state, action) => {
-            if (action.payload.type === "current") {
-                state.currentSlide.design.layout = action.payload.layout
-                state.currentSlide.extraDesign.layout = ""
+            const { type, layout } = action.payload;
+            if (type === "current") {
+                state.currentSlide.design.layout = layout;
+                state.currentSlide.extraDesign.layout = "";
             } else {
-                state.currentSlide.extraDesign.layout = action.payload.layout
+                state.currentSlide.extraDesign.layout = layout;
             }
         },
 
 
-        setDesignLayoutSize: (state,action) => {
-            state.currentSlide.design.layoutSize = state.currentSlide.design.layoutSize + action.payload
+        setDesignLayoutSize: (state, action) => {
+            state.currentSlide.design.layoutSize = clamp(
+                state.currentSlide.design.layoutSize + action.payload,
+                0,
+                4
+            );
         },
-
-        setDesignFontSize: (state,action) => {
-            state.currentSlide.design.fontSize = state.currentSlide.design.fontSize + action.payload
+        setDesignFontSize: (state, action) => {
+            state.currentSlide.design.fontSize = clamp(
+                state.currentSlide.design.fontSize + action.payload,
+                0,
+                4
+            );
         },
 
         setDesignFontColor: (state,action) => {
@@ -148,23 +161,21 @@ const PresentationSlice = createSlice({
         setContentLabel: (state, action) => {
             state.currentSlide.label = action.payload
         },
-
-
-
-
-
-
         clearExtraOptions: (state, action) => {
-            if (action.payload === "horizontal") {
-                state.currentSlide.extraDesign.horizontalAlign = ""
+            const key = action.payload === "layout"
+                ? "layout"
+                : `${action.payload}Align`;
+            if (state.currentSlide.extraDesign.hasOwnProperty(key)) {
+                state.currentSlide.extraDesign[key] = "";
             }
-            if (action.payload === "vertical") {
-                state.currentSlide.extraDesign.verticalAlign = ""
-            }
-            if (action.payload === "layout") {
-                state.currentSlide.extraDesign.layout = ""
-            }
-        }
+        },
+        setDesignValue: (state, action) => {
+            const { key, value } = action.payload;
+            state.currentSlide.design[key] = value;
+        },
+        setActiveType: (state, action) => {
+            state.currentSlide.activeType = action.payload
+        },
 
     }
 })
@@ -186,5 +197,6 @@ export const {
     setContentSubheading,
     setContentLabel,
     setSlideImage,
-    setSlideImageType
+    setSlideImageType,
+    setActiveType
 } = actions

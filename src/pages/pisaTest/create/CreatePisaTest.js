@@ -35,19 +35,22 @@ import TextEditorExc from "components/pisa/textEditor/TextEditor";
 import useDebounce from "hooks/useDebounce";
 import Checkbox from "components/ui/form/checkbox";
 import Back from "components/ui/back";
+import Select from "components/ui/form/select";
+import Timer from "components/ui/form/timer";
 
 const CreatePisaTest = () => {
 
     const {id} = useParams()
 
 
-    const [type, setType] = useState("left")
+    const [type, setType] = useState("center")
 
     const [leftExc, setLeftExc] = useState([])
     const [rightExc, setRightExc] = useState([])
     const [name, setName] = useState()
     const [status, setStatus] = useState(false)
     const [isChanging, setIsChanging] = useState(false)
+    const [timer, setTimer] = useState()
 
 
 
@@ -99,7 +102,8 @@ const CreatePisaTest = () => {
                         }),
                         type: item.type_question,
                         typeVariants: item.typeVariants
-                    }
+                    },
+                    canDelete: item.can_delete
                 })
 
             } else if (item.type === "text" || item.type === "words") {
@@ -110,7 +114,9 @@ const CreatePisaTest = () => {
                     type: item.type,
                     text: item.text,
                     editorState: item.editorState,
-                    words: item.words
+                    words: item.words,
+                    canDelete: item.can_delete
+
                 })
             } else if (item.type === "video") {
                 components.push({
@@ -119,7 +125,8 @@ const CreatePisaTest = () => {
                     index: item.index,
                     type: item.type,
                     text: item.text,
-                    videoLink: item.video_url
+                    videoLink: item.video_url,
+                    canDelete: item.can_delete
 
                 })
             } else if (item.type === "img") {
@@ -129,7 +136,8 @@ const CreatePisaTest = () => {
                     index: item.index,
                     type: item.type,
                     text: item.text,
-                    img: item.image_url
+                    img: item.image_url,
+                    canDelete: item.can_delete
 
                 })
             }
@@ -140,7 +148,8 @@ const CreatePisaTest = () => {
                     index: item.index,
                     type: item.type,
                     text: item.text,
-                    file: item.file_url
+                    file: item.file_url,
+                    canDelete: item.can_delete
 
                 })
             }
@@ -149,6 +158,7 @@ const CreatePisaTest = () => {
         return components
 
     }
+
 
     const onChangeExc = (type, exc) => {
         if (type === "left") {
@@ -213,15 +223,22 @@ const CreatePisaTest = () => {
 
 
 
+
+
     return (
         <div className={cls.createPisaTest}>
             <div className={cls.header}>
                 <div>
                     <Input onChange={setName} value={name} title={"Name"}/>
+                    <Timer
+                        type={"create"}
+                        onChange={setTimer}
+                        value={timer}
+                    />
+
                     <div className={cls.status}>
                         <h1>Status</h1>
                         <Checkbox checked={status} onChange={setStatus} title={"Random"} name={"Status"}/>
-
                     </div>
                 </div>
                 <div>
@@ -286,10 +303,13 @@ const CreateExcPisa = ({typeSide, onChangeExc, pisaId, oldExc = [],exception}) =
     useEffect(() => {
         if (oldExc.length > 0 && !isGetted) {
             setIsGetted(true)
+
             setComponents(oldExc)
         }
     }, [oldExc, isGetted])
 
+
+    console.log(oldExc)
 
     const tools = [
         {
@@ -339,6 +359,7 @@ const CreateExcPisa = ({typeSide, onChangeExc, pisaId, oldExc = [],exception}) =
             setComponents(components => [...components, {
                 type: type,
                 completed: false,
+
                 index: components.length + 1
             }])
         }
@@ -351,26 +372,27 @@ const CreateExcPisa = ({typeSide, onChangeExc, pisaId, oldExc = [],exception}) =
         }
     }, [components])
 
-    const onDeleteComponent = (index) => {
-        const sortedList = components.filter((item, i) => i !== index - 1)
+    const onDeleteComponent = (id) => {
+        const sortedList = components.filter((item) => item.id !== id)
         setComponents(sortedList)
     }
+
 
 
     const onSetCompletedComponent = useCallback((data, id) => {
         setComponents(state => state.map((item, index) => {
             if (!item.completed) {
-                return {...item, ...data, completed: true, id}
+                return {...item, ...data, completed: true, id, canDelete: true}
             }
             return item
         }))
     }, [components])
 
 
-    const onChangeCompletedComponent = (index) => {
+    const onChangeCompletedComponent = (id) => {
         if (components.every(item => item.completed)) {
             setComponents(state => state.map((item, i) => {
-                if (i === index - 1) {
+                if (item.id === id) {
                     return {...item, completed: false}
                 }
                 return item
@@ -470,7 +492,6 @@ const CreateExcPisa = ({typeSide, onChangeExc, pisaId, oldExc = [],exception}) =
                             onDeleteComponent={onDeleteComponent}
                             extra={{pisaId: pisaId, side: typeSide}}
                         />
-
                     </SortableItem>
                 )
             }

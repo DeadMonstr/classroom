@@ -79,10 +79,10 @@ const CreateExc = ({textComponent, onSetCompletedComponent, onDeleteComponent, e
         if (textComponent?.id) {
             request(`${BackUrl}pisa/block/text/${textComponent?.id}`, "DELETE", null, headers())
                 .then(res => {
-                    onDeleteComponent(textComponent.index)
+                    onDeleteComponent(textComponent.id)
                 })
         } else {
-            onDeleteComponent(textComponent.index)
+            onDeleteComponent(textComponent.id)
         }
     }
 
@@ -427,7 +427,6 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                         index: item.index,
                         value: item.item?.index,
                         valueId: item.item?.id,
-
                         text: item.item?.text,
                         type:item.type,
                         id: item.id
@@ -438,7 +437,6 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                     value: item.value,
                     type:item.type,
                     id: item.id
-
                 }
             })
             request(`${BackUrl}pisa/student/complete/pisa/test/${testId}`, "POST", JSON.stringify({
@@ -464,8 +462,8 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
             <div className={styles.viewText}>
                 <div className={styles.text}>
                     {
-                        onChangeCompletedComponent ?
-                            <div onClick={() => onChangeCompletedComponent(textComponent?.index)}
+                        onChangeCompletedComponent && textComponent.canDelete ?
+                            <div onClick={() => onChangeCompletedComponent(textComponent?.id)}
                                  className={styles.popup}>
                                 <i className="fa-sharp fa-solid fa-pen-to-square"/>
                             </div> : null

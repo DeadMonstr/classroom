@@ -9,5 +9,4 @@ export const headingType = {
     title: "Heading",
     preview: <HeadingPreview/>,
     icon: <HeadingThumb/>,
-
 }
