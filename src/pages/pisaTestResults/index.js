@@ -83,16 +83,6 @@ export const PisaTestResults = () => {
                     </thead>
                     <tbody>
                     {render()}
-                    {render()}
-                    {render()}
-                    {render()}
-                    {render()}
-                    {render()}
-                    {render()}
-                    {render()}
-                    {render()}
-                    {render()}
-                    {render()}
                     </tbody>
                 </Table>
             </div>
