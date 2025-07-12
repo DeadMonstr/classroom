@@ -53,7 +53,7 @@ const ChangeLesson = () => {
 
 
     useEffect(() => {
-        request(`${BackUrl}info_lesson/${chapterId}/${lessonId}`, "GET", null, headers())
+        request(`${BackUrl}lesson/profile/${chapterId}/${lessonId}`, "GET", null, headers())
             .then(res => {
                 setNameLesson(res.data.name)
                 setIsTest(res.data.is_test)
@@ -141,7 +141,7 @@ const ChangeLesson = () => {
 
 
     useEffect(() => {
-        request(`${BackUrl}chapters/${levelId}`, "GET", null, headers())
+        request(`${BackUrl}chapter/info/${levelId}`, "GET", null, headers())
             .then(res => {
                 setChapters(res.chapters)
             })
@@ -172,7 +172,7 @@ const ChangeLesson = () => {
         const deletedItem = components.filter((item, i) => item.index === index)[0]
 
         if (deletedItem.block_id) {
-            request(`${BackUrl}del_lesson_block/${deletedItem.block_id}`, "DELETE", null, headers())
+            request(`${BackUrl}lesson/delete/block/${deletedItem.block_id}`, "DELETE", null, headers())
         }
 
         setComponents(sortedList)
@@ -190,7 +190,6 @@ const ChangeLesson = () => {
 
 
     const onChangeCompletedComponent = (index) => {
-
         if (components.every(item => item.completed)) {
             setComponents(state => state.map(item => {
                 if (item.index === index) {
@@ -367,7 +366,7 @@ const ChangeLesson = () => {
 
         const token = sessionStorage.getItem("token")
 
-        request(`${BackUrl}info_lesson/${chapterId}/${lessonId}`, "POST", formData, {
+        request(`${BackUrl}lesson/profile/${chapterId}/${lessonId}`, "POST", formData, {
             "Authorization": "Bearer " + token,
         })
             .then(res => {
@@ -418,11 +417,10 @@ const ChangeLesson = () => {
     }
 
 
-    console.log(components)
 
     const onDelete = () => {
 
-        request(`${BackUrl}info_lesson/${chapterId}/${lessonId}`, "DELETE", null, headers())
+        request(`${BackUrl}lesson/profile/${chapterId}/${lessonId}`, "DELETE", null, headers())
             .then(res => {
                 const alert = {
                     active: true,

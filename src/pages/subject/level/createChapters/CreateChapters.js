@@ -28,7 +28,7 @@ const CreateChapters = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
 
-    const [confirm, setConfirm] = useState(false)
+    // const [confirm, setConfirm] = useState(false)
     const [willDeleteId, setWillDeleteId] = useState(null)
     const [search, setSearch] = useState("")
     const [lessons, setLessons] = useState([])
@@ -42,7 +42,7 @@ const CreateChapters = () => {
 
 
     useEffect(() => {
-        request(`${BackUrl}chapters_info/${levelId}`, "GET", null, headers())
+        request(`${BackUrl}chapter/info/${levelId}`, "GET", null, headers())
             .then(res => {
                 setLessons(res.chapters)
             })
@@ -83,24 +83,24 @@ const CreateChapters = () => {
         setChangeChapterData(item)
     }, [])
 
-
-    const onConfirmDelete = useCallback(() => {
-        request(`${BackUrl}info_lesson/${levelId}/${willDeleteId.order}`, "DELETE", null, headers())
-            .then(res => {
-                const alert = {
-                    active: true,
-                    message: res.msg,
-                    type: res.status
-                }
-                dispatch(setAlertOptions({alert}))
-                setConfirm(false)
-            })
-        setLessons(exs => exs.filter(item => item.id !== willDeleteId.id))
-    }, [])
-
-    const onToggleConfirm = useCallback(() => {
-        setConfirm(false)
-    }, [])
+    //
+    // const onConfirmDelete = useCallback(() => {
+    //     request(`${BackUrl}info_lesson/${levelId}/${willDeleteId.order}`, "DELETE", null, headers())
+    //         .then(res => {
+    //             const alert = {
+    //                 active: true,
+    //                 message: res.msg,
+    //                 type: res.status
+    //             }
+    //             dispatch(setAlertOptions({alert}))
+    //             setConfirm(false)
+    //         })
+    //     setLessons(exs => exs.filter(item => item.id !== willDeleteId.id))
+    // }, [])
+    //
+    // const onToggleConfirm = useCallback(() => {
+    //     setConfirm(false)
+    // }, [])
 
     const onToggleChangeLessonSort = () => {
         setChangeLessonsSort(prev => !prev)
@@ -129,7 +129,7 @@ const CreateChapters = () => {
 
 
     const onSubmit = () => {
-        request(`${BackUrl}change_index`, "POST", JSON.stringify(changedLessons), headers())
+        request(`${BackUrl}chapter/change/order`, "POST", JSON.stringify(changedLessons), headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -212,9 +212,9 @@ const CreateChapters = () => {
             }
 
 
-            <Confirm active={confirm} setActive={onToggleConfirm} onSubmit={onConfirmDelete}>
-                O'chirishni hohlaysizmi
-            </Confirm>
+            {/*<Confirm active={confirm} setActive={onToggleConfirm} onSubmit={onConfirmDelete}>*/}
+            {/*    O'chirishni hohlaysizmi*/}
+            {/*</Confirm>*/}
         </div>
     );
 };
@@ -230,7 +230,7 @@ const CreateChapter = React.memo(({levelId, setCreateChapter, setChapter}) => {
 
     const onSubmit = (e) => {
         e.preventDefault()
-        request(`${BackUrl}chapters_info/${levelId}`, "POST", JSON.stringify({name, status: false}), headers())
+        request(`${BackUrl}chapter/info/${levelId}`, "POST", JSON.stringify({name, status: false}), headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -261,16 +261,20 @@ const ChangeChapter = React.memo(({chapter, setChapter, setActive}) => {
 
     useEffect(() => {
         if (chapter) {
+            console.log(chapter)
             setName(chapter?.name)
+            setStatus(chapter?.status)
         }
     }, [chapter])
+
+
 
 
     const {request} = useHttp()
     const dispatch = useDispatch()
 
     const onSubmitDelete = () => {
-        request(`${BackUrl}crud_chapter/${chapter.id}`, "DELETE", null, headers())
+        request(`${BackUrl}chapter/crud/${chapter.id}`, "DELETE", null, headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -285,7 +289,8 @@ const ChangeChapter = React.memo(({chapter, setChapter, setActive}) => {
     }
 
     const onSubmitChange = () => {
-        request(`${BackUrl}crud_chapter/${chapter.id}`, "POST", JSON.stringify({name, status}), headers())
+
+        request(`${BackUrl}chapter/crud/${chapter.id}`, "POST", JSON.stringify({name, status}), headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -303,8 +308,6 @@ const ChangeChapter = React.memo(({chapter, setChapter, setActive}) => {
             })
     }
 
-    console.log(status, "status")
-
 
     return (
         <>
@@ -312,7 +315,7 @@ const ChangeChapter = React.memo(({chapter, setChapter, setActive}) => {
                 <div className={styles.changeChapter__inner}>
                     <Input title={"Nomi"} value={name} onChange={setName}/>
                     <Input extraClassName={styles.changeChapter__input} type={"checkbox"} title={"Status"}
-                           value={status} onChange={() => setStatus(!status)}/>
+                           extraValues={{checked: status}} onChange={() => setStatus(!status)}/>
                 </div>
 
 

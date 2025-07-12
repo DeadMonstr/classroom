@@ -26,7 +26,7 @@ export const fetchExercisesTypeData = createAsyncThunk(
     'ExercisesSlice/fetchExercisesTypeData',
     async () => {
         const {request} = useHttp();
-        return await request(`${BackUrl}info_exercise_type`,"GET",null,headers())
+        return await request(`${BackUrl}exercise/type/crud/`,"GET",null,headers())
     }
 )
 

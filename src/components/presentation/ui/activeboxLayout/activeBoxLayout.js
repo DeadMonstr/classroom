@@ -31,7 +31,7 @@ const ActiveBoxLayout = ({type,children,clazz}) => {
         <div
             onClick={onClickLayout}
             onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => }
+            // onMouseLeave={() => }
             className={classNames(cls.activeBox, ...(clazz || []),{
                 [`${cls.active}`]: currentSlide.activeType === type,
                 [`${cls.hover}`]: hovered,

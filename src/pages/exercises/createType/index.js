@@ -34,7 +34,7 @@ const CreateType = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        request(`${BackUrl}info_exercise_type`, "GET")
+        request(`${BackUrl}exercise/type/crud/`, "GET")
             .then(res => {
                 setTypes(res.data)
             })
@@ -43,7 +43,7 @@ const CreateType = () => {
 
     const onCreate = () => {
 
-        request(`${BackUrl}info_exercise_type`, "POST", JSON.stringify({name, type: selectedType}))
+        request(`${BackUrl}exercise/type/crud/`, "POST", JSON.stringify({name, type: selectedType}))
             .then(res => {
                 const alert = {
                     active: true,
@@ -59,7 +59,7 @@ const CreateType = () => {
     }
 
     const onChange = () => {
-        request(`${BackUrl}edit_exercise_type/${willChangeData.id}`, "POST", JSON.stringify({name,type: selectedType}))
+        request(`${BackUrl}exercise/type/crud/${willChangeData.id}`, "POST", JSON.stringify({name,type: selectedType}))
             .then(res => {
                 const alert = {
                     active: true,
@@ -105,7 +105,7 @@ const CreateType = () => {
         setWillChangeData("")
         setIsChanging(false)
 
-        request(`${BackUrl}del_exercise_type/${willChangeData?.id}`, "DELETE", JSON.stringify({name}))
+        request(`${BackUrl}exercise/type/crud/${willChangeData?.id}`, "DELETE", JSON.stringify({name}))
             .then(res => {
                 const alert = {
                     active: true,

@@ -10,7 +10,7 @@ export const fetchSubjectsData = createAsyncThunk(
     'SubjectsSlice/fetchSubjectsData',
     async () => {
         const {request} = useHttp();
-        return await request(`${BackUrl}info/subjects`,"GET",null,headers())
+        return await request(`${BackUrl}subject/list/`,"GET",null,headers())
     }
 )
 

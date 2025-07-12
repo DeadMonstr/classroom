@@ -49,7 +49,7 @@ const StudentsCertificates = () => {
                 // const result = {
                 //     ...res?.data,
                 //     name: res?.full_name,
-                //     subject: res?.subjects
+                //     subject: res?.subjectsBlock
                 // }
                 // dispatch(fetchedTeacher(result))
                 // dispatch(fetchedResults(res?.list))

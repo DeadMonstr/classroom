@@ -10,7 +10,7 @@ export const fetchChaptersData = createAsyncThunk(
     'ChaptersSlice/fetchChaptersData',
     async (id) => {
         const {request} = useHttp();
-        return await request(`${BackUrl}chapters_info/${id}`,"GET",null,headers())
+        return await request(`${BackUrl}chapter/info/${id}`,"GET",null,headers())
     }
 )
 
