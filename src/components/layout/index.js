@@ -29,22 +29,9 @@ const Layout = () => {
 		}
 	},[dispatch, isCheckedPassword])
 	return (
-		// <>
-		//
-		// </>
 
-		// <>
-		// 	<Alert/>
-		// 	<Header/>
-		// 	<Menu/>
-		// 	<main id={"main"} ref={mainRef} className={styles.main}>
-		// 		<MainContext.Provider value={mainRef}>
-		// 			<Outlet/>
-		// 		</MainContext.Provider>
-		// 	</main>
-		// </>
 
-		<AuthProvider>
+		<>
 			<Alert/>
 			<Header/>
 			<Menu/>
@@ -53,7 +40,18 @@ const Layout = () => {
 					<Outlet/>
 				</MainContext.Provider>
 			</main>
-		</AuthProvider>
+		</>
+
+		// <AuthProvider>
+		// 	<Alert/>
+		// 	<Header/>
+		// 	<Menu/>
+		// 	<main id={"main"} ref={mainRef} className={styles.main}>
+		// 		<MainContext.Provider value={mainRef}>
+		// 			<Outlet/>
+		// 		</MainContext.Provider>
+		// 	</main>
+		// </AuthProvider>
 	);
 };
 

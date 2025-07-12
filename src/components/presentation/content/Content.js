@@ -82,20 +82,13 @@ const Content = () => {
     }, [currentSlide.design.backgroundColor])
 
 
-    const dispatch = useDispatch()
-
-
-    const onClickLayout = () => {
-        dispatch(setActiveType(activeTypesSideBar.layout))
-    }
-
 
     return (
         <ActiveBox
-            onClick={onClickLayout}
+            isParent={true}
             clazz={[cls.main, cls[layout]]}
-            active={currentSlide.activeType}
-            type={activeTypesSideBar.layout}>
+            type={activeTypesSideBar.layout}
+        >
             {
                 layout !== "default" &&
                 <div
@@ -109,15 +102,18 @@ const Content = () => {
                 >
                     <img src={image} alt=""/>
                 </div>
-
             }
 
 
-            <div className={cls.content} style={{backgroundColor: bgColor}}>
-                <HeadingContent/>
-                {/*<ParagraphContent/>*/}
-                {/*<NumberContent/>*/}
-            </div>
+
+            <HeadingContent />
+
+            {/*<div className={cls.content} style={{backgroundColor: bgColor}}>*/}
+
+
+            {/*    /!*<ParagraphContent/>*!/*/}
+            {/*    /!*<NumberContent/>*!/*/}
+            {/*</div>*/}
 
         </ActiveBox>
     );

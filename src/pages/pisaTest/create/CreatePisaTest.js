@@ -42,9 +42,7 @@ const CreatePisaTest = () => {
 
     const {id} = useParams()
 
-
     const [type, setType] = useState("center")
-
     const [leftExc, setLeftExc] = useState([])
     const [rightExc, setRightExc] = useState([])
     const [name, setName] = useState()

@@ -14,7 +14,7 @@ const initialState = {
         image: 'https://asset.gecdesigns.com/img/wallpapers/beautiful-fantasy-wallpaper-ultra-hd-wallpaper-4k-sr10012418-1706506236698-cover.webp',
         imageType: 'center',
         label: "",
-        activeType: activeTypesSideBar.layout,
+        activeType: "",
 
         design: {
 

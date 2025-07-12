@@ -113,9 +113,6 @@ const Edit = () => {
                 return item.sidebar
             }
         })
-
-
-
     },[slideType])
 
 
@@ -125,11 +122,6 @@ const Edit = () => {
     return (
         <>
             {/*<PresentationSidebarContext.Provider value={{setActiveModal}}>*/}
-
-
-
-                {}
-
                 {/*<HeadingSidebar />*/}
                 {/*/!*<ImageSidebar />*!/*/}
                 {/*/!*<NumberSidebar />*!/*/}
