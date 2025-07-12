@@ -36,6 +36,7 @@ import ViewPisaTest from "pages/pisaTest/view/ViewPisaTest";
 import MyResultPisaTest from "pages/pisaTest/myResult/MyResultPisaTest";
 import CheckResultsPisaTest from "pages/pisaTest/checkExc/CheckResultsPisaTest";
 import RegisteredStudentsPisa from "pages/pisaTest/registeredStudents/RegisteredStudentsPisa";
+import {PisaTestResults} from "pages/pisaTestResults";
 
 
 const Layout = lazy(() => import("components/layout"))
@@ -142,6 +143,7 @@ const App = () => {
                         <Route path={"pisaTest"} element={<PisaTestList/>} />
                         <Route path={"createPisaTest/:id"} element={<CreatePisaTest/>} />
                         <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa/>} />
+                        <Route path={"pisaTestResults.js"} element={<PisaTestResults/>} />
 
 
                         <Route path={"presentations/*"} element={<Presentations/>}/>
