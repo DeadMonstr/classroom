@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect} from 'react';
+import React, {lazy, Suspense, useEffect, useState} from 'react';
 import {
     Route,
     Navigate,
@@ -15,19 +15,19 @@ import ChangeExercises from "pages/exercises/changeExercises";
 
 import GetUser from "pages/getUser";
 import RequireAuth from "components/auth/requireAuth";
-import { ROLES } from "constants/global";
+import {ROLES} from "constants/global";
 import Books from "pages/books/Books";
 import TeacherObservation from "pages/teacherObservation/teacherObservation";
 import Lesson from "pages/subject/level/chapters/lesson";
 import Chat from "pages/chat";
-// import Lesson from m ../pages/subject/level/chapters/lesson";
+
 import Presentations from "pages/presentations/Presentations";
 import Presentation from "pages/presentation/Presentation";
 import CreateTestTuron from "pages/testTuron/create/createTestTuron";
 import ViewTestTuron from "pages/testTuron/view/viewTestTuron";
 import GetUserTuron from "pages/getUserTuron/GetUserTuron";
 import Login from "pages/login/Login";
-import Alert from "components/ui/alert";
+
 import PisaTestList from "pages/pisaTest/PisaTestList";
 import CreatePisaTest from "pages/pisaTest/create/CreatePisaTest";
 import RegisterPisa from "pages/registerPisa/registerPisa";
@@ -36,20 +36,40 @@ import ViewPisaTest from "pages/pisaTest/view/ViewPisaTest";
 import MyResultPisaTest from "pages/pisaTest/myResult/MyResultPisaTest";
 import CheckResultsPisaTest from "pages/pisaTest/checkExc/CheckResultsPisaTest";
 import RegisteredStudentsPisa from "pages/pisaTest/registeredStudents/RegisteredStudentsPisa";
+import ChildrenLayoutMB from "../pages/parentSection/childrenLayoutMB/childrenLayoutMB";
+// import {isMobile} from "react-device-detect";
+import ChildrenWeeklyGrades from "../pages/parentSection/childrenWeeklyGrades/childrenWeeklyGrades";
 
 
 const Layout = lazy(() => import("components/layout"))
 const Home = lazy(() => import("pages/home"))
 const User = lazy(() => import("pages/user"))
 const Subject = lazy(() => import("pages/subject"))
-const CreateExercises   = lazy(() => import("pages/exercises/createExercises"))
+const CreateExercises = lazy(() => import("pages/exercises/createExercises"))
 const CreateExercisesTypes = lazy(() => import("pages/exercises/createType"))
 const Exercises = lazy(() => import("pages/exercises"))
 const Groups = lazy(() => import("pages/groups"))
 const TaskManager = lazy(() => import("pages/taskManager/TaskManager"))
-
+const ParentSection = lazy(() => import("pages/parentSection/parentSection"))
+const ParentBalanceList = lazy(() => import("pages/parentSection/parentBalanceList/parentBalanceList"))
+const ChildrenMonthlyTestsResults = lazy(() => import("pages/parentSection/childrenMonthlyTestsResults/childrenMonthlyTestsResults"))
+const ChildrenMonthlyGrades = lazy(() => import("pages/parentSection/childrenMonthlyGrades/childrenMonthlyGrades"))
+const ChildrenMonthlyAttendance = lazy(() => import("pages/parentSection/childrenMonthlyAttendance/childrenMonthlyAttendance"))
 
 const App = () => {
+
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if ((window.innerWidth <= 375) !== isMobile) {
+                window.location.reload();
+            }
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [isMobile]);
+
 
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -90,9 +110,46 @@ const App = () => {
                     element={<LoginPisa/>}
                 />
 
-                <Route path={"registerPisaTest"} element={<RegisterPisa/>} />
+
+                <Route path={"registerPisaTest"} element={<RegisterPisa/>}/>
+
 
                 <Route path="/*" element={<Layout/>}>
+
+                    <Route element={<RequireAuth allowedRules={[ROLES.Parent]}/>}>
+
+                        {
+                            isMobile && (
+                                <Route path="home" element={<ChildrenLayoutMB/>}>
+                                    <Route index element={<ChildrenWeeklyGrades/>}/>
+                                    <Route path="monthly-grades" element={<ChildrenMonthlyGrades/>}/>
+                                    <Route path="monthly-attendance" element={<ChildrenMonthlyAttendance/>}/>
+                                    <Route path="monthly-balance" element={<ParentBalanceList/>}/>
+                                    <Route path="monthly-result" element={<ChildrenMonthlyTestsResults/>}/>
+
+                                    <Route path="*" element={<Navigate to="home" replace/>}/>
+                                </Route>
+                            )
+                        }
+                        {
+                            !isMobile && (
+                                <>
+
+                                    <Route path="home/parentBalance" element={<ParentBalanceList/>}/>
+                                    <Route path="home/childrenTestsResults" element={<ChildrenMonthlyTestsResults/>}/>
+                                    <Route path="home/childrenGrades" element={<ChildrenMonthlyGrades/>}/>
+                                    <Route path="home/childrenAttendance" element={<ChildrenMonthlyAttendance/>}/>
+                                </>
+                            )
+                        }
+
+                    </Route>
+
+                        <Route path={"home"} element={<Home/>}/>
+
+
+
+
                     <Route
                         index
                         path={"user/:id/*"}
@@ -107,41 +164,35 @@ const App = () => {
 
 
                     <Route
-                        index
-                        path={"home"}
-                        element={<Home/>}
-                    />
-
-                    <Route
                         path={"subject/:id/*"}
                         element={<Subject/>}
                     />
-                    <Route path={"taskManager/*"} element={<TaskManager/>} />
+                    <Route path={"taskManager/*"} element={<TaskManager/>}/>
 
 
-                    <Route path={"viewPisaTest/:id"} element={<ViewPisaTest/>} />
-                    <Route path={"myResultsPisaTest/:id"} element={<MyResultPisaTest/>} />
-                    <Route path={"checkMyResultsPisaTest/:id"} element={<CheckResultsPisaTest/>} />
+                    <Route path={"viewPisaTest/:id"} element={<ViewPisaTest/>}/>
+                    <Route path={"myResultsPisaTest/:id"} element={<MyResultPisaTest/>}/>
+                    <Route path={"checkMyResultsPisaTest/:id"} element={<CheckResultsPisaTest/>}/>
 
-                    <Route element={<RequireAuth allowedRules={[ROLES.Teacher,ROLES.Student]} />}>
-                        <Route path={"groups/*"} element={<Groups/>} />
-                        <Route path={"books/*"} element={<Books/>} />
+                    <Route element={<RequireAuth allowedRules={[ROLES.Teacher, ROLES.Student]}/>}>
+                        <Route path={"groups/*"} element={<Groups/>}/>
+                        <Route path={"books/*"} element={<Books/>}/>
                         {/*<Route path={"chat/*"} element={<Chat/>} />*/}
 
                     </Route>
 
-                    <Route element={<RequireAuth allowedRules={[ROLES.Teacher]} />}>
-                        <Route path={"teacherObservation/*"} element={<TeacherObservation/>} />
+                    <Route element={<RequireAuth allowedRules={[ROLES.Teacher]}/>}>
+                        <Route path={"teacherObservation/*"} element={<TeacherObservation/>}/>
                     </Route>
 
-                    <Route element={<RequireAuth allowedRules={[ROLES.Methodist]} />}>
+                    <Route element={<RequireAuth allowedRules={[ROLES.Methodist]}/>}>
                         <Route path={"exercises"} element={<Exercises/>}/>
-                        <Route path={"createExercises"} element={<CreateExercises/>} />
-                        <Route path={"changeExercises/:id"} element={<ChangeExercises/>} />
-                        <Route path={"createExercisesTypes"} element={<CreateExercisesTypes/>} />
-                        <Route path={"pisaTest"} element={<PisaTestList/>} />
-                        <Route path={"createPisaTest/:id"} element={<CreatePisaTest/>} />
-                        <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa/>} />
+                        <Route path={"createExercises"} element={<CreateExercises/>}/>
+                        <Route path={"changeExercises/:id"} element={<ChangeExercises/>}/>
+                        <Route path={"createExercisesTypes"} element={<CreateExercisesTypes/>}/>
+                        <Route path={"pisaTest"} element={<PisaTestList/>}/>
+                        <Route path={"createPisaTest/:id"} element={<CreatePisaTest/>}/>
+                        <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa/>}/>
 
 
                         <Route path={"presentations/*"} element={<Presentations/>}/>
@@ -154,9 +205,7 @@ const App = () => {
                     />
 
 
-
                 </Route>
-
 
 
             </>
@@ -164,15 +213,11 @@ const App = () => {
     );
 
     return (
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={<Loader/>}>
             <RouterProvider router={router}/>
         </Suspense>
     );
 };
-
-
-
-
 
 
 export default App;

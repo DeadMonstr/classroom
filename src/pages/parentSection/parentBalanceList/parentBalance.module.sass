@@ -1,0 +1,87 @@
+.balance
+  display: flex
+  width: 100%
+  align-items: center
+  flex-direction: column
+  height: 100%
+  padding-top: 13rem
+  padding-left: 4rem
+  padding-right: 4rem
+  gap: 3rem
+  &__header
+    width: 100%
+    display: flex
+    justify-content: space-between
+    align-items: start
+    &__btn
+      display: flex
+      align-self: end
+
+  &__card
+    padding: 3rem
+    &__box
+      width: 100%
+      display: flex
+      align-items: center
+      justify-content: space-between
+      &__panel
+        display: flex
+        padding: 1rem
+        align-items: center
+        gap: 2rem
+        &__btn
+          cursor: pointer
+          &:hover
+            background: #00C2FF !important
+
+    &__header
+      background: #E0F2FE
+      height: 60px
+
+    &__payType
+      border-radius: 1.6rem
+      border: 1px solid #757575
+      padding: .5rem
+.active
+  background: #00A3FF !important
+  color : white !important
+@media only screen and (max-width: 375px)
+  .balance
+    padding: 0
+  .balance__mobile
+    width: 100%
+    display: flex
+    flex-direction: column
+    gap: 2rem
+    //padding: 1rem
+    &__header
+      width: 100%
+      display: flex
+      justify-content: space-between
+      align-items: center
+    &__list
+      width: 100%
+      display: flex
+      flex-direction: column
+      gap: 1rem
+      align-items: center
+      &__card
+        background: #F2F2F7
+        display: flex
+        gap: 3rem
+        flex-direction: column
+        &__header
+          width: 100%
+          display: flex
+          justify-content: space-between
+          align-items: center
+        &__main
+          width: 100%
+          display: flex
+          justify-content: space-between
+          align-items: center
+          span
+            background: white
+            border-radius: 1.5rem
+            font-size: 1.4rem
+            padding: .5rem

@@ -18,6 +18,7 @@ import Form from "components/ui/form";
 import RequireAuthChildren from "components/auth/requireAuthChildren";
 import backImg from "assets/img.png"
 import Button from "components/ui/button";
+import ParentSection from "../parentSection/parentSection";
 
 const Home = () => {
 
@@ -42,10 +43,13 @@ const Home = () => {
 			<div className={styles.home__wrapper}>
 				<RequireAuthChildren allowedRules={[ROLES.Methodist,ROLES.Teacher,ROLES.Student]}>
 					<Subjects />
+					<PisaTests/>
+				</RequireAuthChildren>
+				<RequireAuthChildren allowedRules={[ROLES.Parent]}>
+					<ParentSection/>
 				</RequireAuthChildren>
 
 
-				<PisaTests/>
 			</div>
 
 

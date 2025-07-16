@@ -1,0 +1,54 @@
+.subjectScore {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.dots {
+  flex-grow: 1;
+  border-bottom: 1px dotted #ccc;
+  height: 1px;
+  position: relative;
+  top: -1px;
+  margin: 0 6px;
+}
+
+.score {
+  width: 30px;
+  padding: 2rem;
+  height: 30px;
+  border-radius: 9999px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.green {
+  background-color: #D7FFBC;
+  color: #34C759;
+}
+
+.yellow {
+  background-color: #FFF4BC;
+  color: #FFCC00;
+}
+
+.red {
+  background-color: #FFBCBC;
+  color: #FF3B30;
+}
+
+.subject {
+  color: #AEAEB2;
+}
+
+/*# sourceMappingURL=subjectScore.module.css.map */

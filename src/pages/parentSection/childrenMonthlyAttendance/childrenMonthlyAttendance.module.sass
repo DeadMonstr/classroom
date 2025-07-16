@@ -1,0 +1,153 @@
+.attendance
+  display: flex
+  width: 100%
+  align-items: center
+  flex-direction: column
+  height: 100%
+  padding-top: 2rem
+  padding-left: 4rem
+  padding-right: 4rem
+  gap: 2rem
+
+  &__header
+    width: 100%
+    display: flex
+    justify-content: space-between
+    align-items: start
+    &__div
+      padding: 1rem
+      display: flex
+      gap: 2rem
+      align-items: center
+
+  &__card
+    padding: 3rem
+
+    &__list
+      width: 100%
+      display: flex
+      flex-wrap: wrap
+      gap: 2rem
+      padding: 1rem
+      align-items: flex-start
+      justify-content: flex-start
+
+      &__dayBox
+        display: flex
+        flex-direction: column
+        align-items: center
+        gap: 1rem
+        height: fit-content
+        min-width: 300px
+        max-width: 340px
+        flex: 1 1 160px
+        transition: 0.3s ease
+        box-shadow: none !important
+
+        &__dayNum
+          width: 100%
+          display: flex
+          flex-direction: column
+          align-items: center
+          padding-bottom: 2rem
+          border-bottom: 1px solid  #C7C7CC
+
+          &__dayName
+            font-size: 1.8rem
+            color: #8E8E93
+
+        &__subjectBox
+          display: flex
+          flex-direction: column
+          align-items: center
+          text-align: center
+          padding: 1rem
+          width: 100%
+          border-radius: 1.3rem
+          gap: 1rem
+          font-size: 1.4rem
+
+          &__subjName
+            font-size: 2rem
+
+.activeDay
+  background-color: #00C2FF !important
+  h3
+    color: white
+
+.active
+  background-color: #9EFFB8
+
+.passive
+  color: #C7C7CC !important
+  background-color: #E5E5EA
+
+.activeColor
+  color: white
+
+@media only screen and (max-width: 375px)
+  .attendance
+
+    padding: 0
+    &__header
+      width: 100%
+      flex-direction: column
+      padding-top: .5rem
+      &__second
+        width: 100%
+        display: flex
+        align-items: center
+        justify-content: space-between
+        &__box
+          //width: 100%
+          display: flex
+          align-items: center
+          gap: 1rem
+          &__select
+            border: 1px solid #D9D9D9 !important
+            border-radius: 1rem !important
+            outline: none !important
+        h1
+          font-size: 1rem
+      &__btn
+        width: 50px !important
+        height: 50px !important
+        display: flex
+        border-radius: 1.4rem !important
+        align-items: center
+        justify-content: center
+        color: black
+        background: white
+        border: 1px solid #ccc
+    &__mobile
+      max-width: 360px
+      width: 100%
+      overflow: hidden
+      overflow-x: auto
+      display: flex
+      gap: 1rem
+      align-items: center
+      &__subjects
+        display: flex
+        flex-direction: column
+        gap: 2rem
+      &__days
+        cursor: pointer
+        border: 1px solid #ccc
+        padding: .5rem
+        display: flex
+        align-items: center
+        flex-direction: column
+        border-radius: 8px
+        //margin: 4px
+        transition: all 0.3s
+
+  .arounder
+    width: 100%
+    height: 100%
+    gap: 3rem
+    display: flex
+    flex-direction: column
+.activeDayMobile
+  background-color: #007bff
+  color: #fff !important

@@ -10,7 +10,7 @@ import userImg from "assets/user.png"
 import logo from "assets/logo/Gennis logo.png"
 import hamburger from "assets/hamburger.svg"
 import close from "assets/close.svg"
-import {BackUrlForDoc, PlatformUrl} from "constants/global";
+import {BackUrlForDoc, PlatformUrl, ROLES} from "constants/global";
 
 
 const Header = () => {
@@ -42,14 +42,18 @@ const Header = () => {
 
 				</div>
 				<div>
-					<div className={styles.info}>
-						<span>{data.name}</span>
-						<span>{data.surname}</span>
-						<Link to={`/user/${data?.id}/profile`} >
-							<img src={!data.img ? userImg : `${PlatformUrl}${data.img}`} alt="UserImg" />
-						</Link>
+					{
+						ROLES.Parent ? null :
+							<div className={styles.info}>
+								<span>{data.name}</span>
+								<span>{data.surname}</span>
+								<Link to={`/user/${data?.id}/profile`} >
+									<img src={!data.img ? userImg : `${PlatformUrl}${data.img}`} alt="UserImg" />
+								</Link>
 
-					</div>
+							</div>
+					}
+
 				</div>
 			</header>
 			<div
