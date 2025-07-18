@@ -1,0 +1,54 @@
+.parent
+  padding: 1rem
+  display: flex
+  gap: 3rem
+  flex-direction: column
+  &__childNameBox
+    height: fit-content
+    padding: 1rem
+    align-items: center
+    display: flex
+  &__layout
+    width: 100%
+    display: flex
+    height: 100%
+    gap: 2rem
+    &__leftSide
+      width: 75%
+      display: flex
+      flex-direction: column
+      gap: 2rem
+      &__bottomSide
+        display: flex
+        justify-content: space-between
+        gap: 1rem
+    &__rightSide
+      display: flex
+      width: 25%
+      height: 77.4vh
+      gap: 3rem
+      flex-direction: column
+      &__select
+        border-radius: 1.2rem !important
+        font-weight: bold
+      &__header
+        width: 100%
+        height: 6%
+        border-bottom: 2px solid #D1D1D6
+        display: flex
+        align-items: center
+        padding: 1rem
+        &__article
+          font-size: 2rem
+      &__cardElm
+        display: flex
+        max-height: 100vh !important
+        height: 100%
+        overflow: hidden
+        margin-left: 1rem
+        overflow-y: auto
+        width: 97% !important
+        flex-direction: column
+        align-items: start
+        gap: 2rem
+        padding-bottom: 3rem

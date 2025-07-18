@@ -66,11 +66,12 @@ const Profile = () => {
 	return (
 		<div className={styles.profile}>
 			<Back/>
-			<div className={styles.header}>
+			{!ROLES.Parent && <div className={styles.header}>
 				<div className={styles.username}>
 					<i className="fa-solid fa-user"></i>
 					<span>{username}</span>
 				</div>
+
 				{
 					isMobile ?
 						<div className={styles.optionsMobile} ref={ref}>
@@ -88,17 +89,14 @@ const Profile = () => {
 									<i className="fa-solid fa-user-clock"></i>
 									<span>Dars vaqti</span>
 								</Link>
-								<RequireAuthChildren allowedRules={[ROLES.Teacher]}>
-									<Link to={"../teacherSalary"} className={styles.item}>
-										<i className="fa-solid fa-dollar-sign"></i>
-										<span>Balans tarixi</span>
-									</Link>
-									<Link to={"../studentsCertificates"} className={styles.item}>
-										<i className="fa-solid fa-graduation-cap"></i>
-										<span>Bitiruvchilar sertifikatlari</span>
-									</Link>
-								</RequireAuthChildren>
-
+								<Link to={"../teacherSalary"} className={styles.item}>
+									<i className="fa-solid fa-dollar-sign"></i>
+									<span>Balans tarixi</span>
+								</Link>
+								<Link to={"../teacherSalary"} className={styles.item}>
+									<i className="fa-solid fa-graduation-cap"></i>
+									<span>Bitiruvchilar sertifikatlari</span>
+								</Link>
 								<RequireAuthChildren allowedRules={[ROLES.Student]}>
 									<Link to={"../studentAttendance"} className={styles.item}>
 										<i className="fa-solid fa-calendar-days"></i>
@@ -130,24 +128,18 @@ const Profile = () => {
 							{/*<div className={styles.item}>*/}
 							{/*	<i className="fa-solid fa-camera"></i>*/}
 							{/*</div>*/}
-
-
+							<Link to={"../studentsCertificates"} className={styles.item}>
+								<i className="fa-solid fa-graduation-cap"></i>
+								<span>Bitiruvchilar sertifikatlari</span>
+							</Link>
 							<Link to={"../userLessonTime"} className={styles.item}>
 								<i className="fa-solid fa-user-clock"></i>
 								<span>Dars vaqti</span>
 							</Link>
-							<RequireAuthChildren allowedRules={[ROLES.Teacher]}>
-								<Link to={"../teacherSalary"} className={styles.item}>
-									<i className="fa-solid fa-dollar-sign"></i>
-									<span>Balans tarixi</span>
-								</Link>
-								<Link to={"../studentsCertificates"} className={styles.item}>
-									<i className="fa-solid fa-graduation-cap"></i>
-									<span>Bitiruvchilar sertifikatlari</span>
-								</Link>
-							</RequireAuthChildren>
-
-
+							<Link to={"../teacherSalary"} className={styles.item}>
+								<i className="fa-solid fa-dollar-sign"></i>
+								<span>Balans tarixi</span>
+							</Link>
 
 							<RequireAuthChildren allowedRules={[ROLES.Student]}>
 								<Link to={"../studentAttendance"} className={styles.item}>
@@ -167,7 +159,7 @@ const Profile = () => {
 						</div>
 				}
 
-			</div>
+			</div>}
 			<div className={styles.subHeader}>
 				<div className={styles.user}>
 					<div className={styles.img} onClick={() => setActive(true)}>

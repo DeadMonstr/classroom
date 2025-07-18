@@ -1,0 +1,113 @@
+.grades {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 2rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  gap: 2rem;
+}
+.grades__header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.grades__header__box {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+.grades__card {
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.grades__card__box {
+  width: 100%;
+  display: flex;
+  gap: 4.5rem;
+  flex-wrap: wrap;
+}
+.grades__card__box__weekBox {
+  width: 200px;
+  border-top: 2px solid #D1D1D6;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.grades__card__box__weekBox__dayBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+.grades__card__box__weekBox__subjBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.grades__card__box__weekBox__subjBox__subject {
+  font-size: 1.6rem;
+}
+
+@media only screen and (max-width: 375px) {
+  .grades {
+    width: 100%;
+    padding: 0;
+  }
+  .grades__card__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .grades__card__box__weekBox {
+    padding-top: 2rem;
+  }
+  .grades__card__box__weekBox__dayBox h1 {
+    font-size: 1.3rem;
+  }
+  .grades__header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .grades__header__btn {
+    width: 50px !important;
+    height: 50px !important;
+    display: flex;
+    border-radius: 1.4rem !important;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background: white;
+    border: 1px solid #ccc;
+  }
+  .grades__header__second {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .grades__header__second__box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .grades__header__second__box__select {
+    border: 1px solid #D9D9D9 !important;
+    border-radius: 1rem !important;
+    outline: none !important;
+  }
+  .grades__header__second__box__select h1 {
+    font-size: 1.9rem;
+  }
+}
+
+/*# sourceMappingURL=childrenMonthlyGrades.module.css.map */

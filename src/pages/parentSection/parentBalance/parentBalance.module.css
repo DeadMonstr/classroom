@@ -1,0 +1,33 @@
+.balance {
+  width: 28%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+}
+.balance__header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.balance__balanceAmount {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.4rem;
+  color: #34C759;
+}
+.balance__deadline {
+  font-size: 1.4rem;
+}
+.balance__btn {
+  font-size: 1.4rem;
+  color: #00C2FF;
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=parentBalance.module.css.map */

@@ -1,0 +1,110 @@
+.test {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 13rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  gap: 3rem;
+}
+.test__header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.test__header__div {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.test__header__btn {
+  display: flex;
+  align-self: end;
+}
+.test__card {
+  padding: 3rem;
+}
+
+@media only screen and (max-width: 375px) {
+  .test {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .test__header {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .test__header__btn {
+    align-self: start;
+  }
+  .test__header__second {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .test__header__second h1 {
+    font-size: 1.6rem;
+  }
+  .test__header__second__box {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .test__header__second__box__select {
+    border: 1px solid #D9D9D9 !important;
+    border-radius: 1rem !important;
+    outline: none !important;
+  }
+  .test__arounder {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .test__arounder__card {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .test__arounder__card__header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .test__arounder__card__header h1 {
+    font-weight: lighter;
+    font-size: 1.5rem;
+  }
+  .test__arounder__card__header h2 {
+    font-weight: lighter;
+    font-size: 1.5rem;
+  }
+  .test__arounder__card__main {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .test__arounder__card__footer {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+  }
+  .test__arounder__card__footer h1 {
+    display: flex;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    align-self: end;
+  }
+}
+
+/*# sourceMappingURL=childrenMonthlyTestsResults.module.css.map */

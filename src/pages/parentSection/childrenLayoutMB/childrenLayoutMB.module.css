@@ -1,0 +1,43 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  background-color: #F8F8F8;
+  padding: 0.5rem;
+}
+.layout__menu {
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: center;
+}
+.layout__menu__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  border: none !important;
+}
+
+.selectBox {
+  background-color: #00C2FF !important;
+  padding: 1.5rem !important;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.selectBox__select {
+  border: none !important;
+  border-radius: 1rem !important;
+}
+
+.pageContainer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/*# sourceMappingURL=childrenLayoutMB.module.css.map */
