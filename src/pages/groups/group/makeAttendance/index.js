@@ -155,10 +155,8 @@ const MakeAttendanceIndex = () => {
 	const setDefaultAllUsers = useCallback(() => {
 
 		setUsers(users => users.map(item => {
-
 			const newScores = item.score?.map(s => {
 				return {...s,isNotChecked: false,activeBall: 0}
-
 			})
 			return {...item,type: "",score: newScores}
 		}))

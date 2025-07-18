@@ -105,12 +105,8 @@ const Presentation = () => {
                     </Button>
 
                     <div className={cls.tabs}>
-
                         {renderSlides()}
-
-
                     </div>
-
                 </div>
 
 

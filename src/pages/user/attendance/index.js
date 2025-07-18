@@ -7,7 +7,7 @@ import Table from "components/ui/table";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { useHttp } from "hooks/http.hook";
-import { PlatformUrlApi } from "constants/global";
+import {BackUrl, headers, PlatformUrlApi} from "constants/global";
 import Select from "components/ui/form/select";
 
 const AttendanceStudent = () => {
@@ -27,29 +27,49 @@ const AttendanceStudent = () => {
 	const [month,setMonth] = useState("")
 
 
-	const {data:{platform_id,location_id}} = useSelector(state => state.user)
+	const {data:{id,location_id}} = useSelector(state => state.user)
 	const {request} = useHttp()
 
 	useEffect(() => {
-		const oldToken = sessionStorage.getItem("oldToken")
-		const headers = {
-			"Authorization" : "Bearer " + oldToken,
-		}
+		// const oldToken = sessionStorage.getItem("oldToken")
+		// const headers = {
+		// 	"Authorization" : "Bearer " + oldToken,
+		// }
 
-		request(`${PlatformUrlApi}combined_attendances/${platform_id}`,"GET",null,headers)
+		request(`${BackUrl}combined_attendances2/${id}`,"GET",null,headers())
 			.then(res => {
 				setDays(res.data.dates)
 				setAttendance(res.data.attendances)
 			})
 
-		request(`${PlatformUrlApi}student_group_dates2/${platform_id}`,"GET",null,headers)
+		request(`${BackUrl}student_group_dates/${id}`,"GET",null,headers())
 			.then(res => {
 				setYears(res.data.years)
 				setMonths(res.data.months)
 				setYear(res.data.current_year)
 			})
-	},[platform_id])
+	},[id])
 
+
+
+	useEffect(() => {
+		if (year && month) {
+
+
+			const data = {
+				studentId: id,
+				year,
+				month
+			}
+
+
+			request(`${BackUrl}combined_attendances2/${id}`,"POST",JSON.stringify(data),headers())
+				.then(res => {
+					setDays(res.data.dates)
+					setAttendance(res.data.attendances)
+				})
+		}
+	}, [year,month])
 
 
 	const renderAttendance = () => {
@@ -77,7 +97,7 @@ const AttendanceStudent = () => {
 	const navigate = useNavigate()
 
 	const onClick = (id) => {
-		navigate(`../studentAttendanceHistory/${platform_id}/${id}/${month}/${year}`)
+		// navigate(`../studentAttendanceHistory/${platform_id}/${id}/${month}/${year}`)
 	}
 
 
@@ -93,7 +113,7 @@ const AttendanceStudent = () => {
 				}
 				{
 					months?.length > 0 && year ?
-						<Select title={"Oy"} options={months?.filter(item => item.year === year)[0].months} onChange={setMonth}/>
+						<Select title={"Oy"} options={months?.filter(item => item.year === year)[0]?.months} onChange={setMonth}/>
 						: null
 				}
 

@@ -5,6 +5,7 @@ import cls from "../../typesContent.module.sass";
 
 export const HeadingPreview = () => {
     return (
+
         <ContainerSlide>
             <TextSlide extraClass={cls.label} type={"small"}>
                 Label

@@ -23,9 +23,9 @@ export const fetchLessonData = createAsyncThunk(
                 'Accept': 'application/json',
                 "Authorization" : "Bearer " + token
             }
-            return await request(`${BackUrl}info_lesson/${chapterId}/${lessonOrder}`,"GET",null,header)
+            return await request(`${BackUrl}lesson/profile/${chapterId}/${lessonOrder}`,"GET",null,header)
         }
-        return await request(`${BackUrl}info_lesson/${chapterId}/${lessonOrder}`,"GET",null,headers())
+        return await request(`${BackUrl}lesson/profile/${chapterId}/${lessonOrder}`,"GET",null,headers())
     }
 )
 

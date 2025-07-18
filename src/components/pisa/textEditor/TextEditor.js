@@ -58,10 +58,10 @@ const TextEditorCreate = ({textComponent,onSetCompletedComponent,onDeleteCompone
 
             request(`${BackUrl}pisa/block/text/${textComponent?.id}`, "DELETE", null, headers())
                 .then(res => {
-                    onDeleteComponent(textComponent.index)
+                    onDeleteComponent(textComponent.id)
                 })
         } else {
-            onDeleteComponent(textComponent.index)
+            onDeleteComponent(textComponent.id)
         }
     }
 
@@ -114,7 +114,7 @@ const TextEditorView = ({onChangeCompletedComponent, textComponent}) => {
             <div className={styles.text}>
                 {
                     onChangeCompletedComponent ?
-                        <div onClick={() => onChangeCompletedComponent(textComponent.index)} className={styles.popup}>
+                        <div onClick={() => onChangeCompletedComponent(textComponent.id)} className={styles.popup}>
                             <i className="fa-sharp fa-solid fa-pen-to-square"/>
                         </div> : null
                 }

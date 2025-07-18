@@ -44,7 +44,7 @@ const RegisteredStudentsPisa = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCount, setTotalCount] = useState(1);
-    let PageSize = useMemo(() => 1, [])
+    let PageSize = useMemo(() => 50, [])
 
     useDebounce(() => {
 

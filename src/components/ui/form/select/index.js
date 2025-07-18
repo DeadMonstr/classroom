@@ -59,12 +59,12 @@ const Select = React.memo((
             } else {
                 setCurrentOptions(() => [...allObj,...options.map((item, index) => {
                     if (index === 0 && !value && !all) {
-                        onChange(item[keyValue] || item.value || item.id || item.name)
+                        onChange(item[keyValue] || item.value || item.id || item.name || item)
                     }
                     return {
                         ...item,
-                        name: item.name || item.value,
-                        value: item[keyValue] || item.value || item.id || item.name,
+                        name: item.name || item.value || item,
+                        value: item[keyValue] || item.value || item.id || item.name || item,
                         selected: index === 0 && !all,
                     }
                 })])

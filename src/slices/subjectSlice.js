@@ -18,7 +18,7 @@ export const fetchSubjectData = createAsyncThunk(
 	'SubjectSlice/fetchSubjectData',
 	async (id) => {
 		const {request} = useHttp();
-		return await request(`${BackUrl}subject/${id}`,"GET",null,headers())
+		return await request(`${BackUrl}subject/profile/${id}`,"GET",null,headers())
 	}
 )
 
@@ -26,7 +26,7 @@ export const fetchSubjectLevelsData = createAsyncThunk(
 	'SubjectSlice/fetchSubjectLevelsData',
 	async (id) => {
 		const {request} = useHttp();
-		return await request(`${BackUrl}info_level/${id}`,"GET",null,headers())
+		return await request(`${BackUrl}level/info/${id}`,"GET",null,headers())
 	}
 )
 const SubjectSlice = createSlice({

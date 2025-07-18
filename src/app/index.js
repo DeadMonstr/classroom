@@ -36,9 +36,13 @@ import ViewPisaTest from "pages/pisaTest/view/ViewPisaTest";
 import MyResultPisaTest from "pages/pisaTest/myResult/MyResultPisaTest";
 import CheckResultsPisaTest from "pages/pisaTest/checkExc/CheckResultsPisaTest";
 import RegisteredStudentsPisa from "pages/pisaTest/registeredStudents/RegisteredStudentsPisa";
+
 import ChildrenLayoutMB from "../pages/parentSection/childrenLayoutMB/childrenLayoutMB";
 // import {isMobile} from "react-device-detect";
 import ChildrenWeeklyGrades from "../pages/parentSection/childrenWeeklyGrades/childrenWeeklyGrades";
+
+import {PisaTestResults} from "pages/pisaTestResults";
+
 
 
 const Layout = lazy(() => import("components/layout"))
@@ -111,7 +115,10 @@ const App = () => {
                 />
 
 
+
                 <Route path={"registerPisaTest"} element={<RegisterPisa/>}/>
+
+                <Route path={"register_block_test"} element={<RegisterPisa/>} />
 
 
                 <Route path="/*" element={<Layout/>}>
@@ -187,12 +194,22 @@ const App = () => {
 
                     <Route element={<RequireAuth allowedRules={[ROLES.Methodist]}/>}>
                         <Route path={"exercises"} element={<Exercises/>}/>
+
                         <Route path={"createExercises"} element={<CreateExercises/>}/>
                         <Route path={"changeExercises/:id"} element={<ChangeExercises/>}/>
                         <Route path={"createExercisesTypes"} element={<CreateExercisesTypes/>}/>
                         <Route path={"pisaTest"} element={<PisaTestList/>}/>
                         <Route path={"createPisaTest/:id"} element={<CreatePisaTest/>}/>
                         <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa/>}/>
+
+                        <Route path={"createExercises"} element={<CreateExercises/>} />
+                        <Route path={"changeExercises/:id"} element={<ChangeExercises/>} />
+                        <Route path={"createExercisesTypes"} element={<CreateExercisesTypes/>} />
+                        <Route path={"pisaTest"} element={<PisaTestList/>} />
+                        <Route path={"createPisaTest/:id"} element={<CreatePisaTest/>} />
+                        <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa/>} />
+                        <Route path={"pisaTestResults.js"} element={<PisaTestResults/>} />
+
 
 
                         <Route path={"presentations/*"} element={<Presentations/>}/>
@@ -205,7 +222,13 @@ const App = () => {
                     />
 
 
+
+
                 </Route>
+
+
+
+
 
 
             </>

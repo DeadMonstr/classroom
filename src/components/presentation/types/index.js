@@ -38,8 +38,12 @@ export {
     VideoSidebar,
     VideoContent,
     contentTypes
+}
 
 
 
 
+export const activeTypesSideBar = {
+    layout: "layout",
+    heading: "heading",
 }

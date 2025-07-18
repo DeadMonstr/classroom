@@ -94,7 +94,7 @@ const CreateLesson = () => {
     ]
 
     useEffect(() => {
-        request(`${BackUrl}chapters/${levelId}`, "GET", null, headers())
+        request(`${BackUrl}chapter/info/${levelId}`, "GET", null, headers())
             .then(res => {
                 setChapters(res.chapters)
             })
@@ -324,7 +324,7 @@ const CreateLesson = () => {
 
 
         setLoading(true)
-        request(`${BackUrl}lessons/${levelId}`, "POST", formData, {
+        request(`${BackUrl}lesson/info/${levelId}`, "POST", formData, {
             "Authorization": "Bearer " + token,
         })
             .then(res => {

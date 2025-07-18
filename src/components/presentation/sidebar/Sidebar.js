@@ -25,8 +25,8 @@ import {useSelector} from "react-redux";
 
 const menuOptions = [
     {
-        name: 'content',
-        title: 'Content',
+        name: 'edit',
+        title: 'Edit',
         icon: <Content/>
     },
     {
@@ -64,12 +64,12 @@ const Sidebar = () => {
                 <div className={cls.container}>
                     <div className={cls.title}>
                         <h1>
-                            {activeMenu === "content" ? "Content" : "Design"}
+                            {activeMenu && menuOptions.filter(item => item.name === activeMenu)[0]?.title}
                         </h1>
                         <i onClick={() => setActiveMenu()} className="fa-solid fa-xmark"></i>
                     </div>
 
-                    {activeMenu === "content" ? <ContentOptions/> : <DesignSidebar /> }
+                    {activeMenu === "edit" ? <Edit/> : null }
 
                 </div>
             </div>
@@ -97,12 +97,13 @@ const Sidebar = () => {
 
 
 
-const ContentOptions = () => {
+
+const Edit = () => {
 
     const [activeModal,setActiveModal] = useState(false)
 
 
-    const {currentSlide: {slideType}} = useSelector(state => state.presentation)
+    const {currentSlide: {slideType,activeType}} = useSelector(state => state.presentation)
 
 
     const renderSidebarOptions = useCallback(() => {
@@ -112,9 +113,6 @@ const ContentOptions = () => {
                 return item.sidebar
             }
         })
-
-
-
     },[slideType])
 
 
@@ -123,18 +121,15 @@ const ContentOptions = () => {
 
     return (
         <>
-            <PresentationSidebarContext.Provider value={{setActiveModal}}>
-
-                {}
-
+            {/*<PresentationSidebarContext.Provider value={{setActiveModal}}>*/}
                 {/*<HeadingSidebar />*/}
                 {/*/!*<ImageSidebar />*!/*/}
                 {/*/!*<NumberSidebar />*!/*/}
                 {/*/!*<ParagraphSidebar />*!/*/}
                 {/*/!*<QuoteSidebar/>*!/*/}
                 {/*/!*<VideoSidebar/>*!/*/}
-            </PresentationSidebarContext.Provider>
-
+            {/*</PresentationSidebarContext.Provider>*/}
+            <DesignSidebar/>
             <Modal
                 type={"other"}
                 active={activeModal}

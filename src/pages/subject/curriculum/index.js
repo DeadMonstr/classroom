@@ -56,7 +56,7 @@ const Curriculum = () => {
     const onSubmit = (data) => {
         setActiveModal(false)
 
-        request(`${BackUrl}info_level/${id}`, "POST", JSON.stringify(data), headers())
+        request(`${BackUrl}level/info/${id}`, "POST", JSON.stringify(data), headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -86,7 +86,7 @@ const Curriculum = () => {
             }
             dispatch(setAlertOptions({alert}))
         } else {
-            request(`${BackUrl}del_subject/${id}`, "DELETE", null, headers())
+            request(`${BackUrl}subject/delete/${id}`, "DELETE", null, headers())
                 .then(res => {
                     navigate("/home")
                     const alert = {
@@ -201,9 +201,9 @@ const Curriculum = () => {
 
 const CreateEditLevel = ({onSubmit, changeData}) => {
 
-
     const [name, setName] = useState("")
     const [desc, setDesc] = useState("")
+
 
     useEffect(() => {
         if (changeData) {
@@ -265,7 +265,7 @@ const ChangeSubject = ({onSubmit, oldData}) => {
         formData.append("file", img)
         formData.append("info", JSON.stringify(data))
 
-        request(`${BackUrl}edit_subject/${oldData.id}`, "POST", formData, headersImg())
+        request(`${BackUrl}subject/crud/${oldData.id}`, "POST", formData, headersImg())
             .then(res => {
                 const alert = {
                     active: true,
@@ -349,7 +349,7 @@ const Levels = ({levels}) => {
 
 
     const onSubmitConfirm = () => {
-        request(`${BackUrl}edit_level/${willChangeItemId}`, "DELETE", null, headers())
+        request(`${BackUrl}level/crud/${willChangeItemId}`, "DELETE", null, headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -366,7 +366,7 @@ const Levels = ({levels}) => {
     const onSubmit = (data) => {
         setActiveModal(false)
 
-        request(`${BackUrl}edit_level/${willChangeItemId}`, "POST", JSON.stringify(data), headers())
+        request(`${BackUrl}level/crud/${willChangeItemId}`, "POST", JSON.stringify(data), headers())
             .then(res => {
                 const alert = {
                     active: true,

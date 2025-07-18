@@ -327,7 +327,6 @@ const Chapters = React.memo(({chapters = [],setChapters,setChangedLessons}) =>  
                     }
                     return item
                 })
-
             });
         }
     }
@@ -613,7 +612,9 @@ const Item = (props) => {
 
     const [lastClickTime, setLastClickTime] = useState(0);
 
-    // Function to handle the double click
+
+
+
     const handleDoubleClick = () => {
         const currentTime = new Date().getTime();
         // Check if the time between clicks is within a certain threshold (e.g., 500 milliseconds)
@@ -628,6 +629,7 @@ const Item = (props) => {
             setLastClickTime(currentTime);
         }
     };
+
 
     const navigate = useNavigate()
     const NavigateToItem = () => {

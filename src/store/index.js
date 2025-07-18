@@ -13,7 +13,12 @@ import books from "slices/booksSlice";
 import chat from "slices/chatSlice"
 import presentation from "slices/presentationSlice";
 import pisaTest from "slices/pisaTest";
+
 import parentSlice from "slices/parentSlice";
+
+import pisaTestResults from "slices/pisaTestResults";
+
+
 const stringMiddleware = () => (next) => (action) => {
     if (typeof action === 'string') {
         return next({
@@ -39,7 +44,11 @@ const store = configureStore({
         presentation,
         chat,
         pisaTest,
-        parentSlice
+
+        parentSlice,
+
+        pisaTestResults
+
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(

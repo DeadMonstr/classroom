@@ -29,10 +29,8 @@ const Layout = () => {
 		}
 	},[dispatch, isCheckedPassword])
 	return (
-		// <>
-		//
-		// </>
 
+		//
 		// <>
 		// 	<Alert/>
 		// 	<Header/>
@@ -41,7 +39,6 @@ const Layout = () => {
 		// 		<MainContext.Provider value={mainRef}>
 		// 			<Outlet/>
 		// 		</MainContext.Provider>
-		//
 		// 	</main>
 		// </>
 
