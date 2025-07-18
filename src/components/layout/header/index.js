@@ -42,8 +42,7 @@ const Header = () => {
 
 				</div>
 				<div>
-					{
-						ROLES.Parent ? null :
+
 							<div className={styles.info}>
 								<span>{data.name}</span>
 								<span>{data.surname}</span>
@@ -52,7 +51,7 @@ const Header = () => {
 								</Link>
 
 							</div>
-					}
+
 
 				</div>
 			</header>

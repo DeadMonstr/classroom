@@ -23,17 +23,20 @@ const ParentSection = () => {
     const {data} = useSelector(state  => state.user)
     const {parent, weeklyAttendance, groups, dates} = useSelector(state => state.parentSlice)
 
-    const selectedChild = parent.find(child => child.username === innerType)
+    console.log(parent)
+    const selectedChild = parent.find(child => child.platform_id === +innerType)
     const selectedBalance = selectedChild?.balance
     const selectedGroupId = groups?.group_list?.map((item) => item.id)
     localStorage.setItem("group_id", selectedGroupId)
     localStorage.setItem("current_month", dates.data?.current_month)
     localStorage.setItem("current_year", dates.data?.current_year)
     localStorage.setItem("current_username", selectedChild?.username)
-
+    localStorage.setItem("platform_id", selectedChild?.platform_id)
+    console.log(innerType , "innerType")
     const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
+
 
 
 
@@ -42,16 +45,18 @@ const ParentSection = () => {
     },[data.id])
 
     useEffect(() => {
-        if (selectedChild?.username) {
-            dispatch(fetchChildrenAttendance(selectedChild?.username))
-            dispatch(fetchChildrenGroups(selectedChild?.username))
-            dispatch(fetchChildrenAttendanceWeekly(selectedChild?.username))
-            dispatch(fetchChildrenBalance(selectedChild?.username))
+        if (selectedChild?.platform_id) {
+            dispatch(fetchChildrenAttendance(selectedChild?.platform_id))
+            dispatch(fetchChildrenGroups(selectedChild?.platform_id))
+            dispatch(fetchChildrenAttendanceWeekly(selectedChild?.platform_id))
+            dispatch(fetchChildrenBalance(selectedChild?.platform_id))
             dispatch(fetchChildrenTestsDate(groupId))
-            dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+            if (!groupId && !currentYear && !currentMonth ) {
+                dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+            }
 
         }
-    }, [selectedChild ]);
+    }, [innerType , selectedChild]);
 
 
 
@@ -77,7 +82,7 @@ const ParentSection = () => {
                         </div>
                         <div className={styles.parent__layout__rightSide}>
                             <Select
-                                keyValue={"username"}
+                                keyValue={"platform_id"}
                                 options={parent}
                                 onChange={setInnerType}
                                 value={innerType}

@@ -66,70 +66,24 @@ const Profile = () => {
 	return (
 		<div className={styles.profile}>
 			<Back/>
-			<div className={styles.header}>
+			{!ROLES.Parent && <div className={styles.header}>
 				<div className={styles.username}>
 					<i className="fa-solid fa-user"></i>
 					<span>{username}</span>
 				</div>
+
 				{
-					isMobile ?
-						<div className={styles.optionsMobile} ref={ref}>
-							<div className={styles.btn} onClick={() => setOpenInnerModal(!openInnerModal)}>
-								<i className="fa-solid fa-gear"></i>
-							</div>
-							<div className={classNames(styles.innerModal,{
-								[`${styles.active}`]: openInnerModal
-							})}>
-								<Link to={"../changeProfile"} className={styles.item}>
-									<i className="fa-solid fa-pen-to-square"></i>
-									<span>Ma'lumotlarni o'zgartirish</span>
-								</Link>
-								<Link to={"../userLessonTime"} className={styles.item}>
-									<i className="fa-solid fa-user-clock"></i>
-									<span>Dars vaqti</span>
-								</Link>
-								<Link to={"../teacherSalary"} className={styles.item}>
-									<i className="fa-solid fa-dollar-sign"></i>
-									<span>Balans tarixi</span>
-								</Link>
-								<Link to={"../teacherSalary"} className={styles.item}>
-									<i className="fa-solid fa-graduation-cap"></i>
-									<span>Bitiruvchilar sertifikatlari</span>
-								</Link>
-								<RequireAuthChildren allowedRules={[ROLES.Student]}>
-									<Link to={"../studentAttendance"} className={styles.item}>
-										<i className="fa-solid fa-calendar-days"></i>
-										<span>Davomat</span>
-									</Link>
-									<Link to={"../balanceHistory"} className={styles.item}>
-										<i className="fa-solid fa-dollar-sign"></i>
-										<span>Balans tarixi</span>
-									</Link>
-								</RequireAuthChildren>
-
-								{/*<div className={styles.item}>*/}
-								{/*	<i className="fa-solid fa-user-clock"></i>*/}
-								{/*	<span>Dars vaqti</span>*/}
-								{/*</div>*/}
-
-								{/*<div className={styles.item}>*/}
-								{/*	<i className="fa-solid fa-calendar-days"></i>*/}
-								{/*	<span>Davomat</span>*/}
-								{/*</div>*/}
-								{/*<div className={styles.item}>*/}
-								{/*	<i className="fa-solid fa-dollar-sign"></i>*/}
-								{/*	<span>Balans tarixi</span>*/}
-								{/*</div>*/}
-							</div>
+				isMobile ?
+					<div className={styles.optionsMobile} ref={ref}>
+						<div className={styles.btn} onClick={() => setOpenInnerModal(!openInnerModal)}>
+							<i className="fa-solid fa-gear"></i>
 						</div>
-						:
-						<div className={styles.options}>
-							{/*<div className={styles.item}>*/}
-							{/*	<i className="fa-solid fa-camera"></i>*/}
-							{/*</div>*/}
-							<Link to={"../studentsCertificates"} className={styles.item}>
-								<i className="fa-solid fa-graduation-cap"></i>
-								<span>Bitiruvchilar sertifikatlari</span>
+						<div className={classNames(styles.innerModal,{
+							[`${styles.active}`]: openInnerModal
+						})}>
+							<Link to={"../changeProfile"} className={styles.item}>
+								<i className="fa-solid fa-pen-to-square"></i>
+								<span>Ma'lumotlarni o'zgartirish</span>
 							</Link>
 							<Link to={"../userLessonTime"} className={styles.item}>
 								<i className="fa-solid fa-user-clock"></i>
@@ -139,7 +93,10 @@ const Profile = () => {
 								<i className="fa-solid fa-dollar-sign"></i>
 								<span>Balans tarixi</span>
 							</Link>
-
+							<Link to={"../teacherSalary"} className={styles.item}>
+								<i className="fa-solid fa-graduation-cap"></i>
+								<span>Bitiruvchilar sertifikatlari</span>
+							</Link>
 							<RequireAuthChildren allowedRules={[ROLES.Student]}>
 								<Link to={"../studentAttendance"} className={styles.item}>
 									<i className="fa-solid fa-calendar-days"></i>
@@ -151,14 +108,58 @@ const Profile = () => {
 								</Link>
 							</RequireAuthChildren>
 
-							<Link to={"../changeProfile"} className={styles.item}>
-								<i className="fa-solid fa-gear"></i>
-								<span>Ma'lumotlarni o'zgartirish</span>
-							</Link>
+							{/*<div className={styles.item}>*/}
+							{/*	<i className="fa-solid fa-user-clock"></i>*/}
+							{/*	<span>Dars vaqti</span>*/}
+							{/*</div>*/}
+
+							{/*<div className={styles.item}>*/}
+							{/*	<i className="fa-solid fa-calendar-days"></i>*/}
+							{/*	<span>Davomat</span>*/}
+							{/*</div>*/}
+							{/*<div className={styles.item}>*/}
+							{/*	<i className="fa-solid fa-dollar-sign"></i>*/}
+							{/*	<span>Balans tarixi</span>*/}
+							{/*</div>*/}
 						</div>
+					</div>
+					:
+					<div className={styles.options}>
+						{/*<div className={styles.item}>*/}
+						{/*	<i className="fa-solid fa-camera"></i>*/}
+						{/*</div>*/}
+						<Link to={"../studentsCertificates"} className={styles.item}>
+							<i className="fa-solid fa-graduation-cap"></i>
+							<span>Bitiruvchilar sertifikatlari</span>
+						</Link>
+						<Link to={"../userLessonTime"} className={styles.item}>
+							<i className="fa-solid fa-user-clock"></i>
+							<span>Dars vaqti</span>
+						</Link>
+						<Link to={"../teacherSalary"} className={styles.item}>
+							<i className="fa-solid fa-dollar-sign"></i>
+							<span>Balans tarixi</span>
+						</Link>
+
+						<RequireAuthChildren allowedRules={[ROLES.Student]}>
+							<Link to={"../studentAttendance"} className={styles.item}>
+								<i className="fa-solid fa-calendar-days"></i>
+								<span>Davomat</span>
+							</Link>
+							<Link to={"../balanceHistory"} className={styles.item}>
+								<i className="fa-solid fa-dollar-sign"></i>
+								<span>Balans tarixi</span>
+							</Link>
+						</RequireAuthChildren>
+
+						<Link to={"../changeProfile"} className={styles.item}>
+							<i className="fa-solid fa-gear"></i>
+							<span>Ma'lumotlarni o'zgartirish</span>
+						</Link>
+					</div>
 				}
 
-			</div>
+			</div>}
 			<div className={styles.subHeader}>
 				<div className={styles.user}>
 					<div className={styles.img} onClick={() => setActive(true)}>

@@ -7,7 +7,7 @@ import Table from "../../../components/ui/table";
 import Card from "../../../components/ui/card";
 import {isMobile} from "react-device-detect";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchChildrenTestsDate, fetchChildrenTests, fetchChildrenGroups} from "../../../slices/parentSlice";
+import {fetchChildrenTestsDate, fetchChildrenTests, fetchChildrenGroups} from "slices/parentSlice";
 
 
 
@@ -19,7 +19,7 @@ const ChildrenMonthlyTestsResults = () => {
     const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
-    const currentUsername = localStorage.getItem("current_username")
+    const currentUsername = localStorage.getItem("platform_id")
 
     const dispatch = useDispatch()
     const {tests, tests_date, groups} = useSelector(state => state.parentSlice)
@@ -30,11 +30,13 @@ const ChildrenMonthlyTestsResults = () => {
     useEffect(() => {
         dispatch(fetchChildrenTestsDate(groupId))
         dispatch(fetchChildrenGroups(currentUsername))
-        dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+        if (!groupId && !currentYear && !currentMonth ) {
+            dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+        }
     }, [groupId]);
 
     useEffect(() => {
-        if (year || month || group){
+        if (year && month && group){
             dispatch(fetchChildrenTests({
                 groupId: group,
                 year: year,

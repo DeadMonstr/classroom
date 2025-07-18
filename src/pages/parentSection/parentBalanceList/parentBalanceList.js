@@ -48,13 +48,13 @@ const ParentBalanceList = () => {
 
     const dispatch = useDispatch()
     const [active, setActive] = useState(1);
-    const username = localStorage.getItem("current_username")
+    const platformID = localStorage.getItem("platform_id")
     const {balance} = useSelector(state => state.parentSlice)
 
     console.log(balance, 'ssd')
     useEffect(() => {
-        dispatch(fetchChildrenBalance(username))
-    }, [username]);
+        dispatch(fetchChildrenBalance(platformID))
+    }, [platformID]);
 
     const renderTable = () => {
         return balance?.data?.debts.map((item, index) => {

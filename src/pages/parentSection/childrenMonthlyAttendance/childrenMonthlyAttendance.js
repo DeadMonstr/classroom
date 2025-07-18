@@ -90,7 +90,7 @@ const ChildrenMonthlyAttendance = () => {
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
     const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
-    const currentUsername = localStorage.getItem("current_username")
+    const currentUsername = localStorage.getItem("platform_id")
     const {monthlyAttendance, groups, dates} = useSelector(state => state.parentSlice)
     const years = dates.data?.years
     const months = dates.data?.months?.flatMap(item => item.months) || [];
@@ -98,14 +98,18 @@ const ChildrenMonthlyAttendance = () => {
 
 
     useEffect(() => {
-        dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
-        dispatch(fetchChildrenGroups(currentUsername))
-        dispatch(fetchChildrenAttendance(currentUsername))
-        dispatch(fetchChildrenTestsDate(groupId))
-        dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+       if(!currentUsername){
+           dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
+           dispatch(fetchChildrenGroups(currentUsername))
+           dispatch(fetchChildrenAttendance(currentUsername))
+           dispatch(fetchChildrenTestsDate(groupId))
+           if (!groupId && !currentYear && !currentMonth ) {
+               dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+           }
+       }
     }, [currentMonth]);
 
-    console.log(month, "month")
+
     useEffect(() => {
         if (year && month && group) {
             dispatch(fetchChildrenAttendanceMonthly({
@@ -117,6 +121,7 @@ const ChildrenMonthlyAttendance = () => {
         }
     }, [year, month, group])
 
+    console.log(year , "log")
     const renderCard = () => {
         const todayDate = new Date().getDate();
 
@@ -184,6 +189,7 @@ const ChildrenMonthlyAttendance = () => {
                 <Back className={styles.attendance__header__btn} />
                 {!isMobile && (
                     <div className={styles.attendance__header__div}>
+
                         <Select
                             title={"Yil"}
                             value={year}

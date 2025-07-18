@@ -25,24 +25,27 @@ const ChildrenLayoutMB = () => {
     const dispatch = useDispatch()
     const {data} = useSelector(state  => state.user)
     const {parent} = useSelector(state => state.parentSlice)
-    const selectedChild = parent.find(child => child.username === innerType)
+    const selectedChild = parent.find(child => child.platform_id === +innerType)
     const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
-    localStorage.setItem("current_username", selectedChild?.username)
+    // localStorage.setItem("current_username", selectedChild?.username)
 
     useEffect(() => {
+       if (data?.id)
         dispatch(fetchParentData(data.id))
     },[data.id])
 
     useEffect(() => {
-        if (selectedChild?.username) {
-            dispatch(fetchChildrenAttendance(selectedChild?.username))
-            dispatch(fetchChildrenGroups(selectedChild?.username))
+        if (!selectedChild?.platform_id) {
+            dispatch(fetchChildrenAttendance(selectedChild?.platform_id))
+            dispatch(fetchChildrenGroups(selectedChild?.platform_id))
             // dispatch(fetchChildrenAttendanceWeekly(selectedChild?.username))
-            dispatch(fetchChildrenBalance(selectedChild?.username))
+            dispatch(fetchChildrenBalance(selectedChild?.platform_id))
             dispatch(fetchChildrenTestsDate(groupId))
-            dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+           if (!groupId && !currentYear && !currentMonth ) {
+               dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+           }
 
         }
     }, [selectedChild ]);
@@ -50,8 +53,9 @@ const ChildrenLayoutMB = () => {
     return (
         <div className={styles.layout}>
             <Card extraClassname={styles.selectBox}>
+
                 <Select
-                    keyValue={"username"}
+                    keyValue={"platform_id"}
                     options={parent}
                     onChange={setInnerType}
                     value={innerType}

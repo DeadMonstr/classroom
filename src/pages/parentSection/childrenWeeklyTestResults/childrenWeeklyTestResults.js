@@ -7,27 +7,25 @@ import {useDispatch, useSelector} from "react-redux";
 import {fetchChildrenGroups, fetchChildrenTests, fetchChildrenTestsDate} from "../../../slices/parentSlice";
 
 
-
 const ChildrenWeeklyTestResults = () => {
 
     const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
-    const currentUsername = localStorage.getItem("current_username")
+    const platform_id = localStorage.getItem("platform_id")
 
     const dispatch = useDispatch()
     const {tests, tests_date} = useSelector(state => state.parentSlice)
 
-    console.log(groupId, 'dd')
 
 
     useEffect(() => {
         dispatch(fetchChildrenTestsDate(groupId))
-        dispatch(fetchChildrenGroups(currentUsername))
-        dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
-    }, [currentYear, groupId]);
-
-
+        dispatch(fetchChildrenGroups(platform_id))
+        if (!groupId && !currentYear && !currentMonth ) {
+            dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+        }
+    }, [currentYear, groupId, currentMonth]);
 
 
     const renderTableData = () => {
@@ -40,9 +38,9 @@ const ChildrenWeeklyTestResults = () => {
                     <td>{item.date}</td>
                     <td>{item.percentage}</td>
                     {parseInt(item.percentage) > 49 ? (
-                        <td style={{ color: "green", fontWeight: "bold" }}>O'tdi ✅</td>
+                        <td style={{color: "green", fontWeight: "bold"}}>O'tdi ✅</td>
                     ) : (
-                        <td style={{ color: "red", fontWeight: "bold" }}>O'tmadi ❌</td>
+                        <td style={{color: "red", fontWeight: "bold"}}>O'tmadi ❌</td>
                     )}
                 </tr>
             )
@@ -57,18 +55,18 @@ const ChildrenWeeklyTestResults = () => {
             </div>
             {
                 tests && tests.length > 0 ?
-                <Table>
-                    <thead>
-                    <th>Fan</th>
-                    <th>Daraja</th>
-                    <th>Sana</th>
-                    <th>Natija</th>
-                    <th>Status</th>
-                    </thead>
-                    <tbody>
-                    {renderTableData()}
-                    </tbody>
-                </Table> : <h1 style={{display: "flex", alignSelf: "center"}}>Yechilgan testlar yo'q</h1>
+                    <Table>
+                        <thead>
+                        <th>Fan</th>
+                        <th>Daraja</th>
+                        <th>Sana</th>
+                        <th>Natija</th>
+                        <th>Status</th>
+                        </thead>
+                        <tbody>
+                        {renderTableData()}
+                        </tbody>
+                    </Table> : <h1 style={{display: "flex", alignSelf: "center"}}>Yechilgan testlar yo'q</h1>
             }
 
         </Card>

@@ -18,7 +18,7 @@ const years = [
     "2023"
 ]
 
-const months = ['01', '02', '03', '04', '05', '06', '07']
+const months = ['01', '02', '03', '04', '05', '06', '07' , "08" , "09" , "10" , "11" , "12"]
 
 const data = [
     {
@@ -564,18 +564,21 @@ const ChildrenMonthlyGrades = () => {
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
     const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
-    const currentUsername = localStorage.getItem("current_username")
+    const currentUsername = localStorage.getItem("platform_id")
     const {monthlyAttendance, groups, dates} = useSelector(state => state.parentSlice)
     const years = dates.data?.years
-    const months = dates.data?.months?.flatMap(item => item.months) || [];
-    const groupIds = groups.group_list
 
+
+    // const months = dates.data.years.filter(item => item.id === currentYear)[0].months
+    // const groupIds = groups.group_list
     useEffect(() => {
         dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
         dispatch(fetchChildrenGroups(currentUsername))
         dispatch(fetchChildrenAttendance(currentUsername))
         dispatch(fetchChildrenTestsDate(groupId))
-        dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+        if (!groupId && !currentYear && !currentMonth ) {
+            dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+        }
     }, [currentMonth]);
 
     console.log(month, "month")
