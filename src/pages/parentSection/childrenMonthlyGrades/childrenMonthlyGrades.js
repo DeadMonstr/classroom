@@ -20,17 +20,28 @@ const ChildrenMonthlyGrades = () => {
     const [year, setYear] = useState();
     const [month, setMonth] = useState();
     const [group, setGroup] = useState();
+    const [availableMonths, setAvailableMonths] = useState([]);
     const dispatch = useDispatch()
-    const [selectedDayId, setSelectedDayId] = useState();
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
     const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
     const currentUsername = localStorage.getItem("platform_id")
     const {monthlyAttendance, dates} = useSelector(state => state.parentSlice)
-    const years = dates.data?.years
-    const months = dates.date?.months.map((item) => item)
-    console.log(currentMonth, 'dddd')
 
+    const years = dates.data?.years
+
+    useEffect(() => {
+        if (year) {
+            const selectedYearData = dates.data?.months.find(item => item.year === year);
+            if (selectedYearData) {
+                setAvailableMonths(selectedYearData.months);
+            } else {
+                setAvailableMonths([]);
+            }
+        } else {
+            setAvailableMonths([]);
+        }
+    }, [year, dates.data?.months]);
 
     useEffect(() => {
         dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
@@ -38,11 +49,11 @@ const ChildrenMonthlyGrades = () => {
         dispatch(fetchChildrenAttendance(currentUsername))
         dispatch(fetchChildrenTestsDate(groupId))
         if (!groupId && !currentYear && !currentMonth ) {
-            dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: "07"}))
+            dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
         }
     }, [currentMonth]);
 
-
+    console.log(month, "month")
     useEffect(() => {
         if (year || month || group) {
             dispatch(fetchChildrenAttendanceMonthly({
@@ -105,7 +116,7 @@ const ChildrenMonthlyGrades = () => {
                                         title={"Oy"}
                                         value={month}
                                         onChange={setMonth}
-                                        options={months}
+                                        options={availableMonths}
                                         defaultOption={"Oy"}
                                         style={{ width: "400px" }}
                                     />
@@ -121,7 +132,7 @@ const ChildrenMonthlyGrades = () => {
                                     <div className={styles.grades__header__second__box}>
 
                                         <Select title={"Yil"} value={year} onChange={setYear} options={years} extraClassName={styles.grades__header__second__box__select} />
-                                        <Select title={"Oy"} value={month} onChange={setMonth} options={months} extraClassName={styles.grades__header__second__box__select} />
+                                        <Select title={"Oy"} value={month} onChange={setMonth} options={availableMonths} extraClassName={styles.grades__header__second__box__select} />
                                     </div>
                                 </div>
                             )
