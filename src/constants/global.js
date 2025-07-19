@@ -1,25 +1,25 @@
 import {useMemo} from "react";
 
 
-
-export const BackUrlForDoc = "http://26.253.30.50:5001/"
+//
+// // export const BackUrlForDoc = "http://26.253.30.50:5001/"
 // export const BackUrlForDoc = "https://classroom.gennis.uz/"
-export const BackUrl = `${BackUrlForDoc}api/`
-// export const LogoutUrl = "/login"
-// export const LogoutUrlPisa = "/loginPisa"
-// export const PlatformUrl = "http://26.253.30.50:5002/"
-// export const PlatformUrlApi = `${PlatformUrl}api/`
+// export const BackUrl = `${BackUrlForDoc}api/`
+// // export const LogoutUrl = "/login"
+// // export const LogoutUrlPisa = "/loginPisa"
+// // export const PlatformUrl = "http://26.253.30.50:5002/"
+// // export const PlatformUrlApi = `${PlatformUrl}api/`
 
 
 
 // export const BackUrl = "/api/"
-// export const BackUrlForDoc = "/"
+export const BackUrlForDoc = "/"
 export const PlatformUrl = "https://www.admin.gennis.uz/"
 // export const PlatformUrl = "http://test.gennis.uz"
-
+//
 // export const BackUrlForDoc = "http://26.253.30.50:5001/"
 // export const BackUrlForDoc = "https://classroom.gennis.uz/"
-// export const BackUrl = `${BackUrlForDoc}api/`
+export const BackUrl = `${BackUrlForDoc}api/`
 export const LogoutUrl = "/login"
 
 export const LogoutUrlPisa = "/loginPisa"
