@@ -87,7 +87,11 @@ const ChildrenWeeklyGrades = ({weeklyData}) => {
                     <div className={styles.grade}>
                         <div className={styles.grade__header}>
                             <h2>Bugungi baholar </h2>
-                            <Link className={styles.grade__header__link} to={"monthly-grades"}>Hammasi</Link>
+                            {
+                                weeklyData && weeklyData.length < 0 ? null :
+                                    <Link className={styles.grade__header__link} to={"monthly-grades"}>Hammasi</Link>
+                            }
+
                         </div>
                         <div className={styles.grade__box}>
                             {

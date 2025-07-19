@@ -19,13 +19,15 @@ const ChildrenWeeklyTestResults = () => {
 
 
 
+
+
     useEffect(() => {
         dispatch(fetchChildrenTestsDate(groupId))
         dispatch(fetchChildrenGroups(platform_id))
-        if (!groupId && !currentYear && !currentMonth ) {
+        if (groupId || currentYear || currentMonth ) {
             dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
         }
-    }, [currentYear, groupId, currentMonth]);
+    }, []);
 
 
     const renderTableData = () => {
@@ -51,7 +53,11 @@ const ChildrenWeeklyTestResults = () => {
         <Card extraClassname={styles.test}>
             <div className={styles.test__header}>
                 <h1>Test natijalari</h1>
-                <Link className={styles.test__btn} to={"/home/childrenTestsResults"}>Hammasi</Link>
+                {
+                    tests && tests.length > 0 ?
+                        <Link className={styles.test__btn} to={"/home/childrenTestsResults"}>Hammasi</Link> : null
+                }
+
             </div>
             {
                 tests && tests.length > 0 ?
