@@ -15,7 +15,7 @@ const ChildrenWeeklyTestResults = () => {
     const platform_id = localStorage.getItem("platform_id")
 
     const dispatch = useDispatch()
-    const {tests, tests_date} = useSelector(state => state.parentSlice)
+    const {tests} = useSelector(state => state.parentSlice)
 
 
 
