@@ -16,9 +16,13 @@ import {
 
 
 const ChildrenMonthlyAttendance = () => {
+
+
+
     const [year, setYear] = useState();
     const [month, setMonth] = useState();
     const [group, setGroup] = useState();
+    const [availableMonths, setAvailableMonths] = useState([]);
     const dispatch = useDispatch()
     const [selectedDayId, setSelectedDayId] = useState();
     const currentMonth = localStorage.getItem("current_month")
@@ -29,7 +33,18 @@ const ChildrenMonthlyAttendance = () => {
     const years = dates.data?.years
     const months = dates.data?.months?.flatMap(item => item.months) || [];
     const groupIds = groups.group_list
-
+    useEffect(() => {
+        if (year) {
+            const selectedYearData = dates.data?.months.find(item => item.year === year);
+            if (selectedYearData) {
+                setAvailableMonths(selectedYearData.months);
+            } else {
+                setAvailableMonths([]);
+            }
+        } else {
+            setAvailableMonths([]);
+        }
+    }, [year, dates.data?.months]);
 
     useEffect(() => {
        if(!currentUsername){
@@ -133,7 +148,7 @@ const ChildrenMonthlyAttendance = () => {
                         />
                         <Select
                             title={"Oy"}
-                            value={month}
+                            value={availableMonths}
                             onChange={setMonth}
                             options={months}
                             defaultOption={"Oy"}
@@ -155,7 +170,7 @@ const ChildrenMonthlyAttendance = () => {
                         {/*<h1>Davomat</h1>*/}
                         <div className={styles.attendance__header__second__box}>
                             <Select defaultOption={"Yil"} title={"Yil"} value={year} onChange={setYear} options={years} extraClassName={styles.attendance__header__second__box__select} />
-                            <Select defaultOption={"Oy"} title={"Oy"} value={month} onChange={setMonth} options={months} extraClassName={styles.attendance__header__second__box__select} />
+                            <Select defaultOption={"Oy"} title={"Oy"} value={availableMonths} onChange={setMonth} options={months} extraClassName={styles.attendance__header__second__box__select} />
                             <Select
                                 title={"Guruh"}
                                 value={group}

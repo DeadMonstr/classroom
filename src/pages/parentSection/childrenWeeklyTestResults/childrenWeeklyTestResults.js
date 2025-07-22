@@ -23,8 +23,10 @@ const ChildrenWeeklyTestResults = () => {
 
     useEffect(() => {
         dispatch(fetchChildrenTestsDate(groupId))
-        dispatch(fetchChildrenGroups(platform_id))
-        if (groupId || currentYear || currentMonth ) {
+        if (!platform_id){
+            dispatch(fetchChildrenGroups(platform_id))
+        }
+        if (!groupId || !currentYear || !currentMonth ) {
             dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
         }
     }, []);
