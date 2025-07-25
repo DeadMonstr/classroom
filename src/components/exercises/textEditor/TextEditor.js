@@ -3,12 +3,14 @@ import React, {useEffect, useRef, useState} from 'react';
 
 import styles from "./style.module.sass";
 import TextEditor from "components/ui/textEditor/TextEditor";
+import {useHttp} from "hooks/http.hook";
+import {BackUrl, headers} from "constants/global";
 
 
 
 
 
-const TextEditorExc = React.memo(({ onChangeCompletedComponent, onSetCompletedComponent, component, onDeleteComponent,options}) => {
+const TextEditorExc = React.memo(({ onChangeCompletedComponent, onSetCompletedComponent, component, onDeleteComponent,options,extra}) => {
     const [textComponent, setTextComponent] = useState({})
 
     useEffect(() => {
@@ -28,13 +30,36 @@ const TextEditorExc = React.memo(({ onChangeCompletedComponent, onSetCompletedCo
             textComponent={textComponent}
             onSetCompletedComponent={onSetCompletedComponent}
             onDeleteComponent={onDeleteComponent}
+            extra={extra}
         />
 })
 
 
-const TextEditorCreate = ({textComponent,onSetCompletedComponent,onDeleteComponent,options}) => {
+const TextEditorCreate = ({textComponent,onSetCompletedComponent,onDeleteComponent,options,extra}) => {
 
 
+    const {request} = useHttp()
+
+    const onAdd = (e) => {
+
+        let method = textComponent?.id ? "PUT" : "POST"
+
+        request(`${BackUrl}exercise/block/text/editor/${textComponent.id ? textComponent.id + "/" : ""}`,method,JSON.stringify({...textComponent,...e,...extra}),headers())
+            .then(res => {
+                onSetCompletedComponent(e,res.id)
+            })
+    }
+
+    const onDelete = () => {
+        if (textComponent?.id) {
+            request(`${BackUrl}exercise/block/text/editor/${textComponent.id}/`, "DELETE", null, headers())
+                .then(res => {
+                    onDeleteComponent(textComponent.id)
+                })
+        } else {
+            onDeleteComponent(textComponent.id)
+        }
+    }
 
 
 
@@ -42,7 +67,7 @@ const TextEditorCreate = ({textComponent,onSetCompletedComponent,onDeleteCompone
         <div className={styles.createText}>
             <div className={styles.subHeader}>
                 <i
-                    onClick={() => onDeleteComponent(textComponent.index)}
+                    onClick={onDelete}
                     className={`fa-solid fa-trash ${styles.trash}`}
                 />
             </div>
@@ -50,7 +75,7 @@ const TextEditorCreate = ({textComponent,onSetCompletedComponent,onDeleteCompone
                 options={options}
                 text={textComponent?.text}
                 editorState={textComponent.editorState}
-                onSubmit={onSetCompletedComponent}
+                onSubmit={onAdd}
             />
         </div>
     )
@@ -61,22 +86,15 @@ const TextEditorView = ({onChangeCompletedComponent, textComponent}) => {
     const ref = useRef()
 
     // useEffect(() => {
-    //
     //     // const text  = sanitizeHtml(textComponent.text)
     //     // const parser = new DOMParser();
     //     // const document = parser.parseFromString(textComponent.text, "text/html");
-    //
     //     const elems = document.querySelector(".Excinput")
     //     const inp = document.createElement("input")
-    //
     //     console.log(elems)
-    //
     //     if (elems) {
     //         document.replaceWith(elems,inp)
     //     }
-    //
-    //
-    //
     // },[textComponent])
 
 
@@ -85,7 +103,7 @@ const TextEditorView = ({onChangeCompletedComponent, textComponent}) => {
             <div className={styles.text}>
                 {
                     onChangeCompletedComponent ?
-                        <div onClick={() => onChangeCompletedComponent(textComponent.index)} className={styles.popup}>
+                        <div onClick={() => onChangeCompletedComponent(textComponent.id)} className={styles.popup}>
                             <i className="fa-sharp fa-solid fa-pen-to-square"/>
                         </div> : null
                 }

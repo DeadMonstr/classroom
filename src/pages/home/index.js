@@ -22,10 +22,6 @@ import ParentSection from "../parentSection/parentSection";
 
 const Home = () => {
 
-
-
-
-
     const options = useChangeMenuParams("main","")
     const dispatch = useDispatch()
 
@@ -77,7 +73,7 @@ const Subjects = React.memo(() => {
     useEffect(() => {
 
 
-        request(`${BackUrl}info/subjects`,"GET",null,headers())
+        request(`${BackUrl}subject/list/`,"GET",null,headers())
             .then(res => {
                 setSubjects(res?.subjects.map(item => {
                     return {...item,title: item.name}

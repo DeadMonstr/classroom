@@ -23,9 +23,9 @@ export const fetchLessonData = createAsyncThunk(
                 'Accept': 'application/json',
                 "Authorization" : "Bearer " + token
             }
-            return await request(`${BackUrl}lesson/profile/${chapterId}/${lessonOrder}`,"GET",null,header)
+            return await request(`${BackUrl}lesson/profile/${chapterId}/${lessonOrder}/`,"GET",null,header)
         }
-        return await request(`${BackUrl}lesson/profile/${chapterId}/${lessonOrder}`,"GET",null,headers())
+        return await request(`${BackUrl}lesson/profile/${chapterId}/${lessonOrder}/`,"GET",null,headers())
     }
 )
 
@@ -43,34 +43,41 @@ const LessonSlice = createSlice({
             state.lesson = action.payload.data
             state.isChangedComponents = true
             state.archiveId = null
-            state.components = action.payload.data.blocks?.map((item,i) => {
+            state.components = action.payload.data.lesson_blocks?.map((item, i) => {
                 const index = i + 1
-                const type = item.type
+                const type = item.type_block
                 const text = item.desc
-                const img = item.img
+                const img = item.file
                 const clone = item.clone
-                const audio = item.audio
-                const video = item.audio
-                const file = item.file
-                const block_id = item.id
+                const audio = item.file
+                const video = item.video_url
+                const file = {
+                    name: item.original_name,
+                    url: item.file
+                }
+                const id = item.id
+                const innerType = item.inner_type
                 let editorState = null
 
-                if (item.type === "exc") {
-                    const block = item.exercise_block
+
+                if (item.type_block === "exc") {
+                    const block = item.exercise
                     return {
-                        index: index + 1,
                         completed: true,
                         exc: {
-                            block
+                            ...block
                         },
-                        id: item.exercise_id,
-                        block_id: item.id,
-                        type: "exc"
+                        exercise_id: item.exercise_id,
+                        id: item.id,
+                        type: "exc",
+                        index: index,
+
                     }
                 }
 
                 if (item.type === "text") {
-                    editorState = item.clone
+                    if (item.clone.editorState) editorState = item.clone.editorState
+                    else editorState = item.clone
                 }
 
                 return {
@@ -83,8 +90,9 @@ const LessonSlice = createSlice({
                     text,
                     file,
                     clone,
-                    block_id,
+                    id,
                     editorState,
+                    innerType,
                     completed: true
                 }
             })
@@ -98,36 +106,43 @@ const LessonSlice = createSlice({
                 state.next = action.payload.next
                 state.prev = action.payload.prev
                 state.archiveId = action.payload.archive_id
-                state.studentLessonId = action.payload.lesson_id
+                state.studentLessonId = action.payload.id
                 state.lesson = action.payload.data
-                state.components = action.payload.data.blocks?.map((item,i) => {
+                state.components = action.payload.data.lesson_blocks?.map((item, i) => {
                     const index = i + 1
-                    const type = item.type
+                    const type = item.type_block
                     const text = item.desc
-                    const img = item.img
+                    const img = item.file
                     const clone = item.clone
-                    const audio = item.audio
-                    const video = item.audio
-                    const file = item.file
-                    const block_id = item.id
+                    const audio = item.file
+                    const video = item.video_url
+                    const file = {
+                        name: item.original_name,
+                        url: item.file
+                    }
+                    const id = item.id
+                    const innerType = item.inner_type
                     let editorState = null
 
-                    if (item.type === "exc") {
-                        const block = item.exercise_block
+
+                    if (item.type_block === "exc") {
+                        const block = item.exercise
                         return {
-                            index: index + 1,
                             completed: true,
                             exc: {
-                                block
+                                ...block
                             },
-                            id: item.exercise_id,
-                            block_id: item.id,
-                            type: "exc"
+                            exercise_id: item.exercise_id,
+                            id: item.id,
+                            type: "exc",
+                            index: index,
+
                         }
                     }
 
                     if (item.type === "text") {
-                        editorState = item.clone
+                        if (item.clone.editorState) editorState = item.clone.editorState
+                        else editorState = item.clone
                     }
 
                     return {
@@ -140,8 +155,9 @@ const LessonSlice = createSlice({
                         text,
                         file,
                         clone,
-                        block_id,
+                        id,
                         editorState,
+                        innerType,
                         completed: true
                     }
                 })

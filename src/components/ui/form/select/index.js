@@ -22,7 +22,8 @@ const Select = React.memo((
         extraClassName,
         all,
         multiNames = [],
-        keyValue
+        keyValue,
+        disabled
     }) => {
 
     const [currentOptions, setCurrentOptions] = useState([])
@@ -122,6 +123,7 @@ const Select = React.memo((
                         {
                             register ?
                                 <select
+                                    disabled={disabled}
                                     className={classNames(styles.select, extraClassName, {
                                         [styles.error]: errors?.[name]
                                     })}
@@ -145,6 +147,7 @@ const Select = React.memo((
                                 </select>
                                 :
                                 <select
+                                    disabled={disabled}
                                     className={classNames(styles.select, extraClassName, {
                                         [styles.error]: errors?.[name]
                                     })}

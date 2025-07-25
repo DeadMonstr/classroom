@@ -14,7 +14,7 @@ import {BackUrl, headers, headersImg} from "constants/global";
 import Form from "components/ui/form";
 import {setAlertOptions} from "slices/layoutSlice";
 import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router";
+import { useNavigate, useParams} from "react-router";
 import {
     arrayMove,
     SortableContext,
@@ -40,12 +40,18 @@ import Loader from "components/ui/loader/Loader";
 
 const CreateExercises = () => {
 
+    const {id} = useParams()
+
+
     const { formState: {errors}} = useForm()
+    const [oldData,setOldData] = useState()
 
     const [components, setComponents] = useState([])
     const [subjects, setSubjects] = useState([])
     const [levels, setLevels] = useState([])
     const [types, setTypes] = useState([])
+    const [dataBaseComponents, setDataBaseComponents] = useState([])
+    const [isChanged, setIsChanged] = useState(false)
 
 
     const [selectedSubject, setSelectedSubject] = useState(null)
@@ -54,21 +60,127 @@ const CreateExercises = () => {
     const [random, setRandom] = useState(false)
 
 
-    const [title, setTitle] = useState("")
+    const [title, setTitle] = useState(null)
     const [changeLessonsSort, setChangeLessonsSort] = useState(false)
     const [loading, setLoading] = useState(false)
 
 
     const {request} = useHttp()
 
+
+
     useEffect(() => {
-        request(`${BackUrl}info/subjects`, "GET", null, headers())
+        if (
+            oldData && Object.keys(oldData).length &&
+            (title !== oldData?.name ||
+                selectedLevel !== oldData?.level?.id ||
+                selectedType !== oldData?.type?.id ||
+                selectedSubject !== oldData?.subject?.id)
+        ) {
+            setIsChanged(true)
+        } else {
+            setIsChanged(false)
+        }
+    },[title,selectedLevel,selectedType,selectedSubject,oldData])
+
+    useEffect(() => {
+        const preparedComponents = dataBaseComponents.map((item, index) => {
+            const {
+                type,
+                innerType,
+                desc: text,
+                img,
+                audio,
+                clone,
+                id,
+                answers
+            } = item;
+
+            const indexNum = index + 1;
+
+            if (type === "question") {
+                const options = clone?.variants?.options || [];
+
+                const newOptions = options.map(opt => {
+                    if (opt.innerType === "img") {
+                        const match = answers?.find(ans => ans.order === opt.index && ans.type_img === "variant_img");
+                        return {
+                            ...opt,
+                            img: match?.img || null
+                        };
+                    }
+                    return opt;
+                });
+
+                return {
+                    type,
+                    innerType,
+                    text,
+                    completed: true,
+                    image: innerType !== "text" ? img : null,
+                    variants: {
+                        ...clone.variants,
+                        options: newOptions,
+                    },
+                    clone,
+                    id,
+                    index: indexNum
+                };
+            }
+
+            if (type === "text" || type === "textEditor") {
+                return {
+                    type,
+                    text,
+                    editorState: clone,
+                    words: item.words_clone || [],
+                    completed: true,
+                    id,
+                    index: indexNum
+                };
+            }
+
+            // === DEFAULT CASE ===
+            return {
+                type,
+                innerType,
+                text,
+                clone,
+                ...clone,
+                img,
+                audio,
+                completed: true,
+                id,
+                index: indexNum
+            };
+        });
+
+        setComponents(preparedComponents);
+    }, [dataBaseComponents])
+
+
+    useEffect(() => {
+        request(`${BackUrl}exercise/crud/${id}/`, "GET",null,headers())
+            .then(res => {
+                setDataBaseComponents(res.data.blocks)
+                setSelectedSubject(res.data.subject.id)
+                setSelectedLevel(res.data.level.id)
+                setSelectedType(res.data.type.id)
+                setTitle(res.data.name)
+                // setRandom(res.data.random)
+                setOldData(res.data)
+            })
+    }, [id])
+
+
+    useEffect(() => {
+        request(`${BackUrl}subject/list/`, "GET", null, headers())
             .then(res => {
                 setSubjects(res.subjects)
 
             })
 
-        request(`${BackUrl}info_exercise_type`, "GET", null, headers())
+        request(`${BackUrl}exercise/type/crud/`, "GET", null, headers())
             .then(res => {
 
                 setTypes(res.data)
@@ -78,28 +190,58 @@ const CreateExercises = () => {
     useEffect(() => {
 
         if (selectedSubject) {
-            request(`${BackUrl}info_level/${selectedSubject}`, "GET", null, headers())
+            request(`${BackUrl}level/info/${selectedSubject}`, "GET", null, headers())
                 .then(res => {
                     setLevels(res.data)
-                    setSelectedLevel(null)
+                    // setSelectedLevel(null)
                 })
         }
     }, [selectedSubject])
 
-    const onSetCompletedComponent = useCallback((data) => {
+
+
+
+    // useDebounce(() => {
+    //
+    //     if (!selectedType || !selectedLevel || !selectedSubject ) return;
+    //
+    //     if (
+    //         oldData && Object.keys(oldData).length &&
+    //         (title !== oldData?.name ||
+    //         selectedLevel !== oldData?.level?.id ||
+    //         selectedType !== oldData?.type?.id ||
+    //         selectedSubject !== oldData?.subject?.id)
+    //     ) {
+    //         request(`${BackUrl}exercise/crud/${id}/`, "PUT", JSON.stringify({title, subject: selectedSubject, level: selectedLevel, type: selectedType}), headers())
+    //             .then(res => {
+    //                 const alert = {
+    //                     active: true,
+    //                     message: res.msg,
+    //                     type: res.status
+    //                 }
+    //                 dispatch(setAlertOptions({alert}))
+    //             })
+    //     }
+    // }, 1000, [title,selectedLevel,selectedType,selectedSubject,id, oldData])
+
+
+
+
+    const onSetCompletedComponent = useCallback((data, id) => {
         setComponents(state => state.map((item, index) => {
             if (!item.completed) {
-                return {...item, ...data, completed: true}
+                return {...item, ...data, completed: true, id, canDelete: true}
             }
             return item
         }))
     }, [components])
 
 
-    const onChangeCompletedComponent = (index) => {
+
+    const onChangeCompletedComponent = (id) => {
         if (components.every(item => item.completed)) {
             setComponents(state => state.map((item, i) => {
-                if (item.index === index) {
+                if (item.id === id) {
                     return {...item, completed: false}
                 }
                 return item
@@ -107,9 +249,8 @@ const CreateExercises = () => {
         }
     }
 
-
-    const onDeleteComponent = (index) => {
-        const sortedList = components.filter((item) => item.index !== index)
+    const onDeleteComponent = (id) => {
+        const sortedList = components.filter((item) => item.id !== id)
         setComponents(sortedList)
     }
 
@@ -130,6 +271,7 @@ const CreateExercises = () => {
                             onChangeCompletedComponent={onChangeCompletedComponent}
                             onSetCompletedComponent={onSetCompletedComponent}
                             onDeleteComponent={onDeleteComponent}
+                            extra={{exc_id: id}}
                         />
                     </SortableItem>
                 )
@@ -147,6 +289,7 @@ const CreateExercises = () => {
                             onChangeCompletedComponent={onChangeCompletedComponent}
                             onSetCompletedComponent={onSetCompletedComponent}
                             onDeleteComponent={onDeleteComponent}
+                            extra={{exc_id: id}}
                         />
                     </SortableItem>
 
@@ -165,6 +308,7 @@ const CreateExercises = () => {
                             onChangeCompletedComponent={onChangeCompletedComponent}
                             onSetCompletedComponent={onSetCompletedComponent}
                             onDeleteComponent={onDeleteComponent}
+                            extra={{exc_id: id}}
                         />
                     </SortableItem>
 
@@ -183,6 +327,7 @@ const CreateExercises = () => {
                             onChangeCompletedComponent={onChangeCompletedComponent}
                             onSetCompletedComponent={onSetCompletedComponent}
                             onDeleteComponent={onDeleteComponent}
+                            extra={{exc_id: id}}
                         />
                     </SortableItem>
                 )
@@ -200,6 +345,7 @@ const CreateExercises = () => {
                             onChangeCompletedComponent={onChangeCompletedComponent}
                             onSetCompletedComponent={onSetCompletedComponent}
                             onDeleteComponent={onDeleteComponent}
+                            extra={{exc_id: id}}
                         />
                     </SortableItem>
                 )
@@ -234,6 +380,7 @@ const CreateExercises = () => {
                             onChangeCompletedComponent={onChangeCompletedComponent}
                             onSetCompletedComponent={onSetCompletedComponent}
                             onDeleteComponent={onDeleteComponent}
+                            extra={{exc_id: id}}
                         />
                     </SortableItem>
                 )
@@ -283,94 +430,116 @@ const CreateExercises = () => {
         }
     }
 
+    useEffect(() => {
+        const handler = (e) => {
+            if (!isChanged) return;
+            e.preventDefault();
+            e.returnValue = ""; // Required for Chrome
+        };
+        window.addEventListener("beforeunload", handler);
+        return () => window.removeEventListener("beforeunload", handler);
+    }, [isChanged]);
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const onSubmit = (e) => {
         e.preventDefault()
-        const formData = new FormData()
+        // const formData = new FormData()
+        //
+        // const componentQuestionImg = components.filter(item => item.type === "question")
+        // const componentImg = components.filter(item => item.type === "image")
+        // const componentAudio = components.filter(item => item.type === "audio")
+        //
+        // if (componentQuestionImg.length > 0) {
+        //     for (let item of componentQuestionImg) {
+        //         const convertVariantsImagesToFormData = item.variants?.options?.filter(item => item.innerType === "img")
+        //         const convertWordsImagesToFormData = item.words?.filter(item => item.img)
+        //         const convertImageToFormData = item.image
+        //
+        //         if (convertImageToFormData) {
+        //             formData.append(
+        //                 `component-${item.index}-img`,
+        //                 convertImageToFormData
+        //             )
+        //         }
+        //
+        //
+        //         for (let i = 0; i < convertVariantsImagesToFormData?.length; i++) {
+        //             formData.append(
+        //                 `component-${item.index}-variants-index-${convertVariantsImagesToFormData[i].index}`,
+        //                 convertVariantsImagesToFormData[i].img
+        //             )
+        //         }
+        //
+        //
+        //         for (let i = 0; i < convertWordsImagesToFormData?.length; i++) {
+        //             formData.append(
+        //                 `component-${item.index}-words-index-${convertWordsImagesToFormData[i].id}`,
+        //                 convertWordsImagesToFormData[i].img
+        //             )
+        //         }
+        //
+        //         // formData.append(`component-${item.index}[]`,item.variantsImgFormData)
+        //     }
+        // }
+        //
+        // if (componentImg.length > 0) {
+        //     for (let item of componentImg) {
+        //         formData.append(
+        //             `component-${item.index}-img`,
+        //             item.img
+        //         )
+        //     }
+        // }
+        //
+        // if (componentAudio.length > 0) {
+        //     for (let item of componentAudio) {
+        //         formData.append(
+        //             `component-${item.index}-audio`,
+        //             item.audio
+        //         )
+        //     }
+        // }
+        //
+        // const newData = {
+        //     components,
+        //     title,
+        //     selectedSubject,
+        //     selectedLevel,
+        //     typeEx: selectedType,
+        //     random
+        // }
+        //
+        //
+        //
+        // formData.append("info", JSON.stringify(newData))
+        // setLoading(true)
+        //
+        // request(`${BackUrl}info_exercise`, "POST", formData, headersImg())
+        //     .then(res => {
+        //         setLoading(false)
+        //
+        //         const alert = {
+        //             active: true,
+        //             message: res.msg,
+        //             type: res.status
+        //         }
+        //         dispatch(setAlertOptions({alert}))
+        //     })
+        //     .then(res => {
+        //         navigate(`/exercises`)
+        //     })
 
-        const componentQuestionImg = components.filter(item => item.type === "question")
-        const componentImg = components.filter(item => item.type === "image")
-        const componentAudio = components.filter(item => item.type === "audio")
 
-        if (componentQuestionImg.length > 0) {
-            for (let item of componentQuestionImg) {
-                const convertVariantsImagesToFormData = item.variants?.options?.filter(item => item.innerType === "img")
-                const convertWordsImagesToFormData = item.words?.filter(item => item.img)
-                const convertImageToFormData = item.image
-
-                if (convertImageToFormData) {
-                    formData.append(
-                        `component-${item.index}-img`,
-                        convertImageToFormData
-                    )
-                }
-
-
-                for (let i = 0; i < convertVariantsImagesToFormData?.length; i++) {
-                    formData.append(
-                        `component-${item.index}-variants-index-${convertVariantsImagesToFormData[i].index}`,
-                        convertVariantsImagesToFormData[i].img
-                    )
-                }
-
-
-                for (let i = 0; i < convertWordsImagesToFormData?.length; i++) {
-                    formData.append(
-                        `component-${item.index}-words-index-${convertWordsImagesToFormData[i].id}`,
-                        convertWordsImagesToFormData[i].img
-                    )
-                }
-
-                // formData.append(`component-${item.index}[]`,item.variantsImgFormData)
-            }
-        }
-
-        if (componentImg.length > 0) {
-            for (let item of componentImg) {
-                formData.append(
-                    `component-${item.index}-img`,
-                    item.img
-                )
-            }
-        }
-
-        if (componentAudio.length > 0) {
-            for (let item of componentAudio) {
-                formData.append(
-                    `component-${item.index}-audio`,
-                    item.audio
-                )
-            }
-        }
-
-        const newData = {
-            components,
-            title,
-            selectedSubject,
-            selectedLevel,
-            typeEx: selectedType,
-            random
-        }
-
-
-
-        formData.append("info", JSON.stringify(newData))
-        setLoading(true)
-
-        request(`${BackUrl}info_exercise`, "POST", formData, headersImg())
+        request(`${BackUrl}exercise/crud/${id}/`, "PUT", JSON.stringify({title, subject: selectedSubject, level: selectedLevel, type: selectedType}), headers())
             .then(res => {
-                setLoading(false)
-
                 const alert = {
                     active: true,
                     message: res.msg,
                     type: res.status
                 }
+                setIsChanged(false)
                 dispatch(setAlertOptions({alert}))
-            })
-            .then(res => {
-                navigate(`/exercises`)
             })
     }
 
@@ -383,11 +552,30 @@ const CreateExercises = () => {
     );
 
 
+
+
+
     function handleDragEnd(event) {
         const {active, over} = event;
 
+
+        console.log(active,over)
+
+
+
         if (active.id !== over.id) {
             setComponents((items) => {
+                const activeItem = items.filter(item => item.index === active.id)[0]
+                const overItem = items.filter(item => item.index === over.id)[0]
+
+
+                request(`${BackUrl}exercise/block/order/`, "PUT", JSON.stringify({active: activeItem, over: overItem}), headers())
+                    .then(res => {
+                        console.log(res)
+                    })
+
+
+
                 const oldIndex = items.findIndex(item => item.index === active.id);
                 const newIndex = items.findIndex(item => item.index === over.id);
 
@@ -410,11 +598,19 @@ const CreateExercises = () => {
     }, [changeLessonsSort])
 
     const onToggleTypeExcs = (e) => {
-        setSelectedType(e)
+        setSelectedType(+e)
         setRandom(false)
     }
 
-    // const [value, setValue] = useState("");
+    //
+    // const location = useLocation();
+    //
+    // useEffect(() => {
+    //     window.history.pushState(null, document.title, window.location.href);
+    //     window.addEventListener('popstate', function(event) {
+    //         window.history.pushState(null, document.title, window.location.href);
+    //     });
+    // }, [location]);
 
     if (loading) return <Loader/>
 
@@ -444,10 +640,11 @@ const CreateExercises = () => {
                                 value={title}
                                 onChange={setTitle}
                             />
-                            {types ? <Select
+                            {types.length ? <Select
                                 onChange={onToggleTypeExcs}
                                 title={"Mashq turi"}
                                 name={"type-exc"}
+                                value={selectedType}
                                 options={types}
                             /> : null}
                             {subjects.length > 0 ? <Select
@@ -501,14 +698,19 @@ const CreateExercises = () => {
                 </SortableContext>
 
 
-                {
-                    components[components.length - 1]?.completed ?
-                        <div className={styles.submit}>
-                            <Button form={"formCreateExc"} type={"submit"}>
-                                Tasdiqlash
-                            </Button>
-                        </div> : null}
+
             </DndContext>
+
+            {
+                isChanged &&
+                <div className={styles.submit}>
+                    <Button form={"formCreateExc"} type={"submit"}>
+                        Tasdiqlash
+                    </Button>
+                </div>
+            }
+
+
         </main>
         <div className={styles.nav}>
             <div className={styles.nav__item} onClick={() => onClickText("textEditor")}>

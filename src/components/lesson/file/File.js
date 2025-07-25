@@ -1,33 +1,32 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styles from "pages/subject/level/createChapters/createLesson/style.module.sass"
-import {BackUrlForDoc} from "constants/global";
+import {BackUrl, BackUrlForDoc, headers, headersImg} from "constants/global";
 import {useDropzone} from "react-dropzone";
 import {ReactComponent as FileSvg} from "assets/icons/file-regular.svg"
 import classNames from "classnames";
+import {useHttp} from "hooks/http.hook";
 
 
-const File = ({component,type, onChangeCompletedComponent, onSetCompletedComponent,onDeleteComponent}) => {
-    const [fileComponent,setFileComponent] = useState({})
+const File = ({component, type, onChangeCompletedComponent, onSetCompletedComponent, onDeleteComponent, extra}) => {
+    const [fileComponent, setFileComponent] = useState({})
     useEffect(() => {
         setFileComponent(component)
-    },[component])
+    }, [component])
 
 
     return component.completed ?
-        <ViewFile type={type} component={fileComponent} onChangeCompletedComponent={onChangeCompletedComponent} />
+        <ViewFile type={type} component={fileComponent} onChangeCompletedComponent={onChangeCompletedComponent}/>
         :
         <CreateFile
             component={fileComponent}
             onSetCompletedComponent={onSetCompletedComponent}
             onDeleteComponent={onDeleteComponent}
+            extra={extra}
         />
 };
 
 
-
-const CreateFile = React.memo(({component,onSetCompletedComponent,onDeleteComponent}) => {
-
-
+const CreateFile = React.memo(({component, onSetCompletedComponent, onDeleteComponent, extra}) => {
     const [uploadedFiles, setUploadedFiles] = useState(null)
 
 
@@ -35,15 +34,40 @@ const CreateFile = React.memo(({component,onSetCompletedComponent,onDeleteCompon
         if (component.file) {
             setUploadedFiles(component?.file)
         }
-    },[])
+    }, [])
 
-    const onSubmit = () => {
+    const {request} = useHttp()
+
+
+    const onAdd = () => {
+        const formData = new FormData()
+
         const data = {
             file: uploadedFiles
         }
-        onSetCompletedComponent(data)
+
+        formData.append("file", uploadedFiles)
+        formData.append("info", JSON.stringify({...component, ...extra}))
+
+        let method = component?.id ? "PUT" : "POST"
+
+        request(`${BackUrl}lesson/block/file/${component.id ? component.id + "/" : ""}`, method, formData, headersImg())
+            .then(res => {
+                onSetCompletedComponent(data, res.id)
+            })
     }
 
+
+    const onDelete = () => {
+        if (component?.id) {
+            request(`${BackUrl}lesson/block/file/${component?.id}/`, "DELETE", null, headers())
+                .then(res => {
+                    onDeleteComponent(component.id)
+                })
+        } else {
+            onDeleteComponent(component.id)
+        }
+    }
 
 
     const onDrop = useCallback(acceptedFiles => {
@@ -53,12 +77,12 @@ const CreateFile = React.memo(({component,onSetCompletedComponent,onDeleteCompon
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
     return (
-        <div className={styles.component__create} >
+        <div className={styles.component__create}>
             <div className={`${styles.header} ${styles.j_sp_bt}`}>
                 <h1>Fayl kiriting</h1>
                 <div>
                     <i
-                        onClick={() => onDeleteComponent(component.index)}
+                        onClick={onDelete}
                         className={`fa-solid fa-trash ${styles.trash}`}
                     />
                 </div>
@@ -67,10 +91,12 @@ const CreateFile = React.memo(({component,onSetCompletedComponent,onDeleteCompon
             <div className={styles.file__container}>
                 <input  {...getInputProps()} />
 
-
-                <div   {...getRootProps()}  className={classNames(styles.insert, {
-                    [styles.focus]: isDragActive
-                })}>
+                <div
+                    {...getRootProps()}
+                    className={classNames(styles.insert, {
+                        [styles.focus]: isDragActive
+                    })}
+                >
                     {
                         uploadedFiles ?
                             <div className={styles.wrapper}>
@@ -84,7 +110,7 @@ const CreateFile = React.memo(({component,onSetCompletedComponent,onDeleteCompon
             </div>
 
             <div
-                onClick={onSubmit}
+                onClick={onAdd}
                 className={styles.submitBtn}
             >
                 Tasdiqlash
@@ -94,14 +120,13 @@ const CreateFile = React.memo(({component,onSetCompletedComponent,onDeleteCompon
     )
 })
 
-const ViewFile = ({component,onChangeCompletedComponent,type}) => {
-    const [file,setFile] = useState(null)
+const ViewFile = ({component, onChangeCompletedComponent, type}) => {
+    const [file, setFile] = useState(null)
 
 
     useEffect(() => {
         setFile(component?.file)
-    },[component])
-
+    }, [component])
 
 
     return (
@@ -110,8 +135,8 @@ const ViewFile = ({component,onChangeCompletedComponent,type}) => {
                 <div className={styles.file__item}>
                     {
                         type !== "view" ?
-                            <div onClick={() => onChangeCompletedComponent(component.index)} className={styles.popup}>
-                                <i className="fa-sharp fa-solid fa-pen-to-square" />
+                            <div onClick={() => onChangeCompletedComponent(component.id)} className={styles.popup}>
+                                <i className="fa-sharp fa-solid fa-pen-to-square"/>
                             </div> : null
                     }
 

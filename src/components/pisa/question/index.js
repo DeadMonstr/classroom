@@ -284,7 +284,6 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
         imageRef.current.click()
     }
 
-
     const onChangeImage = useCallback(async (e) => {
         const currentImg = e.target.files[0]
         if (innerType === "imageInText") {
@@ -349,7 +348,6 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
                 .then(res => {
                     onSetCompletedComponent(data,res.id)
                 })
-
             // onSetCompletedComponent(data)
         }
     }

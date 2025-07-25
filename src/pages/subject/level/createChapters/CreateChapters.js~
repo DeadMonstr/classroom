@@ -358,7 +358,173 @@ const ChangeChapter = React.memo(({chapter, setChapter, setActive}) => {
 })
 
 
+// const Chapter = (props) => {
+//
+//     const {title, lessons, active, onToggleChapter} = props
+//
+//     const height = useRef()
+//
+//     const renderLessons = () => {
+//         return lessons.map(item => {
+//             return (
+//                 <Lesson/>
+//             )
+//         })
+//     }
+//
+//     return (
+//         <div className={styles.chapter}>
+//             <div
+//                 className={classNames(styles.info, {
+//                     [`${styles.active}`]: active
+//                 })}
+//                 onClick={onToggleChapter}
+//             >
+//                 <div>
+//                     Hello Chapter
+//                 </div>
+//                 <ArrowDown className={styles.iconDown}/>
+//             </div>
+//             <div
+//                 ref={height}
+//                 className={styles.items}
+//                 style={
+//                     active
+//                         ? {height: height.current.scrollHeight}
+//                         : {height: "0px"}
+//                 }
+//             >
+//                 <Lesson index/>
+//             </div>
+//         </div>
+//     )
+// }
+//
+// const Lesson = () => {
+//
+//     return (
+//         <div
+//             className={styles.lesson}
+//         >
+//             1 lesson
+//         </div>
+//     )
+// }
 
+
+// const LessonsTable = ({lessons = [],onDelete,setLessons}) => {
+//
+//
+// 	const [dragItemIndex,setDragItemIndex] = useState()
+// 	const [dragOverItemIndex,setDragOverItemIndex] = useState()
+// 	const [sortedList,setSortedList] = useState([])
+//
+// 	useEffect(() => {
+// 		setSortedList(lessons.sort( (a,b) => a.order - b.order ))
+// 	},[lessons])
+//
+//
+//
+// 	const handleDragStart = (index) => {
+// 		setDragItemIndex(index)
+// 	}
+//
+// 	const handleDragOver = (e) => {
+// 		e.preventDefault()
+// 	}
+//
+// 	const {request} = useHttp()
+// 	const dispatch = useDispatch()
+//
+//
+// 	const handleDrop = () => {
+// 		const _lessons = [...lessons]
+// 		const dragItem = _lessons.splice(dragItemIndex,1)
+// 		_lessons.splice(dragOverItemIndex,0,...dragItem)
+//
+//
+//
+// 		const newList = _lessons.map((item,index) => {
+// 			return {...item,order: index}
+// 		})
+//
+// 		setLessons(newList)
+//
+//
+//
+// 		request(`${BackUrl}set_order`,"POST",JSON.stringify({lessons: newList}),headers())
+// 			.then(res => {
+// 				dispatch(setOptionsByHref({
+// 					href: "lesson",
+// 					changedLinks: {
+// 						links: res.data.map(item => {
+// 							return {
+// 								type: "simple",
+// 								title: item.name,
+// 								href: item.order
+// 							}
+// 						})
+// 					}
+// 				}))
+// 			})
+// 	}
+//
+// 	const handleDragEnter = (index) => {
+// 		setDragOverItemIndex(index)
+// 	}
+//
+// 	const handleDragEnd = () => {
+// 		setDragOverItemIndex(undefined)
+// 	}
+//
+//
+//
+// 	const renderLessons = () => {
+// 		return sortedList.map((item,index) => {
+// 			return (
+// 				<tr
+// 					key={index}
+// 					className={dragOverItemIndex === index ? styles.overTr : null}
+// 					draggable
+// 					onDragStart={( ) => handleDragStart(index)}
+// 					onDragOver={handleDragOver}
+// 					onDrop={() => handleDrop(index)}
+// 					onDragEnter={() => handleDragEnter(index)}
+// 					onDragEnd={handleDragEnd}
+// 				>
+// 					<td>
+// 						{index+1}
+// 					</td>
+// 					<td>{item.name}</td>
+// 					<td>
+// 						<Link to={`../changeLevelLesson/${item.order}`}>
+// 							<i className="fa-solid fa-pen-to-square" />
+// 						</Link>
+// 						<i onClick={() => onDelete(item.id,item.order)} style={{color: "red"}} className="fa-solid fa-trash" />
+// 					</td>
+// 				</tr>
+// 			)
+// 		})
+//
+// 	}
+//
+//
+// 	return (
+// 		<Table>
+// 			<thead>
+// 				<tr>
+// 					<th className={""}>N/o</th>
+// 					<th>Nomi</th>
+// 					<th></th>
+// 				</tr>
+//
+// 			</thead>
+// 			<tbody>
+// 				{renderLessons()}
+// 			</tbody>
+// 		</Table>
+// 	)
+// }
 
 
 export default CreateChapters;
