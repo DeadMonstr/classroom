@@ -5,27 +5,35 @@ import { darcula } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import styles from "./style.module.sass";
 import Select from "components/ui/form/select";
 import { CopyToClipboard } from "react-copy-to-clipboard/lib/Component";
+import {BackUrl, headers, headersImg} from "constants/global";
+import {useHttp} from "hooks/http.hook";
 
 
-const ExcSnippet = React.memo(({component,type, onChangeCompletedComponent, onSetCompletedComponent,onDeleteComponent}) => {
+const ExcSnippet = React.memo(({component,type, onChangeCompletedComponent, onSetCompletedComponent,onDeleteComponent,extra}) => {
 
 	const [textComponent,setTextComponent] = useState({})
 	useEffect(() => {
 		setTextComponent(component)
 	},[component])
 	return component.completed ?
-		<SnippetView type={type} component={textComponent} onChangeCompletedComponent={onChangeCompletedComponent}/>
+		<SnippetView
+			type={type}
+			component={textComponent}
+			onChangeCompletedComponent={onChangeCompletedComponent}
+			extra={extra}
+		/>
 		:
 		<SnippetCreate
 			component={textComponent}
 			onSetCompletedComponent={onSetCompletedComponent}
 			onDeleteComponent={onDeleteComponent}
+			extra={extra}
 		/>
 })
 
 
 
-const SnippetCreate = ({onSetCompletedComponent,component,onDeleteComponent,type}) => {
+const SnippetCreate = ({onSetCompletedComponent,component,onDeleteComponent,type,extra}) => {
 	const [text,setText] = useState("")
 	const [innerType,setInnerType] = useState()
 
@@ -37,8 +45,30 @@ const SnippetCreate = ({onSetCompletedComponent,component,onDeleteComponent,type
 	},[component])
 
 
-	const onSubmit = () => {
-		onSetCompletedComponent({...component,text,innerType})
+	const {request} = useHttp()
+
+	const onAdd = () => {
+
+
+		let method = component?.id ? "PUT" : "POST"
+
+		request(`${BackUrl}exercise/block/code/${component?.id}/`,method,JSON.stringify({...component,text,innerType,...extra}),headers())
+			.then(res => {
+				onSetCompletedComponent({text,innerType},res.id)
+			})
+	}
+
+
+	const onDelete = () => {
+		if (component?.id) {
+
+			request(`${BackUrl}exercise/block/code/${component?.id}/`, "DELETE", null, headers())
+				.then(res => {
+					onDeleteComponent(component.id)
+				})
+		} else {
+			onDeleteComponent(component.id)
+		}
 	}
 
 
@@ -47,12 +77,15 @@ const SnippetCreate = ({onSetCompletedComponent,component,onDeleteComponent,type
 		"python","javascript","html","css","sass","scss"
 	]
 
+
+
+
 	return (
 		<div className={styles.createCode}>
 
 			<div className={styles.subHeader}>
 				<i
-					onClick={() => onDeleteComponent(component.index)}
+					onClick={onDelete}
 					className={`fa-solid fa-trash ${styles.trash}`}
 				/>
 			</div>
@@ -66,7 +99,7 @@ const SnippetCreate = ({onSetCompletedComponent,component,onDeleteComponent,type
 			</div>
 			<div className={styles.createCode__container}>
 
-				<div onClick={onSubmit} className={styles.btn}>
+				<div onClick={onAdd} className={styles.btn}>
 					Tasdiqlash
 				</div>
 			</div>
@@ -78,18 +111,11 @@ const SnippetCreate = ({onSetCompletedComponent,component,onDeleteComponent,type
 
 const SnippetView = ({component,onChangeCompletedComponent,type}) => {
 
-	const [textOpts,setTextOpts] = useState({})
-	const [words,setWords] = useState([])
+
 
 	const [copy,setCopy] = useState(false)
 
 
-	useEffect(() => {
-		if (component) {
-			setTextOpts(component.textOptions)
-			setWords(component.words)
-		}
-	},[component])
 
 	useEffect(() => {
 		if (copy) {
@@ -105,7 +131,7 @@ const SnippetView = ({component,onChangeCompletedComponent,type}) => {
 			<div className={styles.code}>
 				{
 					onChangeCompletedComponent ?
-						<div onClick={() => onChangeCompletedComponent(component.index)} className={styles.popup}>
+						<div onClick={() => onChangeCompletedComponent(component.id)} className={styles.popup}>
 							<i className="fa-sharp fa-solid fa-pen-to-square" />
 						</div> : null
 				}

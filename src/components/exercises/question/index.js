@@ -2,10 +2,12 @@ import React, {useCallback, useEffect, useLayoutEffect, useRef, useState, create
 import styles from "./style.module.sass";
 import classNames from "classnames";
 import QuestionVariants from "./variants";
-import {BackUrlForDoc} from "constants/global";
+import {BackUrl, BackUrlForDoc, headers, headersImg} from "constants/global";
 import Radio from "components/ui/form/radio";
 import {ExcContext} from "helpers/contexts";
 import Input from "../../ui/form/input";
+import {useHttp} from "hooks/http.hook";
+import Button from "components/ui/button";
 
 const QuestionContext = createContext()
 
@@ -15,6 +17,7 @@ const ExcQuestion = React.memo(({
                                     onSetCompletedComponent,
                                     onDeleteComponent,
                                     setAnswers,
+                                    extra
                                 }) => {
 
 
@@ -33,12 +36,14 @@ const ExcQuestion = React.memo(({
                         setQuestionComponent={setQuestionComponent}
                         onChangeCompletedComponent={onChangeCompletedComponent}
                         setAnswers={setAnswers}
+                        extra={extra}
                     /> :
                     <CreateExc
                         questionComponent={questionComponent}
                         setQuestionComponent={setQuestionComponent}
                         onSetCompletedComponent={onSetCompletedComponent}
                         onDeleteComponent={onDeleteComponent}
+                        extra={extra}
                     />
             }
         </QuestionContext.Provider>
@@ -104,7 +109,7 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
             <div className={styles.text}>
                 {
                     onChangeCompletedComponent ?
-                        <div onClick={() => onChangeCompletedComponent(questionComponent.index)}
+                        <div onClick={() => onChangeCompletedComponent(questionComponent.id)}
                              className={styles.popup}>
                             <i className="fa-sharp fa-solid fa-pen-to-square"/>
                         </div> : null
@@ -173,7 +178,7 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
 }
 
 
-const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponent}) => {
+const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponent,extra}) => {
 
     const [text, setText] = useState("")
     const [image, setImage] = useState("")
@@ -181,6 +186,8 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
     const [words, setWords] = useState([])
     const [variants, setVariants] = useState()
     const [clone, setClone] = useState([])
+    const [loading,setLoading] = useState(false)
+
 
     const imageRef = useRef()
 
@@ -257,10 +264,14 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
         }
     }, [innerType])
 
+
+    const {request} = useHttp()
+
     const onSubmit = () => {
-        const isEmpty = innerType === "text" ? text.length === 0 : innerType === "imageInText" ? !words.some(item => item.img) : !image
+         const isEmpty = innerType === "text" ? text.length === 0 : innerType === "imageInText" ? !words.some(item => item.img) : !image
 
         if (variants && !isEmpty) {
+
             const data = {
                 text,
                 innerType,
@@ -270,10 +281,57 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
                 clone
             }
 
-            onSetCompletedComponent(data)
+            const formData = new FormData()
+
+
+            const convertVariantsImagesToFormData = variants?.options?.filter(item => item.innerType === "img")
+            const convertImageToFormData = image
+
+            if (convertImageToFormData) {
+                formData.append(
+                    `img`,
+                    convertImageToFormData
+                )
+            }
+
+            for (let i = 0; i < convertVariantsImagesToFormData?.length; i++) {
+                formData.append(
+                    `img-index-${convertVariantsImagesToFormData[i].index}`,
+                    convertVariantsImagesToFormData[i].img
+                )
+            }
+
+
+            let method = questionComponent?.id ? "PUT" : "POST"
+
+            const newData = {
+                ...questionComponent,...data,...extra
+            }
+
+            formData.append("info", JSON.stringify(newData))
+
+
+            setLoading(true)
+            request(`${BackUrl}exercise/block/question/${questionComponent?.id}/`,method,formData,headersImg())
+                .then(res => {
+                    setLoading(false)
+                    onSetCompletedComponent(data,res.id)
+                })
+            // onSetCompletedComponent(data)
         }
     }
 
+
+    const onDelete = () => {
+        if (questionComponent?.id) {
+            request(`${BackUrl}exercise/block/question/${questionComponent?.id}/`, "DELETE", null, headers())
+                .then(res => {
+                    onDeleteComponent(questionComponent.id)
+                })
+        } else {
+            onDeleteComponent(questionComponent.id)
+        }
+    }
 
     useEffect(() => {
         if (variants?.options?.length > 0 || words?.length > 0) {
@@ -291,7 +349,7 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
 
             <div className={styles.subHeader}>
                 <i
-                    onClick={() => onDeleteComponent(questionComponent.index)}
+                    onClick={onDelete}
                     className={`fa-solid fa-trash ${styles.trash}`}
                 />
             </div>
@@ -320,7 +378,7 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
                 <select value={innerType} name="" id="" onChange={changeType}>
                     <option value="text">Text</option>
                     <option value="image">Image</option>
-                    <option value="imageInText">Image in text</option>
+                    {/*<option value="imageInText">Image in text</option>*/}
                 </select>
             </div>
             <div className={styles.createQuestion__container}>
@@ -337,41 +395,40 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
                         </>
                         : null
                 }
-                {
-                    innerType === "imageInText" ?
-                        <>
-                            <div className={styles.createQuestion__innerHeader}>
-                                <div>
-                                    <h1>So'zlarni tanlang</h1>
-                                    <h1 className={styles.error}>
-                                        So'zlarni tanlashdan oldin matn to'liq yozilganliga ishonch hosil qiling !
-                                    </h1>
-                                </div>
-                                <div className={styles.about}>
-                                    <div className={styles.popup}>
-                                        Qollanma
-                                    </div>
-                                    <i className="fa-solid fa-question"></i>
-                                </div>
-                            </div>
-                            <div className={styles.createQuestion__text}>
-                                {
-                                    words.length > 0
-                                        ? <Words words={words} handleDoubleClick={handleDoubleClick}/>
-                                        : <h1>Matn mavjud emas</h1>
-                                }
-                            </div>
-                        </>
-                        : null
-                }
+                {/*{*/}
+                {/*    innerType === "imageInText" ?*/}
+                {/*        <>*/}
+                {/*            <div className={styles.createQuestion__innerHeader}>*/}
+                {/*                <div>*/}
+                {/*                    <h1>So'zlarni tanlang</h1>*/}
+                {/*                    <h1 className={styles.error}>*/}
+                {/*                        So'zlarni tanlashdan oldin matn to'liq yozilganliga ishonch hosil qiling !*/}
+                {/*                    </h1>*/}
+                {/*                </div>*/}
+                {/*                <div className={styles.about}>*/}
+                {/*                    <div className={styles.popup}>*/}
+                {/*                        Qollanma*/}
+                {/*                    </div>*/}
+                {/*                    <i className="fa-solid fa-question"></i>*/}
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*            <div className={styles.createQuestion__text}>*/}
+                {/*                {*/}
+                {/*                    words.length > 0*/}
+                {/*                        ? <Words words={words} handleDoubleClick={handleDoubleClick}/>*/}
+                {/*                        : <h1>Matn mavjud emas</h1>*/}
+                {/*                }*/}
+                {/*            </div>*/}
+                {/*        </>*/}
+                {/*        : null*/}
+                {/*}*/}
                 <QuestionVariants
                     variants={variants}
                     setVariants={setVariants}
                 />
-
-                <div onClick={onSubmit} className={styles.btn}>
-                    Tasdiqlash
-                </div>
+                <Button type={"submit"} disabled={loading} onClick={onSubmit} >
+                    Tasdiqlash {loading && <i className="fa-solid fa-spinner" />}
+                </Button>
             </div>
         </div>
     )

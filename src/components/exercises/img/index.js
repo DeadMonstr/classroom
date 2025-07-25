@@ -1,8 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
 import styles from "./style.module.sass";
-import {BackUrlForDoc} from "constants/global";
+import {BackUrl, BackUrlForDoc, headers, headersImg} from "constants/global";
+import {useHttp} from "hooks/http.hook";
+import Button from "components/ui/button";
 
-const ExcImg = React.memo(({onChangeCompletedComponent,onSetCompletedComponent,component,onDeleteComponent}) => {
+const ExcImg = React.memo(({onChangeCompletedComponent,onSetCompletedComponent,component,onDeleteComponent,extra}) => {
 
 	const [imgComponent,setImgComponent] = useState({})
 
@@ -15,12 +17,14 @@ const ExcImg = React.memo(({onChangeCompletedComponent,onSetCompletedComponent,c
 			imgComponent={imgComponent}
 			setImgComponent={setImgComponent}
 			onChangeCompletedComponent={onChangeCompletedComponent}
+			extra={extra}
 		/> :
 		<CreateExc
 			imgComponent={imgComponent}
 			setImgComponent={setImgComponent}
 			onSetCompletedComponent={onSetCompletedComponent}
 			onDeleteComponent={onDeleteComponent}
+			extra={extra}
 		/>
 })
 
@@ -29,7 +33,7 @@ const ViewExc = React.memo(({imgComponent,setImgComponent,onChangeCompletedCompo
 		<div className={styles.viewImage}>
 			{
 				onChangeCompletedComponent ?
-					<div onClick={() => onChangeCompletedComponent(imgComponent.index)} className={styles.popup}>
+					<div onClick={() => onChangeCompletedComponent(imgComponent.id)} className={styles.popup}>
 						<i className="fa-sharp fa-solid fa-pen-to-square" />
 					</div> : null
 			}
@@ -39,9 +43,10 @@ const ViewExc = React.memo(({imgComponent,setImgComponent,onChangeCompletedCompo
 })
 
 
-const CreateExc = ({imgComponent,setImgComponent,onSetCompletedComponent,onDeleteComponent}) => {
+const CreateExc = ({imgComponent,setImgComponent,onSetCompletedComponent,onDeleteComponent,extra}) => {
 
 	const [img,setImg] = useState(null)
+	const [loading,setLoading] = useState(false)
 
 	const imageRef = useRef()
 
@@ -52,13 +57,48 @@ const CreateExc = ({imgComponent,setImgComponent,onSetCompletedComponent,onDelet
 	},[imgComponent])
 
 
+	const {request} = useHttp()
 
-	const onSubmit = () => {
+	const onAdd = () => {
+
 		const data = {
 			img
 		}
-		onSetCompletedComponent(data)
+
+		const formData = new FormData()
+
+		formData.append("img",img)
+		formData.append("info",JSON.stringify({...imgComponent,...extra}))
+
+		let method = imgComponent?.id ? "PUT" : "POST"
+
+
+		setLoading(true)
+		request(`${BackUrl}exercise/block/image/${imgComponent?.id}/`,method,formData,headersImg())
+			.then(res => {
+				setLoading(false)
+				onSetCompletedComponent(data,res.id)
+			})
 	}
+
+
+	const onDelete = () => {
+
+
+		if (imgComponent?.id) {
+			setLoading(true)
+
+			request(`${BackUrl}exercise/block/image/${imgComponent.id}/`, "DELETE", null, headers())
+				.then(res => {
+					setLoading(false)
+
+					onDeleteComponent(imgComponent.id)
+				})
+		} else {
+			onDeleteComponent(imgComponent.id)
+		}
+	}
+
 
 	const onGetImage = () => {
 		imageRef.current.click()
@@ -70,7 +110,7 @@ const CreateExc = ({imgComponent,setImgComponent,onSetCompletedComponent,onDelet
 
 			<div className={styles.subHeader}>
 				<i
-					onClick={() => onDeleteComponent(imgComponent.index)}
+					onClick={onDelete}
 					className={`fa-solid fa-trash ${styles.trash}`}
 				/>
 			</div>
@@ -86,9 +126,9 @@ const CreateExc = ({imgComponent,setImgComponent,onSetCompletedComponent,onDelet
 				/>
 			</div>
 			<div className={styles.createImage__container}>
-				<div onClick={onSubmit} className={styles.btn}>
-					Tasdiqlash
-				</div>
+				<Button type={"submit"} disabled={loading} onClick={onAdd} >
+					Tasdiqlash {loading && <i className="fa-solid fa-spinner" />}
+				</Button>
 			</div>
 		</div>
 	)

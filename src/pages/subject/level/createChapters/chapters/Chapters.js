@@ -634,7 +634,7 @@ const Item = (props) => {
     const navigate = useNavigate()
     const NavigateToItem = () => {
         if (changeLessonsSort) return
-        navigate(`../changeLevelLesson/${containerId}/${item.order}`)
+        navigate(`../createLevelLesson/${item.id}`)
     }
 
     return (

@@ -66,7 +66,7 @@ const ChangeLesson = () => {
                     const img = item.img
                     const clone = item.clone
                     const audio = item.audio
-                    const video = item.video
+                    const videoLink = item.video
                     const file = item.file
                     const block_id = item.id
                     let editorState = null
@@ -97,7 +97,7 @@ const ChangeLesson = () => {
                         type,
                         index,
                         img,
-                        video,
+                        videoLink,
                         audio,
                         text,
                         file,

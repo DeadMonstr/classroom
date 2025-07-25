@@ -1,11 +1,12 @@
 import React, {useEffect, useRef, useState} from 'react';
 import styles from "pages/subject/level/createChapters/createLesson/style.module.sass"
-import {BackUrlForDoc} from "constants/global";
+import {BackUrl, BackUrlForDoc, headers, headersImg} from "constants/global";
+import {useHttp} from "hooks/http.hook";
 
 
 
 
-const Img = ({component,type, onChangeCompletedComponent, onSetCompletedComponent,onDeleteComponent}) => {
+const Img = ({component,type, onChangeCompletedComponent, onSetCompletedComponent,onDeleteComponent,extra}) => {
 	const [imgComponent,setImgComponent] = useState({})
 	useEffect(() => {
 		setImgComponent(component)
@@ -13,19 +14,26 @@ const Img = ({component,type, onChangeCompletedComponent, onSetCompletedComponen
 
 
 	return component.completed ?
-		<ViewImg type={type} component={imgComponent} onChangeCompletedComponent={onChangeCompletedComponent}/>
+		<ViewImg
+			type={type}
+			component={imgComponent}
+			onChangeCompletedComponent={onChangeCompletedComponent}
+			extra={extra}
+		/>
 		:
 		<CreateImg
 			component={imgComponent}
 			onSetCompletedComponent={onSetCompletedComponent}
 			onDeleteComponent={onDeleteComponent}
+			extra={extra}
 		/>
 };
 
 
 
-const CreateImg = ({component,onSetCompletedComponent,onDeleteComponent}) => {
+const CreateImg = ({component,onSetCompletedComponent,onDeleteComponent,extra}) => {
 	const [img,setImg] = useState(null)
+	const [loading,setLoading] = useState(false)
 	useEffect(() => {
 		if (component) {
 			setImg(component?.img)
@@ -33,11 +41,41 @@ const CreateImg = ({component,onSetCompletedComponent,onDeleteComponent}) => {
 
 	},[component])
 
-	const onSubmit = () => {
+	const {request} = useHttp()
+
+	const onAdd = () => {
+
 		const data = {
 			img
 		}
-		onSetCompletedComponent(data)
+
+		const formData = new FormData()
+
+		formData.append("img",img)
+		formData.append("info",JSON.stringify({...component,...extra}))
+
+		let method = component?.id ? "PUT" : "POST"
+		setLoading(true)
+
+		request(`${BackUrl}lesson/block/image/${component.id ? component.id + "/" : ""}`,method,formData,headersImg())
+			.then(res => {
+				setLoading(false)
+				onSetCompletedComponent(data,res.id)
+			})
+	}
+
+
+	const onDelete = () => {
+		if (component?.id) {
+			setLoading(true)
+			request(`${BackUrl}lesson/block/image/${component.id}/`, "DELETE", null, headers())
+				.then(res => {
+					setLoading(false)
+					onDeleteComponent(component.id)
+				})
+		} else {
+			onDeleteComponent(component.id)
+		}
 	}
 
 
@@ -55,7 +93,7 @@ const CreateImg = ({component,onSetCompletedComponent,onDeleteComponent}) => {
 				<h1>Rasm kiriting</h1>
 				<div>
 					<i
-						onClick={() => onDeleteComponent(component.index)}
+						onClick={onDelete}
 						className={`fa-solid fa-trash ${styles.trash}`}
 					/>
 				</div>
@@ -77,7 +115,7 @@ const CreateImg = ({component,onSetCompletedComponent,onDeleteComponent}) => {
 			</div>
 
 			<div
-				onClick={onSubmit}
+				onClick={onAdd}
 				className={styles.submitBtn}
 			>
 				Tasdiqlash
@@ -106,7 +144,7 @@ const ViewImg = ({component,onChangeCompletedComponent,type}) => {
 				<div className={styles.img__item}>
 					{
 						type !== "view" ?
-							<div onClick={() => onChangeCompletedComponent(component.index)} className={styles.popup}>
+							<div onClick={() => onChangeCompletedComponent(component.id)} className={styles.popup}>
 								<i className="fa-sharp fa-solid fa-pen-to-square" />
 							</div> : null
 					}

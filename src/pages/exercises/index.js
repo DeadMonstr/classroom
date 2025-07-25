@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import styles from "./style.module.sass"
 import Input from "components/ui/form/input";
 import Select from "components/ui/form/select";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useHttp} from "hooks/http.hook";
 import {BackUrl, headers} from "constants/global";
 import Table from "components/ui/table";
@@ -20,6 +20,8 @@ import {fetchSubjectLevelsData} from "slices/subjectSlice";
 import {fetchSubjectsData} from "slices/subjectsSlice";
 import Pagination from "components/ui/pagination";
 import useDebounce from "hooks/useDebounce";
+import Modal from "components/ui/modal";
+import Button from "components/ui/button";
 
 
 const Exercises = () => {
@@ -38,8 +40,7 @@ const Exercises = () => {
     const [selectedSubject, setSelectedSubject] = useState(null)
     const [selectedLevel, setSelectedLevel] = useState(null)
     const [data,setData] = useState([])
-
-
+    const [addActiveModal,setAddActiveModal] = useState(false)
 
     const {request} = useHttp()
 
@@ -51,11 +52,9 @@ const Exercises = () => {
     }, [])
 
     useEffect(() => {
-
         setSelectedType(type)
         setSelectedSubject(subject)
         setSelectedLevel(level)
-
     }, [])
 
 
@@ -71,9 +70,7 @@ const Exercises = () => {
     let PageSize = useMemo(() => 50, [])
 
     useDebounce(() => {
-
-
-
+        if (!selectedSubject && !selectedType && !selectedLevel) return;
 
         const data = {
             search,
@@ -84,7 +81,7 @@ const Exercises = () => {
             per_page: PageSize
         }
 
-        request(`${BackUrl}exercise/info/?${new URLSearchParams(data).toString()}`, "GET", null, headers())
+        request(`${BackUrl}exercise/crud/?${new URLSearchParams(data).toString()}`, "GET", null, headers())
             .then(res => {
                 setData(res.data)
                 setTotalCount(res.total)
@@ -127,7 +124,7 @@ const Exercises = () => {
     const dispatch = useDispatch()
 
     const onConfirmDelete = () => {
-        request(`${BackUrl}exercise_profile/${willDeleteId}`, "DELETE", null, headers())
+        request(`${BackUrl}exercise/crud/${willDeleteId}/`, "DELETE", null, headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -155,6 +152,14 @@ const Exercises = () => {
     const onSetSearch = (e) => {
         dispatch(setSearch(e))
     }
+
+
+    const navigate = useNavigate()
+
+    const onCreateExc = async () => {
+        setAddActiveModal(true)
+    }
+
 
 
     return (
@@ -192,9 +197,9 @@ const Exercises = () => {
                     <Link to={"/createExercisesTypes"} className={styles.btn}>
                         Mashq turi qo'shish
                     </Link>
-                    <Link to={"/createExercises"} className={styles.btn}>
+                    <div onClick={onCreateExc} className={styles.btn}>
                         Mashq qo'shish
-                    </Link>
+                    </div>
                 </div>
             </div>
             <div className={styles.container}>
@@ -210,6 +215,11 @@ const Exercises = () => {
 
                 />
             </div>
+
+
+            <Modal active={addActiveModal} setActive={setAddActiveModal}>
+                <AddModal levels={levels} subjects={subjects} types={types}/>
+            </Modal>
 
             <Confirm active={confirm} setActive={() => setConfirm(false)} onSubmit={onConfirmDelete}>
                 O'chirishni hohlaysizmi
@@ -231,7 +241,7 @@ const ExcTable = ({data, onDelete}) => {
                     <td>{item.subject.name}</td>
                     <td>{item.level.name}</td>
                     <td className={styles.icon}>
-                        <Link to={`/changeExercises/${item.id}`}>
+                        <Link to={`/createExercises/${item.id}`}>
                             <i className="fa-solid fa-pen-to-square"/>
                         </Link>
                         <i onClick={() => onDelete(item.id)} style={{color: "red"}} className="fa-solid fa-trash"/>
@@ -264,6 +274,101 @@ const ExcTable = ({data, onDelete}) => {
 
         </>
 
+    )
+}
+
+
+const AddModal = ({types, subjects}) => {
+
+    const [selectedType, setSelectedType] = useState(null)
+    const [selectedSubject, setSelectedSubject] = useState(null)
+    const [selectedLevel, setSelectedLevel] = useState(null)
+    const [name,setName] = useState("unnamed")
+
+    const [levels, setLevels] = useState([])
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const {request} = useHttp()
+
+    useEffect(() => {
+        if (selectedSubject && selectedSubject !== "all") {
+            request(`${BackUrl}level/info/${selectedSubject}`,"GET",null,headers())
+                .then(res => {
+                    setLevels(res.data)
+                })
+        }
+    }, [selectedSubject])
+
+
+
+
+    const onSubmit = async () => {
+
+
+        const data = {
+            name,
+            type: selectedType,
+            subject: selectedSubject,
+            level: selectedLevel
+        }
+
+
+        const exc = await request(`${BackUrl}exercise/crud/`, "POST", JSON.stringify(data), headers())
+            .then(res => {
+                const alert = {
+                    active: true,
+                    message: res.msg,
+                    type: res.status
+                }
+                dispatch(setAlertOptions({alert}))
+
+
+                return res
+            })
+
+
+
+        await navigate(`/createExercises/${exc.data.id}`)
+    }
+
+
+
+    return (
+        <div className={styles.addModal}>
+            <Input
+                value={name}
+                onChange={setName}
+                title={"Mashq nomi"}
+            />
+            <Select
+                onChange={setSelectedType}
+                title={"Mashq turi"}
+                options={types}
+                value={selectedType}
+                // all={true}
+            />
+            <Select
+                onChange={setSelectedSubject}
+                title={"Fan"}
+                name={"subject"}
+                options={subjects}
+                value={selectedSubject}
+                // all={true}
+            />
+            <Select
+                disabled={!selectedSubject}
+                onChange={setSelectedLevel}
+                title={"Mashq darajasi"}
+                name={"level-exc"}
+                options={levels}
+                value={selectedLevel}
+                // all={true}
+            />
+
+            <Button type={"submit"} onClick={onSubmit}>Tasdiqlash</Button>
+
+        </div>
     )
 }
 

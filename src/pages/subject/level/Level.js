@@ -157,7 +157,7 @@ const Level = () => {
 
 			<Routes>
 				{/* <Route path={"lesson/:lessonId"} element={<Lesson/>}/> */}
-				<Route path={"createLevelLesson/*"} element={<CreateSubjectLevelLesson/>}/>
+				<Route path={"createLevelLesson/:lessonId"} element={<CreateSubjectLevelLesson/>}/>
 				<Route path={"changeLevelLesson/:chapterId/:lessonId/*"} element={<ChangeSubjectLevelLesson/>}/>
 				<Route path={"createChapters/*"} element={<CreateChapters/>}/>
 				<Route path={"lessons/*"} element={<Chapters onToggleChapterOpen={onToggleChapterOpen} isOpenChapters={isOpenChapters}  />}/>

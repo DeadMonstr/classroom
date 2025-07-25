@@ -49,7 +49,7 @@ const Login = () => {
         }
 
         setPostDataStatus("loading")
-        request(`${BackUrl}login`,"POST",JSON.stringify(user))
+        request(`${BackUrl}login/`,"POST",JSON.stringify(user))
             .then((res) => {
                 if (res.data?.info) {
                     dispatch(setUserData({data: {

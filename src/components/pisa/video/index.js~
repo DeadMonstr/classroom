@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import styles from "pages/subject/level/createChapters/createLesson/style.module.sass"
 import Input from "components/ui/form/input";
 import ReactPlayer from "react-player";
-import {BackUrl, headers, headersImg} from "constants/global";
 import {useHttp} from "hooks/http.hook";
+import {BackUrl, headers, headersImg} from "constants/global";
 
 
 const Video = ({component,type, onChangeCompletedComponent, onSetCompletedComponent,onDeleteComponent,extra}) => {
@@ -15,13 +15,13 @@ const Video = ({component,type, onChangeCompletedComponent, onSetCompletedCompon
 	},[component])
 
 	return component.completed ?
-		<ViewVideo type={type} component={videoComponent} onChangeCompletedComponent={onChangeCompletedComponent} extra={extra}/>
+		<ViewVideo type={type} component={videoComponent} onChangeCompletedComponent={onChangeCompletedComponent}/>
 		:
 		<CreateVideo
-			component={videoComponent}
+			extra={extra}
+			component={component}
 			onSetCompletedComponent={onSetCompletedComponent}
 			onDeleteComponent={onDeleteComponent}
-			extra={extra}
 		/>
 };
 
@@ -34,45 +34,58 @@ const CreateVideo = ({component,onSetCompletedComponent,onDeleteComponent,extra}
 	useEffect(() => {
 
 		if (component) {
-			setVideoLink(component?.video)
+			console.log(component)
+			setVideoLink(component?.videoLink)
 		}
 
 	},[component])
 
+	// const onSubmit = () => {
+	// 	const data = {
+	// 		videoLink
+	// 	}
+	// 	onSetCompletedComponent(data)
+	// }
+
+
 
 	const {request} = useHttp()
 
-	const onSubmit = () => {
+	const onAdd = (e) => {
+
 		const data = {
-			video: videoLink
+			videoLink
 		}
+
+		const formData = new FormData()
+
+		formData.append("info",JSON.stringify({...component,...data,...extra}))
+
 
 		let method = component?.id ? "PUT" : "POST"
 
-
-		request(`${BackUrl}lesson/block/video/${component.id || ""}/`,method,JSON.stringify({ ...component,video_link: videoLink,...extra}),headers())
+		request(`${BackUrl}pisa/block/infos/${component?.id}`,method,formData,headersImg())
 			.then(res => {
-				onSetCompletedComponent(data,res.id)
+				onSetCompletedComponent(e,res.id)
 			})
-
-
 	}
-
-
 
 	const onDelete = () => {
 
 
 		if (component?.id) {
 
-			request(`${BackUrl}lesson/block/video/${component?.id}/`, "DELETE", null, headers())
+			request(`${BackUrl}pisa/block/infos/${component?.id}`, "DELETE", null, headers())
 				.then(res => {
-					onDeleteComponent(component.id)
+					onDeleteComponent(component.index)
 				})
 		} else {
-			onDeleteComponent(component.id)
+			onDeleteComponent(component.index)
 		}
 	}
+
+
+
 
 	return (
 		<div className={styles.component__create}>
@@ -94,7 +107,7 @@ const CreateVideo = ({component,onSetCompletedComponent,onDeleteComponent,extra}
 
 
 			<div
-				onClick={onSubmit}
+				onClick={onAdd}
 				className={styles.submitBtn}
 			>
 				Tasdiqlash
@@ -108,7 +121,7 @@ const ViewVideo = ({component,onChangeCompletedComponent,type}) => {
 	const [videoComponent,setVideoComponent] = useState()
 
 	useEffect(() => {
-		setVideoComponent(component.video)
+		setVideoComponent(component.videoLink)
 	},[component])
 
 
@@ -121,7 +134,7 @@ const ViewVideo = ({component,onChangeCompletedComponent,type}) => {
 				<div className={styles.video__item}>
 					{
 						type !== 'view' ?
-							<div onClick={() => onChangeCompletedComponent(component.id)} className={styles.popup}>
+							<div onClick={() => onChangeCompletedComponent(component.index)} className={styles.popup}>
 								<i className="fa-sharp fa-solid fa-pen-to-square" />
 							</div> : null
 					}

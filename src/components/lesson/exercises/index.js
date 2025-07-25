@@ -43,18 +43,32 @@ const Exercises =
             }
         }, [component])
 
+        const {request} = useHttp()
+
+        const onDelete = () => {
+            if (component?.id) {
+                request(`${BackUrl}lesson/block/exercise/${component.id}/`, "DELETE", null, headers())
+                    .then(res => {
+                        onDeleteComponent(component.id)
+                    })
+            } else {
+                onDeleteComponent(component.id)
+            }
+        }
+
 
         return excComponent.completed ?
             <ViewExc
                 lessonId={lessonId}
                 type={type}
-                onDeleteComponent={onDeleteComponent}
+                onDeleteComponent={onDelete}
                 component={excComponent}
                 onChangeCompletedComponent={onChangeCompletedComponent}
                 archiveId={archiveId}
             />
             : Object.keys(excComponent).length > 0 ?
                 <CreateExc
+                    lessonId={lessonId}
                     oldExercises={exercises}
                     subjectId={subjectId}
                     levelId={levelId}
@@ -65,7 +79,15 @@ const Exercises =
     };
 
 
-const CreateExc = ({onDeleteComponent, onSetCompletedComponent, component, levelId, subjectId, oldExercises}) => {
+const CreateExc = ({
+                       onDeleteComponent,
+                       onSetCompletedComponent,
+                       component,
+                       levelId,
+                       subjectId,
+                       oldExercises,
+                       lessonId
+                   }) => {
 
     const [search, setSearch] = useState("")
     const [types, setTypes] = useState([])
@@ -78,9 +100,8 @@ const CreateExc = ({onDeleteComponent, onSetCompletedComponent, component, level
     useEffect(() => {
 
         if (subjectId && levelId) {
-            request(`${BackUrl}filter_exercise/${subjectId}/${levelId}`, "GET", null, headers())
+            request(`${BackUrl}lesson/filter/exercise/${subjectId}/${levelId}`, "GET", null, headers())
                 .then(res => {
-                    console.log(res, "Filter")
                     setExercises(res.data.filter(item => {
                         if (!oldExercises.length > 0) return item
                         return oldExercises.every(oldExc => oldExc?.exc?.id !== item.id)
@@ -92,7 +113,7 @@ const CreateExc = ({onDeleteComponent, onSetCompletedComponent, component, level
 
 
     useEffect(() => {
-        request(`${BackUrl}info_exercise_type`, "GET")
+        request(`${BackUrl}exercise/type/crud/`, "GET")
             .then(res => {
                 setTypes(res.data)
             })
@@ -115,18 +136,21 @@ const CreateExc = ({onDeleteComponent, onSetCompletedComponent, component, level
 
 
     const onSubmit = async () => {
-        setLoading(true)
+        // setLoading(true)
 
         const activedExc = exercises.filter(item => item.active)[0]
 
-        await request(`${BackUrl}exercise_profile/${activedExc.id}`, "GET", null, headers())
+        await request(`${BackUrl}lesson/block/exercise/`, "POST", JSON.stringify({
+            exercise_id: activedExc.id,
+            lesson_id: lessonId,
+            type: "exc"
+        }), headers())
             .then(res => {
-
-                onSetCompletedComponent({exc: {...res.data}, id: res.data.id})
+                onSetCompletedComponent({exc: {...res.exercise}, id: res.id})
             })
 
 
-        await setLoading(false)
+        // await setLoading(false)
     }
 
 
@@ -145,9 +169,8 @@ const CreateExc = ({onDeleteComponent, onSetCompletedComponent, component, level
     }
 
 
-
     return (
-        <Modal active={true} setActive={() => onDeleteComponent(component?.index)}>
+        <Modal active={true} setActive={() => onDeleteComponent(component?.id)}>
             <div className={styles.exc}>
                 <h1>Mashqlar</h1>
                 <div className={styles.header}>
@@ -178,7 +201,9 @@ const CreateExc = ({onDeleteComponent, onSetCompletedComponent, component, level
                             <Button
                                 type={"submit"}
                                 onClick={onSubmit}
-                            >Tasdiqlash</Button>
+                            >
+                                Tasdiqlash
+                            </Button>
                         </div> : null
                 }
             </div>
@@ -187,7 +212,7 @@ const CreateExc = ({onDeleteComponent, onSetCompletedComponent, component, level
 }
 
 
-const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
+const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
 
 
     const [exc, setExc] = useState()
@@ -198,7 +223,7 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
     const [isChanged, setIsChanged] = useState(false)
     const [changedAnswerData, setChangedAnswerData] = useState({})
 
-    const [loading,setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
 
     useEffect(() => {
@@ -207,193 +232,265 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
 
         setExc(component)
 
+        // setExcComponents(component.exercise.block.map((item, index) => {
+        //     const type = item.type
+        //     const innerType = item.innerType
+        //     const text = item.desc
+        //     const img = item.img
+        //     const clone = item.clone
+        //     const audio = item.audio
+        //     let oldData = null
+        //     if (dataLesson && dataLesson.lessonId === lessonId) {
+        //         oldData = dataLesson.answers.filter(comp => comp.index === index)[0]
+        //     }
+        //
+        //
+        //     if (item.isAnswered || type === "check") {
+        //         setDisabled(true)
+        //         setDisabledExc(true)
+        //     } else {
+        //         setDisabled(false)
+        //         setDisabledExc(false)
+        //     }
+        //
+        //
+        //     if (type === "text") {
+        //
+        //         let words
+        //
+        //         if (item.isAnswered) {
+        //             console.log("keldi")
+        //             const old = item?.words_clone
+        //             words = old.map(word => {
+        //                 const filtered = item.answers.filter(ans => ans.order === word.index)[0]
+        //                 if (word.type === "matchWord") {
+        //                     return {
+        //                         ...word,
+        //                         status: filtered?.status,
+        //                         item: filtered?.value
+        //                     }
+        //                 }
+        //                 return {
+        //                     ...word,
+        //                     status: filtered?.status,
+        //                     value: filtered?.value
+        //                 }
+        //
+        //             })
+        //         } else {
+        //             words = oldData?.answers || item?.words_clone
+        //             // words = item?.words_clone
+        //         }
+        //
+        //
+        //         return {
+        //             type,
+        //             innerType,
+        //             text,
+        //             index,
+        //             img,
+        //             // clone,
+        //             // ...clone,
+        //             words,
+        //             audio,
+        //             completed: true,
+        //             block_id: item.id
+        //         }
+        //     }
+        //
+        //     if (type === "question") {
+        //
+        //         const answers = item.answers;
+        //         const wordsImg = item.words_img;
+        //         const options = clone?.variants?.options;
+        //         const words = clone.words;
+        //         let newOptions = [];
+        //         let newWords = [];
+        //         let answerInput
+        //
+        //
+        //         for (let i = 0; i < options?.length; i++) {
+        //             if (options[i].innerType === "img") {
+        //                 const ans = answers.filter(ans => ans.order === options[i].index && ans.type_img === "variant_img")
+        //                 newOptions.push({
+        //                     ...options[i],
+        //                     img: typeof options[i].img === "object" ? ans[0].img : options[i].img
+        //                 })
+        //             } else {
+        //                 newOptions.push(options[i])
+        //             }
+        //         }
+        //
+        //
+        //         if (clone.variants.type === "select") {
+        //             const ans = answers[0]
+        //
+        //
+        //             if (ans.status) {
+        //                 newOptions = newOptions.map(opt => {
+        //                     if (opt.index === ans.order) {
+        //                         return {
+        //                             ...opt,
+        //                             isAnswer: true,
+        //                             checked: ans.value
+        //                         }
+        //                     }
+        //                     return opt
+        //                 })
+        //             } else if (!ans.status && ans.status !== undefined) {
+        //
+        //                 newOptions = newOptions.map(opt => {
+        //                     if (opt.index === ans.order) {
+        //                         return {
+        //                             ...opt,
+        //                             isAnswer: false
+        //                         }
+        //                     }
+        //                     return opt
+        //                 })
+        //             } else {
+        //
+        //
+        //                 newOptions = newOptions.map(opt => {
+        //                     const isChecked = oldData?.answers.filter(old => old.index === opt.index)[0].checked
+        //                     return {
+        //                         ...opt,
+        //                         checked: isChecked
+        //                     }
+        //
+        //                 })
+        //             }
+        //         } else {
+        //
+        //
+        //             const ans = answers[0]
+        //
+        //             answerInput = {
+        //                 checked: ans.checked,
+        //                 value: oldData?.answers || ans.value,
+        //                 isAnswer: ans.status
+        //             }
+        //         }
+        //
+        //
+        //         if (words && innerType === "imageInText") {
+        //             for (let i = 0; i < words.length; i++) {
+        //                 if (words[i].active) {
+        //                     const img = wordsImg.filter(ans => ans.order === words[i].id && ans.type === "word")
+        //                     newWords.push({
+        //                         ...words[i],
+        //                         img: typeof words[i].img === "object" ? img[0].img : words[i].img
+        //                     })
+        //                 } else {
+        //                     newWords.push(words[i])
+        //                 }
+        //             }
+        //         }
+        //
+        //         return {
+        //             type,
+        //             innerType,
+        //             text,
+        //             index,
+        //             completed: true,
+        //             words: newWords,
+        //             image: innerType !== "text" ? img : null,
+        //             variants: {
+        //                 ...item.clone.variants,
+        //                 options: newOptions,
+        //                 ...answerInput
+        //             },
+        //             clone,
+        //             block_id: item.id
+        //         }
+        //     }
+        //
+        //     return {
+        //         type,
+        //         innerType,
+        //         text,
+        //         index,
+        //         img,
+        //         clone,
+        //         ...clone,
+        //         audio,
+        //         completed: true,
+        //         block_id: item.id
+        //     }
+        // }))
 
-        setExcComponents(component.exc.block.map((item, index) => {
-            const type = item.type
-            const innerType = item.innerType
-            const text = item.desc
-            const img = item.img
-            const clone = item.clone
-            const audio = item.audio
-            let oldData = null
-            if (dataLesson && dataLesson.lessonId === lessonId) {
-                oldData = dataLesson.answers.filter(comp => comp.index === index)[0]
-            }
+        const preparedComponents = component.exc.blocks.map((item, index) => {
+            const {
+                type,
+                innerType,
+                desc: text,
+                img,
+                audio,
+                clone,
+                id,
+                answers
+            } = item;
 
-
-            if (item.isAnswered || type === "check") {
-                setDisabled(true)
-                setDisabledExc(true)
-            } else {
-                setDisabled(false)
-                setDisabledExc(false)
-            }
-
-
-            if (type === "text") {
-
-                let words
-
-                if (item.isAnswered) {
-                    console.log("keldi")
-                    const old = item?.words_clone
-                    words = old.map(word => {
-                        const filtered = item.answers.filter(ans => ans.order === word.index)[0]
-                        if (word.type === "matchWord") {
-                            return {
-                                ...word,
-                                status: filtered?.status,
-                                item: filtered?.value
-                            }
-                        }
-                        return {
-                            ...word,
-                            status: filtered?.status,
-                            value: filtered?.value
-                        }
-
-                    })
-                } else {
-                    words = oldData?.answers || item?.words_clone
-                    // words = item?.words_clone
-                }
-
-
-                return {
-                    type,
-                    innerType,
-                    text,
-                    index,
-                    img,
-                    // clone,
-                    // ...clone,
-                    words,
-                    audio,
-                    completed: true,
-                    block_id: item.id
-                }
-            }
+            const indexNum = index + 1;
 
             if (type === "question") {
+                const options = clone?.variants?.options || [];
 
-                const answers = item.answers;
-                const wordsImg = item.words_img;
-                const options = clone?.variants?.options;
-                const words = clone.words;
-                let newOptions = [];
-                let newWords = [];
-                let answerInput
-
-
-                for (let i = 0; i < options?.length; i++) {
-                    if (options[i].innerType === "img") {
-                        const ans = answers.filter(ans => ans.order === options[i].index && ans.type_img === "variant_img")
-                        newOptions.push({
-                            ...options[i],
-                            img: typeof options[i].img === "object" ? ans[0].img : options[i].img
-                        })
-                    } else {
-                        newOptions.push(options[i])
+                const newOptions = options.map(opt => {
+                    if (opt.innerType === "img") {
+                        const match = answers?.find(ans => ans.order === opt.index && ans.type_img === "variant_img");
+                        return {
+                            ...opt,
+                            img: match?.img || null
+                        };
                     }
-                }
-
-
-                if (clone.variants.type === "select") {
-                    const ans = answers[0]
-
-
-                    if (ans.status) {
-                        newOptions = newOptions.map(opt => {
-                            if (opt.index === ans.order) {
-                                return {
-                                    ...opt,
-                                    isAnswer: true,
-                                    checked: ans.value
-                                }
-                            }
-                            return opt
-                        })
-                    } else if (!ans.status && ans.status !== undefined) {
-
-                        newOptions = newOptions.map(opt => {
-                            if (opt.index === ans.order) {
-                                return {
-                                    ...opt,
-                                    isAnswer: false
-                                }
-                            }
-                            return opt
-                        })
-                    } else {
-
-
-                        newOptions = newOptions.map(opt => {
-                            const isChecked  = oldData?.answers.filter(old => old.index === opt.index)[0].checked
-                            return {
-                                ...opt,
-                                checked: isChecked
-                            }
-
-                        })
-                    }
-                } else {
-
-
-                    const ans = answers[0]
-
-                    answerInput = {
-                        checked: ans.checked,
-                        value: oldData?.answers || ans.value,
-                        isAnswer: ans.status
-                    }
-                }
-
-
-                if (words && innerType === "imageInText") {
-                    for (let i = 0; i < words.length; i++) {
-                        if (words[i].active) {
-                            const img = wordsImg.filter(ans => ans.order === words[i].id && ans.type === "word")
-                            newWords.push({
-                                ...words[i],
-                                img: typeof words[i].img === "object" ? img[0].img : words[i].img
-                            })
-                        } else {
-                            newWords.push(words[i])
-                        }
-                    }
-                }
+                    return opt;
+                });
 
                 return {
                     type,
                     innerType,
                     text,
-                    index,
                     completed: true,
-                    words: newWords,
                     image: innerType !== "text" ? img : null,
                     variants: {
-                        ...item.clone.variants,
+                        ...clone.variants,
                         options: newOptions,
-                        ...answerInput
                     },
                     clone,
-                    block_id: item.id
-                }
+                    id,
+                    index: indexNum
+                };
             }
 
+            if (type === "text" || type === "textEditor") {
+                return {
+                    type,
+                    text,
+                    editorState: clone,
+                    words: item.words_clone || [],
+                    completed: true,
+                    id,
+                    index: indexNum
+                };
+            }
+
+            // === DEFAULT CASE ===
             return {
                 type,
                 innerType,
                 text,
-                index,
-                img,
                 clone,
                 ...clone,
+                img,
                 audio,
                 completed: true,
-                block_id: item.id
-            }
-        }))
+                id,
+                index: indexNum
+            };
+        });
+
+        setExcComponents(preparedComponents);
     }, [component])
 
     // useEffect(() => {
@@ -423,7 +520,7 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
                 }
                 return item
             }))
-            setChangedAnswerData({index, answer:changedAnswer})
+            setChangedAnswerData({index, answer: changedAnswer})
         } else {
             setAnswers(answers => [...answers, changedAnswer])
         }
@@ -438,11 +535,10 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
     }, [answers])
 
 
-
     useLayoutEffect(() => {
 
 
-        if (answers && answers.some(item => item.someFilled)){
+        if (answers && answers.some(item => item.someFilled)) {
 
             const dataLesson = JSON.parse(localStorage.getItem("dataLesson"))
 
@@ -460,18 +556,15 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
                 })
 
                 // console.log(newDataLesson, "newdasdasdas")
-                localStorage.setItem("dataLesson",JSON.stringify({answers: newDataLesson, lessonId}))
+                localStorage.setItem("dataLesson", JSON.stringify({answers: newDataLesson, lessonId}))
 
             } else {
                 // console.log("eski sukaaaa", answers)
-                localStorage.setItem("dataLesson",JSON.stringify({answers, lessonId}))
+                localStorage.setItem("dataLesson", JSON.stringify({answers, lessonId}))
             }
         }
 
-    },[answers,changedAnswerData,disabled])
-
-
-
+    }, [answers, changedAnswerData, disabled])
 
 
     const renderBlocks = () => {
@@ -514,7 +607,7 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
             }
             if (item.type === "snippet") {
                 return (
-                    <div  className={styles.line}>
+                    <div className={styles.line}>
                         <Snippet component={item}/>
                     </div>
                 )
@@ -636,8 +729,6 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
             }
 
 
-
-
             if (words && innerType === "imageInText") {
                 for (let i = 0; i < words.length; i++) {
                     if (words[i].active) {
@@ -699,9 +790,8 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
         if (!disabled && !disabledExc) {
             request(`${BackUrl}complete_exercise`, "POST", JSON.stringify(data), headers())
                 .then(res => {
-                    console.log("ura ketdi")
                     setAnswers([])
-                    dispatch(setArchiveId({id:res.archive_id}))
+                    dispatch(setArchiveId({id: res.archive_id}))
                     localStorage.removeItem("dataLesson")
                     setExcComponents(excComponents.map((item, index) => {
                         const filtered = res.block.filter(comp => comp.id === item.block_id)[0]
@@ -730,7 +820,6 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
     }
 
 
-
     // if (loading) return <Loader/>
 
     return (
@@ -754,7 +843,8 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
 
             {
                 type === "view" && !disabled ?
-                    <Button form={`component-${component.index}`} type={"submit"} disabled={disabled} onClick={onSubmit}>
+                    <Button form={`component-${component.index}`} type={"submit"} disabled={disabled}
+                            onClick={onSubmit}>
                         Tasdiqlash
                     </Button> : null
             }
@@ -767,7 +857,7 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId,archiveId}) => {
                     >
                         Qayta topshirish
                     </Button>
-                : null
+                    : null
             }
 
         </div>

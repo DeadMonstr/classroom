@@ -1,260 +1,113 @@
-// import React, {useEffect, useRef, useState} from "react";
-// import styles from "pages/subject/level/createChapters/createLesson/LoaderPage.module.sass";
-// import Select from "components/ui/form/select";
-// import classNames from "classnames";
-//
-//
-// const Text = React.memo(({component,type, onChangeCompletedComponent, onSetCompletedComponent,onDeleteComponent}) => {
-//
-// 	const [textComponent,setTextComponent] = useState({})
-// 	useEffect(() => {
-// 		setTextComponent(component)
-// 	},[component])
-//
-//
-// 	return component.completed ?
-// 		<TextView
-// 			type={type}
-// 			component={textComponent}
-// 			onChangeCompletedComponent={onChangeCompletedComponent}
-// 		/>
-// 		:
-// 		<TextCreate
-// 			component={textComponent}
-// 			onSetCompletedComponent={onSetCompletedComponent}
-// 			onDeleteComponent={onDeleteComponent}
-// 		/>
-//
-//
-// })
-//
-//
-//
-// const TextCreate = ({onSetCompletedComponent,component,onDeleteComponent,type}) => {
-// 	const [text,setText] = useState("")
-//
-//
-//
-//
-//
-// 	return (
-// 		<div className={styles.component__create}>
-//
-// 			<div className={`${styles.header} ${styles.j_sp_bt}`}>
-// 				<h1>Matn kiriting</h1>
-//
-// 				<div>
-// 					<i
-// 						onClick={() => onDeleteComponent(component.index)}
-// 						className={`fa-solid fa-trash ${styles.trash}`}
-// 					/>
-// 				</div>
-// 			</div>
-// 			<textarea
-// 				value={text}
-// 				required
-// 				onChange={e => setText(e.target.value)}
-// 			/>
-// 			<div className={styles.header}>
-// 				{
-// 					innerModals.map((item,index) => {
-// 						return (
-// 							<Select
-// 								title={item.title}
-// 								options={item.options}
-// 								value={textOptions?.[item.type]}
-// 								onChange={(e) => {
-// 									setTextOptions(items => ({...items,[item.type]: e}))
-// 								}}
-// 							/>
-// 						)
-// 					})
-// 				}
-// 			</div>
-// 			<div
-// 				className={styles.words}
-// 				style={{
-// 					fontSize: `${textOptions?.size}rem`,
-// 					fontWeight: `${textOptions?.weight}`
-// 				}}
-// 			>
-// 				<Words contextMenu={handleClick} words={words} type={"create"}/>
-// 			</div>
-//
-// 			<div
-// 				ref={refModal}
-// 				className={classNames(styles.modal,{
-// 					[`${styles.active}`] : modalOpts.active,
-// 					[`${styles.right}`] : modalOpts.position === "right",
-// 					[`${styles.left}`] : modalOpts.position === "left",
-// 				})}
-// 				style={{top: modalOpts?.y + "px", left: modalOpts?.x + "px"}}
-// 			>
-// 				{
-// 					innerModals.map((item,index ) => {
-// 						return (
-// 							<div className={styles.item} key={index}>
-// 								<span>{item.title}</span>
-// 								<i className="fa-solid fa-caret-down" />
-// 								<div className={styles.innerModal}>
-// 									<Select
-// 										value={defaultValuesModals[item.type]}
-// 										options={item.options}
-// 										onChange={(e) => onChangeInnerModalSelect(item.type,e)}
-// 									/>
-// 								</div>
-// 							</div>
-// 						)
-// 					})
-// 				}
-// 			</div>
-//
-// 			<div
-// 				onClick={onSubmit}
-// 				className={styles.submitBtn}
-// 			>
-// 				Tasdiqlash
-// 			</div>
-//
-// 		</div>
-// 	)
-// }
-//
-//
-// const TextView = ({component,onChangeCompletedComponent,type}) => {
-//
-// 	const [textOpts,setTextOpts] = useState({})
-// 	const [words,setWords] = useState([])
-//
-//
-// 	useEffect(() => {
-// 		if (component) {
-// 			setTextOpts(component.textOptions)
-// 			setWords(component.words)
-// 		}
-// 	},[component])
-//
-//
-// 	const onChange = () => {
-// 		console.log(component.index)
-// 		onChangeCompletedComponent(component.index)
-// 	}
-//
-// 	return (
-// 		<div className={styles.component__view} >
-// 			<div
-// 				className={styles.text}
-// 				style={{
-// 					fontSize: `${textOpts?.size}rem`,
-// 					fontWeight: `${textOpts?.weight}`
-// 				}}
-// 			>
-// 				{
-// 					type !== 'view' ?
-// 						<div onClick={onChange} className={styles.popup}>
-// 							<i className="fa-sharp fa-solid fa-pen-to-square" />
-// 						</div> : null
-// 				}
-//
-// 				<p>
-//
-// 					<Words words={words} type={"view"}/>
-// 				</p>
-// 			</div>
-//
-// 		</div>
-// 	)
-// }
-//
-//
-// const Words = React.memo(({words,type,contextMenu}) => {
-// 	let inValid = /\s/;
-// 	let inValidDots = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g;
-//
-// 	return words?.map((item,index) => {
-// 		if (type === "view") {
-// 			if (item.active) {
-// 				return (
-// 					<input key={index} placeholder={item.word} type="text"/>
-// 				)
-// 			}
-// 			if (item.word.includes("\n")) {
-// 				return (
-// 					<>
-// 						<br/>
-// 					</>
-// 				)
-// 			}
-// 			if (inValid.test(item.word)) {
-// 				return (
-// 					<span key={index}>
-// 						{item.word}
-// 					</span>
-// 				)
-// 			}
-// 			if (inValidDots.test(item.word)) {
-// 				return (
-// 					<span key={index}>
-// 						{item.word}
-// 				</span>
-// 				)
-// 			}
-// 			return (
-// 				<span
-// 					className={styles.word}
-// 					key={index}
-// 					style={{
-// 						fontSize: `${item.size}rem`,
-// 						fontWeight: `${item.weight}`
-// 					}}
-// 				>
-// 					{item.word}
-// 				</span>
-// 			)
-//
-// 		} else {
-// 			if (item.active) {
-// 				return (
-// 					<input key={index} placeholder={item.word} type="text"/>
-// 				)
-// 			}
-// 			if (item.word.includes("\n")) {
-// 				return (
-// 					<>
-// 						<br/>
-// 					</>
-// 				)
-// 			}
-// 			if (inValid.test(item.word)) {
-// 				return (
-// 					<span key={index}>
-// 						{item.word}
-// 					</span>
-// 				)
-// 			}
-// 			if (inValidDots.test(item.word)) {
-// 				return (
-// 					<span key={index}>
-// 						{item.word}
-// 				</span>
-// 				)
-// 			}
-// 			return (
-// 				<span
-// 					className={styles.word}
-// 					onContextMenu={(e) => contextMenu(e,index)}
-// 					key={index}
-// 					style={{
-// 						fontSize: `${item.size}rem`,
-// 						fontWeight: `${item.weight}`
-// 					}}
-// 				>
-// 					{item.word}
-// 				</span>
-// 			)
-// 		}
-// 	})
-// })
-//
-//
-// export default Text
+import React, {useEffect, useRef, useState} from 'react';
+
+
+import styles from "./style.module.sass";
+import TextEditor from "components/ui/textEditor/TextEditor";
+import {useHttp} from "hooks/http.hook";
+import {BackUrl, headers} from "constants/global";
+
+
+
+
+
+const TextEditorLesson = React.memo(({ onChangeCompletedComponent, onSetCompletedComponent, component, onDeleteComponent,options,extra}) => {
+
+
+
+    return component.completed ?
+        <TextEditorView
+            textComponent={component}
+            onChangeCompletedComponent={onChangeCompletedComponent}
+        /> :
+        <TextEditorCreate
+            options={options}
+            textComponent={component}
+            onSetCompletedComponent={onSetCompletedComponent}
+            onDeleteComponent={onDeleteComponent}
+            extra={extra}
+        />
+})
+
+
+const TextEditorCreate = ({textComponent,onSetCompletedComponent,onDeleteComponent,options,extra}) => {
+
+
+    const {request} = useHttp()
+
+    const onAdd = (e) => {
+
+        let method = textComponent?.id ? "PUT" : "POST"
+
+        request(`${BackUrl}lesson/block/text/${textComponent.id || ""}/`,method,JSON.stringify({...textComponent,...e,...extra}),headers())
+            .then(res => {
+                onSetCompletedComponent(e,res.id)
+            })
+    }
+
+    const onDelete = () => {
+        if (textComponent?.id) {
+            request(`${BackUrl}lesson/block/text/${textComponent?.id}/`, "DELETE", null, headers())
+                .then(res => {
+                    onDeleteComponent(textComponent.id)
+                })
+        } else {
+            onDeleteComponent(textComponent.id)
+        }
+    }
+
+
+
+    return (
+        <div className={styles.createText}>
+            <div className={styles.subHeader}>
+                <i
+                    onClick={onDelete}
+                    className={`fa-solid fa-trash ${styles.trash}`}
+                />
+            </div>
+            <TextEditor
+                options={options}
+                text={textComponent?.text}
+                editorState={textComponent.editorState}
+                onSubmit={onAdd}
+            />
+        </div>
+    )
+}
+
+const TextEditorView = ({onChangeCompletedComponent, textComponent}) => {
+
+    const ref = useRef()
+
+    // useEffect(() => {
+    //     // const text  = sanitizeHtml(textComponent.text)
+    //     // const parser = new DOMParser();
+    //     // const document = parser.parseFromString(textComponent.text, "text/html");
+    //     const elems = document.querySelector(".Excinput")
+    //     const inp = document.createElement("input")
+    //     console.log(elems)
+    //     if (elems) {
+    //         document.replaceWith(elems,inp)
+    //     }
+    // },[textComponent])
+
+
+    return (
+        <div className={styles.viewText}>
+            <div className={styles.text}>
+                {
+                    onChangeCompletedComponent ?
+                        <div onClick={() => onChangeCompletedComponent(textComponent.id)} className={styles.popup}>
+                            <i className="fa-sharp fa-solid fa-pen-to-square"/>
+                        </div> : null
+                }
+                <div ref={ref} dangerouslySetInnerHTML={{__html:textComponent.text}}>
+                </div>
+            </div>
+
+        </div>
+    )
+}
+
+
+export default TextEditorLesson;
