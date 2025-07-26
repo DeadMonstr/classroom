@@ -27,12 +27,13 @@ const ChildrenMonthlyAttendance = () => {
     const [selectedDayId, setSelectedDayId] = useState();
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
-    const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
+    const groupId = (localStorage.getItem("group_id"))
     const currentUsername = localStorage.getItem("platform_id")
     const {monthlyAttendance, groups, dates} = useSelector(state => state.parentSlice)
     const years = dates.data?.years
     const months = dates.data?.months?.flatMap(item => item.months) || [];
     const groupIds = groups.group_list
+
     useEffect(() => {
         if (year) {
             const selectedYearData = dates.data?.months.find(item => item.year === year);
@@ -51,9 +52,12 @@ const ChildrenMonthlyAttendance = () => {
            dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
            dispatch(fetchChildrenGroups(currentUsername))
            dispatch(fetchChildrenAttendance(currentUsername))
-           dispatch(fetchChildrenTestsDate(groupId))
+
            if (!groupId && !currentYear && !currentMonth ) {
                dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+           }
+           if (groupId || groupId !==  undefined) {
+               dispatch(fetchChildrenTestsDate(groupId))
            }
        }
     }, [currentMonth]);

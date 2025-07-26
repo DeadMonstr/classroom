@@ -29,20 +29,28 @@ const ChildrenLayoutMB = () => {
     },[data.id])
 
     useEffect(() => {
-        const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
+        const groupId = localStorage.getItem("group_id")
         const currentMonth = localStorage.getItem("current_month")
         const currentYear = localStorage.getItem("current_year")
+        if (groupId || groupId !==  undefined) {
+            dispatch(fetchChildrenTestsDate(groupId))
+        }
         if (!selectedChild?.platform_id) {
             dispatch(fetchChildrenAttendance(selectedChild?.platform_id))
             dispatch(fetchChildrenGroups(selectedChild?.platform_id))
             dispatch(fetchChildrenBalance(selectedChild?.platform_id))
-            dispatch(fetchChildrenTestsDate(groupId))
+
            if (!groupId && !currentYear && !currentMonth ) {
+
+
                dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
            }
 
         }
     }, [selectedChild ]);
+
+
+
 
     return (
         <div className={styles.layout}>
