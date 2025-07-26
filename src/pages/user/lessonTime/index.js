@@ -30,7 +30,7 @@ const UserLessonTime = () => {
 
 
 		if (system_name === "gennis" && ROLES.Teacher === role) {
-			request(`${BackUrl}teacher_locations`,"GET",null,headers())
+			request(`${BackUrl}teacher/teacher_locations`,"GET",null,headers())
 				.then(res => {
 					setLocations(res.locations)
 				})
@@ -84,7 +84,7 @@ const GennisTable = ({data,location}) => {
 
 	useEffect(() => {
 		// if (location)
-			request(`${BackUrl}user_time_table/${location || ""}`,"GET",null,headers())
+			request(`${BackUrl}teacher/user_time_table/${location || ""}`,"GET",null,headers())
 				.then(res => {
 					setTimes(res.data)
 					setDays(res.days)
@@ -141,7 +141,7 @@ const TuronTable = ({data}) => {
 	const {request} = useHttp()
 
 	useEffect(() => {
-		request(`${BackUrl}user_time_table/`,"GET",null,headers())
+		request(`${BackUrl}teacher/user_time_table/`,"GET",null,headers())
 			.then(res => {
 				setTimes(res.times)
 				setDays(res.days)
