@@ -10,15 +10,11 @@ import resultIcon from "assets/icons/result.svg"
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchChildrenAttendance,
-    fetchChildrenAttendanceWeekly, fetchChildrenBalance,
+    fetchChildrenBalance,
     fetchChildrenGroups, fetchChildrenTests, fetchChildrenTestsDate,
     fetchParentData
 } from "../../../slices/parentSlice";
 
-const options = [
-    {value: 'child1', label: 'Farzand 1'},
-    {value: 'child2', label: 'Farzand 2'},
-];
 
 const ChildrenLayoutMB = () => {
     const [innerType,setInnerType] = useState()
@@ -26,10 +22,6 @@ const ChildrenLayoutMB = () => {
     const {data} = useSelector(state  => state.user)
     const {parent} = useSelector(state => state.parentSlice)
     const selectedChild = parent.find(child => child.platform_id === +innerType)
-    const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
-    const currentMonth = localStorage.getItem("current_month")
-    const currentYear = localStorage.getItem("current_year")
-    // localStorage.setItem("current_username", selectedChild?.username)
 
     useEffect(() => {
        if (data?.id)
@@ -37,10 +29,12 @@ const ChildrenLayoutMB = () => {
     },[data.id])
 
     useEffect(() => {
+        const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
+        const currentMonth = localStorage.getItem("current_month")
+        const currentYear = localStorage.getItem("current_year")
         if (!selectedChild?.platform_id) {
             dispatch(fetchChildrenAttendance(selectedChild?.platform_id))
             dispatch(fetchChildrenGroups(selectedChild?.platform_id))
-            // dispatch(fetchChildrenAttendanceWeekly(selectedChild?.username))
             dispatch(fetchChildrenBalance(selectedChild?.platform_id))
             dispatch(fetchChildrenTestsDate(groupId))
            if (!groupId && !currentYear && !currentMonth ) {

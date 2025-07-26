@@ -72,7 +72,7 @@ const ObserveTeacherLessonIndex = () => {
     const {request} = useHttp()
 
     useEffect(() => {
-        request(`${BackUrl}observe_info`,"GET",null,headers())
+        request(`${BackUrl}teacher/observe_info`,"GET",null,headers())
             .then(res => {
                 setFields(res.observations)
                 setOptions(res.options)
@@ -134,7 +134,7 @@ const ObserveTeacherLessonIndex = () => {
 
     const onSubmit = (data) => {
 
-        request(`${BackUrl}teacher_observe/${id}`, "POST", JSON.stringify({list: fields,month,day}),headers())
+        request(`${BackUrl}teacher/teacher_observe/${id}`, "POST", JSON.stringify({list: fields,month,day}),headers())
             .then(res => {
                 const alert = {
                     active : true,

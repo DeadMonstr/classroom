@@ -31,7 +31,7 @@ const TeacherObservationIndex = () => {
 
 
     useEffect(() => {
-        request(`${BackUrl}groups_to_observe`,"GET",null,headers())
+        request(`${BackUrl}teacher/groups_to_observe`,"GET",null,headers())
             .then(res => {
                 if (res.observation_tools.length < 1) {
                     setMonth(res.observation_tools[0].value)
@@ -45,7 +45,7 @@ const TeacherObservationIndex = () => {
 
     useEffect(() => {
         if (day && month) {
-            request(`${BackUrl}groups_to_observe`,"POST",JSON.stringify({month,day}),headers())
+            request(`${BackUrl}teacher/groups_to_observe`,"POST",JSON.stringify({month,day}),headers())
                 .then(res => {
                     setGroups(res.groups)
                 })

@@ -31,7 +31,7 @@ const TeacherSalary = () => {
 
 
     useEffect(() => {
-        request(`${BackUrl}teacher_salary_info`, "GET", null, headers())
+        request(`${BackUrl}teacher/teacher_salary_info`, "GET", null, headers())
             .then(res => {
 
                 if (res.locations.length === 1) {
@@ -53,7 +53,7 @@ const TeacherSalary = () => {
 
     useEffect(() => {
         if (year && location) {
-            request(`${BackUrl}block_salary/${location}/${year}`, "GET", null, headers())
+            request(`${BackUrl}teacher/block_salary/${location}/${year}`, "GET", null, headers())
                 .then(res => {
                     setSalaries(res.data)
                 })

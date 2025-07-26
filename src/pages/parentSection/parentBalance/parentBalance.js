@@ -13,7 +13,6 @@ const ParentBalance = ({balance}) => {
                 <Link className={styles.balance__btn} to={"parentBalance"}>Hammasi</Link>
             </div>
             <h1 className={styles.balance__balanceAmount}>$ {balance}</h1>
-            <p className={styles.balance__deadline}>01.01.2025 dan 01.02.2025 gacha</p>
         </Card>
     );
 };

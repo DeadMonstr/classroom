@@ -23,7 +23,7 @@ export const fetchDataLessonsDegree = createAsyncThunk(
     'FinishedLessons/fetchDataLessonsDegree',
     async (data) => {
         const {request} = useHttp();
-        return await request(`${BackUrl}group_degree`,"POST",JSON.stringify(data),headers())
+        return await request(`${BackUrl}teacher/group_degree/`,"POST",JSON.stringify(data),headers())
     }
 )
 

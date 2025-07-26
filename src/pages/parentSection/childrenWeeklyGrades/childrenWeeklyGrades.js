@@ -1,127 +1,14 @@
 import React from 'react';
 import styles from "./childrenWeeklyGrades.module.sass"
-import Card from "../../../components/ui/card";
+
 import SubjectScore from "../../../components/ui/subjectScore/subjectScore";
 import {Link} from "react-router-dom";
 import {isMobile} from "react-device-detect";
 
-const data = [
-    {
-        id: 1,
-        day_name: "Dush",
-        subjects: [
-            {
-                id: 1,
-                name: "INgliz tili",
-                icon: "🧬",
-                grade: "5",
-                color: "green"
-            },
-            {
-                id: 2,
-                name: "Web dasturchilik",
-                icon: "🧬",
-                grade: "2",
-                color: "red"
-            },
-            {
-                id: 3,
-                name: "Biologiya",
-                icon: "🧬",
-                grade: "3",
-                color: "yellow"
-            }
-        ]
-    },
-    {
-        id: 2,
-        day_name: "Sesh",
-        subjects: [
-            {
-                id: 1,
-                name: "INgliz tili",
-                icon: "🧬",
-                grade: "5",
-                color: "green"
-            },
-            {
-                id: 2,
-                name: "Web dasturchilik",
-                icon: "🧬",
-                grade: "2",
-                color: "red"
-            },
-            {
-                id: 3,
-                name: "Biologiya",
-                icon: "🧬",
-                grade: "3",
-                color: "yellow"
-            }
-        ]
-    },{
-        id: 2,
-        day_name: "Sesh",
-        subjects: [
-            {
-                id: 1,
-                name: "INgliz tili",
-                icon: "🧬",
-                grade: "5",
-                color: "green"
-            },
-            {
-                id: 2,
-                name: "Web dasturchilik",
-                icon: "🧬",
-                grade: "2",
-                color: "red"
-            },
-            {
-                id: 3,
-                name: "Biologiya",
-                icon: "🧬",
-                grade: "3",
-                color: "yellow"
-            }
-        ]
-    },{
-        id: 2,
-        day_name: "Sesh",
-        subjects: [
-            {
-                id: 1,
-                name: "INgliz tili",
-                icon: "🧬",
-                grade: "5",
-                color: "green"
-            },
-            {
-                id: 2,
-                name: "Web dasturchilik",
-                icon: "🧬",
-                grade: "2",
-                color: "red"
-            },
-            {
-                id: 3,
-                name: "Biologiya",
-                icon: "🧬",
-                grade: "3",
-                color: "yellow"
-            }
-        ]
-    },
-    {
-        id: 3,
-        day_name: "Chor",
-        subjects: []
-    }
-]
+
 
 const ChildrenWeeklyGrades = ({weeklyData}) => {
 
-    console.log(weeklyData, 'dddf')
 
     const renderSubjects = () => {
         return weeklyData?.map((item, index) => {
@@ -200,7 +87,11 @@ const ChildrenWeeklyGrades = ({weeklyData}) => {
                     <div className={styles.grade}>
                         <div className={styles.grade__header}>
                             <h2>Bugungi baholar </h2>
-                            <Link className={styles.grade__header__link} to={"monthly-grades"}>Hammasi</Link>
+                            {
+                                weeklyData && weeklyData.length < 0 ? null :
+                                    <Link className={styles.grade__header__link} to={"monthly-grades"}>Hammasi</Link>
+                            }
+
                         </div>
                         <div className={styles.grade__box}>
                             {

@@ -1,0 +1,171 @@
+.main {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  margin: 0 2rem;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.main.default .image {
+  display: none;
+}
+.main.default .content {
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+}
+.main.background {
+  position: relative;
+}
+.main.background .image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+.main.background .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.main.background .content {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.68);
+  top: 0;
+  left: 0;
+  padding: 3rem;
+}
+.main.left {
+  display: flex;
+}
+.main.left .image {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main.left .image img {
+  width: 30rem;
+  height: 30rem;
+  object-fit: cover;
+}
+.main.left .content {
+  width: 50%;
+  height: 100%;
+  padding: 3rem;
+}
+.main.right {
+  display: flex;
+}
+.main.right .image {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  order: 2;
+}
+.main.right .image img {
+  width: 30rem;
+  height: 30rem;
+  object-fit: cover;
+}
+.main.right .content {
+  width: 50%;
+  height: 100%;
+  order: 1;
+  padding: 3rem;
+}
+.main.fullLeft {
+  display: flex;
+}
+.main.fullLeft .image {
+  min-width: 30%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main.fullLeft .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.main.fullLeft .content {
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+}
+.main.fullRight {
+  display: flex;
+}
+.main.fullRight .image {
+  min-width: 30%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  order: 2;
+}
+.main.fullRight .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.main.fullRight .content {
+  width: 100%;
+  height: 100%;
+  order: 1;
+  padding: 3rem;
+}
+.main.top {
+  display: flex;
+  flex-direction: column;
+}
+.main.top .image {
+  width: 100%;
+  min-height: 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main.top .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.main.top .content {
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+}
+.main.bottom {
+  display: flex;
+  flex-direction: column;
+}
+.main.bottom .image {
+  width: 100%;
+  min-height: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  order: 2;
+}
+.main.bottom .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.main.bottom .content {
+  width: 100%;
+  height: 100%;
+  order: 1;
+  padding: 3rem;
+}
+
+/*# sourceMappingURL=content.module.css.map */

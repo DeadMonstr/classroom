@@ -60,6 +60,8 @@ const Index = () => {
         dispatch(onChangeSelectType({type: type}))
     }
 
+
+    console.log(selectedLevel)
     useEffect(() => {
         dispatch(fetchChaptersData(selectedLevel))
     }, [selectedLevel])
@@ -443,7 +445,7 @@ const Lesson = ({students, lessonId}) => {
 
     const {request} = useHttp()
     const getExercise = (studentId) => {
-        request(`${BackUrl}student_exercise_block/${lessonId}/${studentId}`, "GET", null, headers())
+        request(`${BackUrl}teacher/student_exercise_block/${lessonId}/${studentId}`, "GET", null, headers())
             .then(res => {
 
                 setExercises(res?.data?.lesson?.blocks?.map((item,i) => {

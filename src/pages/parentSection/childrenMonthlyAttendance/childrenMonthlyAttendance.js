@@ -8,83 +8,21 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     fetchChildrenAttendance,
     fetchChildrenAttendanceMonthly,
-    fetchChildrenGroups, fetchChildrenTest, fetchChildrenTests, fetchChildrenTestsDate
+    fetchChildrenGroups,  fetchChildrenTests, fetchChildrenTestsDate
 } from "../../../slices/parentSlice";
 
-// const years = ["2025", "2024", "2023"];
 
-const months = ['01', '02', '03', '04', '05', '06', '07']
 
-const weekDays = [
-    { id: 7, name: "Dush" },
-    { id: 8, name: "Sesh" },
-    { id: 9, name: "Chor" },
-    { id: 10, name: "Pay" },
-    { id: 11, name: "Jum" },
-    { id: 12, name: "Shan" },
-];
 
-const data = [
-    {
-        id: 7,
-        name: "Dushanba",
-        subjects: [
-            { id: 2, name: "Ingliz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 3, name: "Rus tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 4, name: "Fransuz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: false }
-        ]
-    },
-    {
-        id: 8,
-        name: "Seshanba",
-        subjects: [
-            { id: 2, name: "Ingliz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 3, name: "Rus tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 4, name: "Fransuz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: false }
-        ]
-    },
-    {
-        id: 9,
-        name: "Chorshanba",
-        subjects: [
-            { id: 2, name: "Ingliz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: false },
-            { id: 3, name: "Rus tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 4, name: "Fransuz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: false }
-        ]
-    },
-    {
-        id: 10,
-        name: "Payshanba",
-        subjects: [
-            { id: 2, name: "Ingli tili", group_name: "2-guruh", time: "12:00/14:00", isCome: false },
-            { id: 3, name: "Rus tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 4, name: "Fransuz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: false }
-        ]
-    },
-    {
-        id: 11,
-        name: "Juma",
-        subjects: [
-            { id: 2, name: "Ingliz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 3, name: "Rus tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 4, name: "Fransuz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: false }
-        ]
-    },
-    {
-        id: 12,
-        name: "Shanba",
-        subjects: [
-            { id: 2, name: "Ingliz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 3, name: "Rus tili", group_name: "2-guruh", time: "12:00/14:00", isCome: true },
-            { id: 4, name: "Fransuz tili", group_name: "2-guruh", time: "12:00/14:00", isCome: false }
-        ]
-    }
-];
 
 const ChildrenMonthlyAttendance = () => {
+
+
+
     const [year, setYear] = useState();
     const [month, setMonth] = useState();
     const [group, setGroup] = useState();
+    const [availableMonths, setAvailableMonths] = useState([]);
     const dispatch = useDispatch()
     const [selectedDayId, setSelectedDayId] = useState();
     const currentMonth = localStorage.getItem("current_month")
@@ -95,7 +33,18 @@ const ChildrenMonthlyAttendance = () => {
     const years = dates.data?.years
     const months = dates.data?.months?.flatMap(item => item.months) || [];
     const groupIds = groups.group_list
-
+    useEffect(() => {
+        if (year) {
+            const selectedYearData = dates.data?.months.find(item => item.year === year);
+            if (selectedYearData) {
+                setAvailableMonths(selectedYearData.months);
+            } else {
+                setAvailableMonths([]);
+            }
+        } else {
+            setAvailableMonths([]);
+        }
+    }, [year, dates.data?.months]);
 
     useEffect(() => {
        if(!currentUsername){
@@ -121,7 +70,6 @@ const ChildrenMonthlyAttendance = () => {
         }
     }, [year, month, group])
 
-    console.log(year , "log")
     const renderCard = () => {
         const todayDate = new Date().getDate();
 
@@ -200,7 +148,7 @@ const ChildrenMonthlyAttendance = () => {
                         />
                         <Select
                             title={"Oy"}
-                            value={month}
+                            value={availableMonths}
                             onChange={setMonth}
                             options={months}
                             defaultOption={"Oy"}
@@ -222,7 +170,7 @@ const ChildrenMonthlyAttendance = () => {
                         {/*<h1>Davomat</h1>*/}
                         <div className={styles.attendance__header__second__box}>
                             <Select defaultOption={"Yil"} title={"Yil"} value={year} onChange={setYear} options={years} extraClassName={styles.attendance__header__second__box__select} />
-                            <Select defaultOption={"Oy"} title={"Oy"} value={month} onChange={setMonth} options={months} extraClassName={styles.attendance__header__second__box__select} />
+                            <Select defaultOption={"Oy"} title={"Oy"} value={availableMonths} onChange={setMonth} options={months} extraClassName={styles.attendance__header__second__box__select} />
                             <Select
                                 title={"Guruh"}
                                 value={group}

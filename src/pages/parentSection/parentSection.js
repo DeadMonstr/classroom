@@ -15,7 +15,7 @@ import {
 } from "../../slices/parentSlice";
 import {isMobile} from "react-device-detect";
 import ChildrenLayoutMB from "./childrenLayoutMB/childrenLayoutMB";
-import ChildrenMonthlyGrades from "./childrenMonthlyGrades/childrenMonthlyGrades";
+
 
 const ParentSection = () => {
     const [innerType,setInnerType] = useState()
@@ -30,21 +30,20 @@ const ParentSection = () => {
     localStorage.setItem("group_id", selectedGroupId)
     localStorage.setItem("current_month", dates.data?.current_month)
     localStorage.setItem("current_year", dates.data?.current_year)
-    localStorage.setItem("current_username", selectedChild?.username)
     localStorage.setItem("platform_id", selectedChild?.platform_id)
-    console.log(innerType , "innerType")
-    const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
-    const currentMonth = localStorage.getItem("current_month")
-    const currentYear = localStorage.getItem("current_year")
 
 
 
 
     useEffect(() => {
-        dispatch(fetchParentData(data.id))
+        if (data?.id)  dispatch(fetchParentData(data.id))
     },[data.id])
 
     useEffect(() => {
+        const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
+        const currentMonth = localStorage.getItem("current_month")
+        const currentYear = localStorage.getItem("current_year")
+
         if (selectedChild?.platform_id) {
             dispatch(fetchChildrenAttendance(selectedChild?.platform_id))
             dispatch(fetchChildrenGroups(selectedChild?.platform_id))

@@ -22,7 +22,7 @@ const TeacherStudentsDebt = () => {
 
 
     useEffect(() => {
-        request(`${BackUrl}teacher_black_salary`, "GET",null,headers())
+        request(`${BackUrl}teacher/teacher_black_salary`, "GET",null,headers())
             .then(res => {
                 setGroups(res.groups)
                 setStudents(res.students)

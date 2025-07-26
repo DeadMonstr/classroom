@@ -11,28 +11,19 @@ const ChildrenWeeklyAttendance = ({weeklyData}) => {
 
 
     const renderCard = () => {
-        const weekDays = [
-            "Yakshanba",
-            "Dushanba",
-            "Seshanba",
-            "Chorshanba",
-            "Payshanba",
-            "Juma",
-            "Shanba"
-        ];
-        const todayName = weekDays[new Date().getDay()];
+
 
         return weeklyData?.map((item, index) => {
-            const isToday = item.name === todayName;
+
 
             return (
                 <Card
                     key={index}
-                    extraClassname={`${styles.card__daysList__dayBox} ${isToday ? styles.activeDay : ""}`}
+                    extraClassname={styles.card__daysList__dayBox}
                 >
                     <div className={styles.card__daysList__dayBox__dayNum}>
-                        <h3 className={`${styles.card__daysList__dayBox__dayNum__dayName} ${isToday ? styles.activeColor : ""}`}>{item.weekday}</h3>
-                        <h1  className={`${styles.card__daysList__dayBox__dayNum__dayName} ${isToday ? styles.activeColor : ""}`}>{item.date}</h1>
+                        <h3 className={styles.card__daysList__dayBox__dayNum__dayName}>{item.weekday}</h3>
+                        <h1  className={styles.card__daysList__dayBox__dayNum__dayName}>{item.date}</h1>
                     </div>
                     {item.attendances?.map((subject, subIndex) => (
                         <div
@@ -58,7 +49,11 @@ const ChildrenWeeklyAttendance = ({weeklyData}) => {
         <Card extraClassname={styles.card}>
             <div className={styles.card__header}>
                 <h1>Davomat</h1>
-                <Link className={styles.card__header__btn} to={"/home/childrenAttendance"}>Hammasi</Link>
+                {
+                    weeklyData && weeklyData.length < 0 ? null :
+                        <Link className={styles.card__header__btn} to={"/home/childrenAttendance"}>Hammasi</Link>
+                }
+
             </div>
             <div className={styles.card__daysList}>
                 {renderCard()}
