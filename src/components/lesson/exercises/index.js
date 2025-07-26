@@ -689,7 +689,6 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
                         img: typeof options[i].img === "object" ? ans[0].img : options[i].img
                     })
                 } else {
-
                     newOptions.push(options[i])
                 }
             }
@@ -788,7 +787,7 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
         }
 
         if (!disabled && !disabledExc) {
-            request(`${BackUrl}complete_exercise`, "POST", JSON.stringify(data), headers())
+            request(`${BackUrl}student/lesson/complete/`, "POST", JSON.stringify(data), headers())
                 .then(res => {
                     setAnswers([])
                     dispatch(setArchiveId({id: res.archive_id}))

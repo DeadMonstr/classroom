@@ -181,7 +181,7 @@ const Lesson = ({isNavigate}) => {
 
     useEffect(() => {
         if (components.length > 0 && role === ROLES.Student) {
-            request(`${BackUrl}finish/lesson/${studentLessonId}`, "GET", null, headers())
+            request(`${BackUrl}student/finish/lesson/${studentLessonId}/`, "GET", null, headers())
                 .then(res => {
                     console.log(res)
                 })
