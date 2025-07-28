@@ -47,6 +47,7 @@ const Username = () => {
 
 	const {register,handleSubmit,formState:{errors},watch,setError,clearErrors} = useForm()
 	const {data:{platform_id,username,id}} = useSelector(state => state.user)
+	const [isFound,setIsFound] = useState(false)
 	const watchUsername = watch("username")
 
 
@@ -58,12 +59,15 @@ const Username = () => {
 	useEffect(() => {
 		if (username !== watchUsername && watchUsername !== undefined && watchUsername !== "") {
 
-			request(`${BackUrl}check_username`,"POST",JSON.stringify({username: watchUsername}),headers())
+			request(`${BackUrl}user/check_username`,"POST",JSON.stringify({username: watchUsername}),headers())
 				.then(res => {
 					if (res.found) {
 						setError('username', { type: 'custom', message: 'Username band' })
+						setIsFound(true)
 					} else {
 						clearErrors("username")
+						setIsFound(false)
+
 					}
 				})
 
@@ -86,7 +90,7 @@ const Username = () => {
 
 
 
-		request(`${BackUrl}change_pas_user`,"POST",JSON.stringify(newData),headers())
+		request(`${BackUrl}user/change_pas_user`,"POST",JSON.stringify(newData),headers())
 			.then(res => {
 				const alert = {
 					active : true,
@@ -125,7 +129,7 @@ const Username = () => {
 				required={true}
 			/>
 
-			<Button form={"form-username"} type={"submit"} >Tasdiqlash</Button>
+			<Button disabled={isFound} form={"form-username"} type={"submit"} >Tasdiqlash</Button>
 		</Form>
 	)
 }
@@ -158,7 +162,7 @@ const Password = () => {
 		}
 
 
-		request(`${BackUrl}change_pas_user`,"POST",JSON.stringify(newData),headers())
+		request(`${BackUrl}user/change_pas_user`,"POST",JSON.stringify(newData),headers())
 			.then(res => {
 				const alert = {
 					active : true,
