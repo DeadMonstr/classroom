@@ -40,7 +40,7 @@ const ParentSection = () => {
     },[data.id])
 
     useEffect(() => {
-        const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
+        const groupId = localStorage.getItem("group_id")
         const currentMonth = localStorage.getItem("current_month")
         const currentYear = localStorage.getItem("current_year")
 
@@ -49,7 +49,9 @@ const ParentSection = () => {
             dispatch(fetchChildrenGroups(selectedChild?.platform_id))
             dispatch(fetchChildrenAttendanceWeekly(selectedChild?.platform_id))
             dispatch(fetchChildrenBalance(selectedChild?.platform_id))
-            dispatch(fetchChildrenTestsDate(groupId))
+            if (!groupId ) {
+                dispatch(fetchChildrenTestsDate(groupId))
+            }
             if (!groupId && !currentYear && !currentMonth ) {
                 dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
             }

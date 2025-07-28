@@ -16,7 +16,7 @@ const ChildrenMonthlyTestsResults = () => {
     const [year, setYear] = useState();
     const [month, setMonth] = useState();
     const [group, setGroup] = useState();
-    const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
+    const groupId = (localStorage.getItem("group_id"))
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
     const currentUsername = localStorage.getItem("platform_id")
@@ -28,7 +28,9 @@ const ChildrenMonthlyTestsResults = () => {
 
 
     useEffect(() => {
-        dispatch(fetchChildrenTestsDate(groupId))
+        if (groupId || groupId !==  undefined) {
+            dispatch(fetchChildrenTestsDate(groupId))
+        }
         dispatch(fetchChildrenGroups(currentUsername))
         if (!groupId && !currentYear && !currentMonth ) {
             dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))

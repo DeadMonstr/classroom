@@ -24,7 +24,7 @@ const ChildrenMonthlyGrades = () => {
     const dispatch = useDispatch()
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
-    const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
+    const groupId = localStorage.getItem("group_id")
     const currentUsername = localStorage.getItem("platform_id")
     const {monthlyAttendance, dates} = useSelector(state => state.parentSlice)
 
@@ -47,7 +47,9 @@ const ChildrenMonthlyGrades = () => {
         dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
         dispatch(fetchChildrenGroups(currentUsername))
         dispatch(fetchChildrenAttendance(currentUsername))
-        dispatch(fetchChildrenTestsDate(groupId))
+        if (!groupId) {
+            dispatch(fetchChildrenTestsDate(groupId))
+        }
         if (!groupId && !currentYear && !currentMonth ) {
             dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
         }
