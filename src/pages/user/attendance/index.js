@@ -36,13 +36,13 @@ const AttendanceStudent = () => {
 		// 	"Authorization" : "Bearer " + oldToken,
 		// }
 
-		request(`${BackUrl}combined_attendances2/${id}`,"GET",null,headers())
+		request(`${BackUrl}student/combined_attendances2/${id}`,"GET",null,headers())
 			.then(res => {
 				setDays(res.data.dates)
 				setAttendance(res.data.attendances)
 			})
 
-		request(`${BackUrl}student_group_dates/${id}`,"GET",null,headers())
+		request(`${BackUrl}student/student_group_dates/${id}`,"GET",null,headers())
 			.then(res => {
 				setYears(res.data.years)
 				setMonths(res.data.months)
@@ -63,7 +63,7 @@ const AttendanceStudent = () => {
 			}
 
 
-			request(`${BackUrl}combined_attendances2/${id}`,"POST",JSON.stringify(data),headers())
+			request(`${BackUrl}student/combined_attendances2/${id}`,"POST",JSON.stringify(data),headers())
 				.then(res => {
 					setDays(res.data.dates)
 					setAttendance(res.data.attendances)
