@@ -30,7 +30,7 @@ const GroupsIndex = () => {
 	const {request} = useHttp()
 
 	useEffect(() => {
-		request(`${BackUrl}get_groups`,"GET",null,headers())
+		request(`${BackUrl}group/get_groups`,"GET",null,headers())
 			.then(res => {
 				setGroups(res)
 			})

@@ -15,7 +15,7 @@ export const  fetchGroup = createAsyncThunk(
 	async (id) => {
 		const {request} = useHttp();
 
-		return await request(`${BackUrl}group_profile2/${id}`,"GET",null,headers())
+		return await request(`${BackUrl}group/group_profile2/${id}`,"GET",null,headers())
 	}
 )
 
@@ -25,7 +25,7 @@ export const  fetchGroupObserver = createAsyncThunk(
 		const {request} = useHttp();
 		const token = sessionStorage.getItem("oldToken")
 
-		return await request(`${BackUrl}group_observer/${id}`,"GET",null,headers())
+		return await request(`${BackUrl}group/group_observer/${id}`,"GET",null,headers())
 	}
 )
 

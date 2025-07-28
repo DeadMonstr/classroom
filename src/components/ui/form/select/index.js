@@ -132,7 +132,7 @@ const Select = React.memo((
                                         placeholder: placeholder,
                                         required: required,
                                     })}
-                                    onChange={onChange ? e => onChange(e.target.value) : null}
+                                    onChange={onChange ? e => onChange(e?.target?.value) : null}
                                     name={name}
                                     id={name}
                                     value={value}
@@ -154,7 +154,7 @@ const Select = React.memo((
                                     value={value}
                                     required={required}
                                     placeholder={placeholder}
-                                    onChange={e => onChange(e.target.value)}
+                                    onChange={e => onChange(e?.target?.value)}
                                     name={name}
                                     id={name}
                                 >

@@ -38,7 +38,7 @@ const AttendanceTable = ({backBtn}) => {
 
 			setLoading(true)
 
-			request(`${BackUrl}group_dates2/${data.id}`,"GET",null,headers())
+			request(`${BackUrl}group/group_dates2/${data.id}`,"GET",null,headers())
 				.then(res => {
 					setLoading(false)
 					setMonths(res.data.months)
@@ -68,7 +68,7 @@ const AttendanceTable = ({backBtn}) => {
 
 			setLoading(true)
 
-			request(`${BackUrl}attendances/${data.id}`,"POST",JSON.stringify(newData),headers())
+			request(`${BackUrl}group/attendances/${data.id}`,"POST",JSON.stringify(newData),headers())
 				.then(res => {
 					setLoading(false)
 					if (system_name === "gennis") {
