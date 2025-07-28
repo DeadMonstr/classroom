@@ -3,6 +3,12 @@ import {activeTypesSideBar} from "components/presentation/types";
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
+const DefaultDesign= {
+
+    fontColor: "#000000",
+
+}
+
 
 const initialState = {
 
@@ -103,10 +109,18 @@ const PresentationSlice = createSlice({
 
 
         setDesignLayoutOption: (state, action) => {
-            const { type, layout } = action.payload;
+            const { type, layout,extra } = action.payload;
             if (type === "current") {
                 state.currentSlide.design.layout = layout;
                 state.currentSlide.extraDesign.layout = "";
+
+
+                const keys = extra ? Object.keys(extra) : Object.keys(DefaultDesign)
+                const value = extra || DefaultDesign
+                keys.forEach((key) => {
+                    state.currentSlide.design[key] = value[key];
+                })
+
             } else {
                 state.currentSlide.extraDesign.layout = layout;
             }

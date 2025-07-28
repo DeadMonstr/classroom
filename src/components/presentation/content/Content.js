@@ -106,14 +106,14 @@ const Content = () => {
 
 
 
-            <HeadingContent />
 
-            {/*<div className={cls.content} style={{backgroundColor: bgColor}}>*/}
+            <div className={cls.content} style={{backgroundColor: bgColor}}>
+                <HeadingContent />
 
 
-            {/*    /!*<ParagraphContent/>*!/*/}
-            {/*    /!*<NumberContent/>*!/*/}
-            {/*</div>*/}
+                {/*<ParagraphContent/>*/}
+                {/*<NumberContent/>*/}
+            </div>
 
         </ActiveBox>
     );

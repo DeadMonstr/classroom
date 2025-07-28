@@ -61,7 +61,6 @@ const Index = () => {
     }
 
 
-    console.log(selectedLevel)
     useEffect(() => {
         dispatch(fetchChaptersData(selectedLevel))
     }, [selectedLevel])
@@ -116,7 +115,6 @@ const Index = () => {
 
     }, [selectedChapter, selectedLevel, selectedLesson, typeData])
 
-    console.log(data)
 
 
     const renderData = useCallback(() => {
@@ -169,11 +167,10 @@ const Index = () => {
                         />
                     }
                 </div>
-
             </div>
+
             <div className={cls.wrapper}>
                 {renderData()}
-
             </div>
         </div>
     )
@@ -279,13 +276,6 @@ const Level = ({chapters}) => {
                         }
                     >
                         {renderStudentsData(item.students)}
-                        {/*{items?.map((item) =>*/}
-                        {/*    <SortableItem*/}
-                        {/*        containerId={chapter.id}*/}
-                        {/*        item={item}*/}
-                        {/*        key={item.id}*/}
-                        {/*    />*/}
-                        {/*)}*/}
                     </div>
                 </div>
             )
@@ -447,8 +437,7 @@ const Lesson = ({students, lessonId}) => {
     const getExercise = (studentId) => {
         request(`${BackUrl}teacher/student_exercise_block/${lessonId}/${studentId}`, "GET", null, headers())
             .then(res => {
-
-                setExercises(res?.data?.lesson?.blocks?.map((item,i) => {
+                setExercises(res?.data?.lesson?.blocks?.exercise_block?.map((item,i) => {
                     const index = i + 1
                     if (item.type === "exc") {
                         const block = item.exercise_block
@@ -539,9 +528,7 @@ const Lesson = ({students, lessonId}) => {
                 </tr>
                 </thead>
                 <tbody>
-                {renderStudentsData()}
-
-
+                    {renderStudentsData()}
                 </tbody>
             </Table>
 

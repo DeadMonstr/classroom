@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import cls from "./designSidebar.module.sass";
 import classNames from "classnames";
 
@@ -21,404 +21,214 @@ import {ReactComponent as VrCenter} from "assets/icons/vertical-center.svg"
 import {ReactComponent as VrBottom} from "assets/icons/vertical-bottom.svg"
 
 
+
+
 import Popup from "components/ui/popup/Popup";
 import Button from "components/ui/button";
 import ColorPopup from "components/ui/colorPopup/colorPopup";
 
-
-import {typesPresentation} from "components/presentation/types";
 import {useDispatch, useSelector} from "react-redux";
 import {
     clearExtraOptions,
     setDesignHorizontalAlign,
     setDesignVerticalAlign,
-    setDesignLayoutOption, setDesignLayoutSize, setDesignFontSize, setDesignFontColor, setDesignBackgroundColor
+    setDesignLayoutOption,
+    setDesignLayoutSize,
+    setDesignFontSize,
+    setDesignFontColor,
+    setDesignBackgroundColor,
 } from "slices/presentationSlice";
-import {useExamSecurity} from "hooks/useExamSecurity";
 
-
-const typeDesign = [
-    "Slide", "Theme"
-]
-
+const MAX_SIZE = 4;
+const MIN_SIZE = 0;
 
 const optionsLayout = [
     {
         type: "default",
-        content: <Default/>
+        content: <Default/>,
     },
     {
         type: "background",
-        content: <Background/>
+        content: <Background/>,
+        extraOptions: {
+            fontColor: '#ffffff',
+        }
     },
-    {
-        type: "left",
-        content: <Left/>
-    },
-    {
-        type: "right",
-        content: <Right/>
-    },
-    {
-        type: "fullLeft",
-        content: <FullLeft/>
-    },
-    {
-        type: "fullRight",
-        content: <FullRight/>
-    },
-    {
-        type: "top",
-        content: <Top/>
-    },
-    {
-        type: "bottom",
-        content: <Bottom/>
-    }
-]
-
+    {type: "left", content: <Left/>},
+    {type: "right", content: <Right/>},
+    {type: "fullLeft", content: <FullLeft/>},
+    {type: "fullRight", content: <FullRight/>},
+    {type: "top", content: <Top/>},
+    {type: "bottom", content: <Bottom/>},
+];
 
 const optionsHorizontal = [
-    {
-        type: "left",
-        content: <HrLeft/>
-    },
-    {
-        type: "center",
-        content: <HrCenter/>
-    },
-    {
-        type: "right",
-        content: <HrRight/>
-    }
-]
-
+    {type: "left", content: <HrLeft/>},
+    {type: "center", content: <HrCenter/>},
+    {type: "right", content: <HrRight/>},
+];
 
 const optionsVertical = [
-    {
-        type: "top",
-        content: <VrTop/>
-    },
-    {
-        type: "center",
-        content: <VrCenter/>
-    },
-    {
-        type: "bottom",
-        content: <VrBottom/>
-    }
-]
-
+    {type: "top", content: <VrTop/>},
+    {type: "center", content: <VrCenter/>},
+    {type: "bottom", content: <VrBottom/>},
+];
 
 const DesignSidebar = () => {
-    const {currentSlide} = useSelector(state => state.presentation)
-
-
-    const [type, setType] = useState("Slide")
+    const dispatch = useDispatch();
+    const {currentSlide} = useSelector((state) => state.presentation);
     const [color, setColor] = useState("#000000");
     const [backgroundColor, setBackgroundColor] = useState("#ffffff");
 
-
+    useEffect(() => {
+        setColor(currentSlide.design.fontColor);
+    }, [currentSlide.design.fontColor]);
 
     useEffect(() => {
-        setColor(currentSlide.design.fontColor)
-    },[currentSlide.design.fontColor])
+        setBackgroundColor(currentSlide.design.backgroundColor);
+    }, [currentSlide.design.backgroundColor]);
 
-    useEffect(() => {
-        setBackgroundColor(currentSlide.design.backgroundColor)
-    },[currentSlide.design.backgroundColor])
-
-
-
-    const dispatch = useDispatch()
-
-
-    const onHover = useCallback((typeOption, type) => {
-        if (typeOption === "horizontal" || typeOption === "vertical") {
-            onChangeAlign(typeOption, type, "extra")
-        } else if (typeOption === "layout") {
-            onChangeLayoutOption(type,"extra")
+    const handleHover = useCallback((optionType, value , extra) => {
+        if (optionType === "horizontal" || optionType === "vertical") {
+            handleAlign(optionType, value, "extra");
+        } else if (optionType === "layout") {
+            console.log(extra,"exijnawsedjibnasidjb")
+            handleLayout(value, extra,"extra");
         }
-    },[])
+    }, []);
 
-    const onLeave = useCallback((typeOption) => {
-        dispatch(clearExtraOptions(typeOption))
-    },[])
+    const handleLeave = useCallback((optionType) => {
+        dispatch(clearExtraOptions(optionType));
+    }, [dispatch]);
 
+    const handleAlign = useCallback((axis, value, target = "current") => {
+        const action = axis === "horizontal" ? setDesignHorizontalAlign : setDesignVerticalAlign;
+        dispatch(action({type: target, align: value}));
+    }, [dispatch]);
 
-    const onChangeAlign = useCallback((typeAlign, type, typePlace = "current") => {
-        if (typeAlign === "horizontal") {
-            dispatch(setDesignHorizontalAlign({type: typePlace, align: type}))
-        } else {
-            dispatch(setDesignVerticalAlign({type: typePlace, align: type}))
-        }
-    },[])
+    const handleLayout = useCallback((layout ,extra, target = "current") => {
+        dispatch(setDesignLayoutOption({type: target, layout, extra}));
+    }, [dispatch]);
 
-    const onChangeLayoutOption = useCallback((layout, typePlace = "current") => {
-        dispatch(setDesignLayoutOption({type: typePlace, layout}))
-    },[])
+    const handleSizeChange = useCallback((field, type) => {
+        const action = field === "layout" ? setDesignLayoutSize : setDesignFontSize;
+        const delta = type === "inc" ? 1 : -1;
+        dispatch(action(delta));
+    }, [dispatch]);
 
+    const handleColorChange = useCallback((color) => {
+        dispatch(setDesignFontColor(color));
+    }, [dispatch]);
 
-    const onChangeLayoutSize = useCallback((type) => {
-        if (type === "inc" ) {
-            dispatch(setDesignLayoutSize(1))
-        } else {
-            dispatch(setDesignLayoutSize(-1))
-        }
-    },[])
+    const handleBackgroundChange = useCallback((color) => {
+        dispatch(setDesignBackgroundColor(color));
+    }, [dispatch]);
 
-    const onChangeFontSize = useCallback((type) => {
-        if (type === "inc" ) {
-            dispatch(setDesignFontSize(1))
-        } else {
-            dispatch(setDesignFontSize(-1))
-        }
-    },[])
+    const renderControlButtons = (value, onInc, onDec) => (
+        <div className={cls.controller}>
+            <div
+                className={classNames(cls.item, {[cls.disabled]: value === MIN_SIZE})}
+                onClick={() => value > MIN_SIZE && onDec()}
+            >
+                <i className="fa-solid fa-minus"></i>
+            </div>
+            <div
+                className={classNames(cls.item, {[cls.disabled]: value === MAX_SIZE})}
+                onClick={() => value < MAX_SIZE && onInc()}
+            >
+                <i className="fa-solid fa-plus"></i>
+            </div>
+        </div>
+    );
 
-
-    const onChangeFontColor = (e) => {
-        dispatch(setDesignFontColor(e))
-        // setColor(e)
-    }
-
-
-    const onChangeBackgroundColor = (e) => {
-        dispatch(setDesignBackgroundColor(e))
-    }
-
-
-    // useExamSecurity();
-    //
-    // useEffect(() => {
-    //     const enterFullscreen = () => {
-    //         const el = document.documentElement;
-    //         if (el.requestFullscreen) {
-    //             el.requestFullscreen().catch((err) => {
-    //                 console.error("Fullscreen error:", err);
-    //             });
-    //         }
-    //     };
-    //
-    //     enterFullscreen();
-    // }, []);
-
-    // 12214
-
+    const renderOptionIcons = (options, currentValue, type) => (
+        <div className={cls.icons}>
+            {options.map((item) => (
+                <HoverElem
+                    key={item.type}
+                    onClick={() => handleAlign(type, item.type)}
+                    onEnter={() => handleHover(type, item.type)}
+                    onLeave={() => handleLeave(type)}
+                >
+                    <div className={classNames(cls.icon, {[cls.active]: currentValue === item.type})}>
+                        {item.content}
+                    </div>
+                </HoverElem>
+            ))}
+        </div>
+    );
 
     return (
         <div className={cls.design}>
-                {/*<div className={cls.designType}>*/}
-                {/*    {*/}
-                {/*        typeDesign.map(item => {*/}
-                {/*            return (*/}
-                {/*                <div*/}
-                {/*                    className={classNames(cls.designType__item, {*/}
-                {/*                        [cls.active]: type === item*/}
-                {/*                    })}*/}
-                {/*                    onClick={() => setType(item)}*/}
-                {/*                >*/}
-                {/*                    {item}*/}
-                {/*                </div>*/}
-                {/*            )*/}
-                {/*        })*/}
-                {/*    }*/}
-                {/*</div>*/}
-
-            {
-                currentSlide.design.isLayout &&
+            {currentSlide.design.isLayout && (
                 <div className={cls.layout}>
                     <h2 className={cls.titleComponent}>Layout</h2>
-
                     <div className={cls.layout__wrapper}>
-                        {
-                            optionsLayout.map(item => {
-                                return (
-                                    <HoverElem
-                                        onClick={() => onChangeLayoutOption(item.type)}
-                                        onEnter={() => onHover("layout", item.type)}
-                                        onLeave={() => onLeave("layout")}
-                                    >
-                                        <div
-                                            className={classNames(cls.item, {
-                                                [cls.active]: currentSlide.design.layout === item.type
-                                            })}
-                                        >
-                                            {item.content}
-                                        </div>
-                                    </HoverElem>
-
-                                )
-                            })
-                        }
+                        {optionsLayout.map((item) => (
+                            <HoverElem
+                                key={item.type}
+                                onClick={() => handleLayout(item.type, item.extraOptions)}
+                                onEnter={() => handleHover("layout", item.type,item.extraOptions)}
+                                onLeave={() => handleLeave("layout")}
+                            >
+                                <div className={classNames(cls.item, {
+                                    [cls.active]: currentSlide.design.layout === item.type,
+                                })}>
+                                    {item.content}
+                                </div>
+                            </HoverElem>
+                        ))}
                     </div>
-                    { currentSlide.design.isLayoutSize ?
+                    {currentSlide.design.isLayoutSize && (
                         <div className={cls.component}>
                             <h2 className={cls.subTitleComponent}>Image size</h2>
-                            <div>
-                                <div className={cls.controller}>
-                                    <div
-                                        className={classNames(cls.item, {
-                                            [cls.disabled]: currentSlide.design.layoutSize === 0
-                                        })}
-                                        onClick={() => {
-                                            if (currentSlide.design.layoutSize !== 0) onChangeLayoutSize("dec")
-                                        }}
-                                    >
-                                        <i className="fa-solid fa-minus"></i>
-                                    </div>
-                                    <div
-                                        className={classNames(cls.item, {
-                                            [cls.disabled]: currentSlide.design.layoutSize === 4
-                                        })}
-                                        onClick={() => {
-                                            if (currentSlide.design.layoutSize !== 4) onChangeLayoutSize("inc")
-                                        }}
-                                    >
-                                        <i className="fa-solid fa-plus"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> :null
-                    }
+                            {renderControlButtons(currentSlide.design.layoutSize, () => handleSizeChange("layout", "inc"), () => handleSizeChange("layout", "dec"))}
+                        </div>
+                    )}
                     <div className={cls.separator}/>
                 </div>
-            }
+            )}
 
-
-            <div className={cls.titleComponent}>
-                Text
-            </div>
-
+            <div className={cls.titleComponent}>Text</div>
             <div className={cls.component}>
                 <h2 className={cls.subTitleComponent}>Text color</h2>
-                <div>
-                    <ColorPopup color={color} setColor={onChangeFontColor}/>
-                </div>
+                <ColorPopup color={color} setColor={handleColorChange}/>
             </div>
 
-
-            {
-                currentSlide.design.isHorizontalAlign &&
+            {currentSlide.design.isHorizontalAlign && (
                 <div className={cls.component}>
                     <h2 className={cls.subTitleComponent}>Horizontal alignment</h2>
-                    <div>
-                        <div className={cls.icons}>
-                            {
-                                optionsHorizontal.map(item => {
-                                    return (
-                                        <HoverElem
-                                            onClick={() => onChangeAlign("horizontal", item.type)}
-                                            onEnter={() => onHover("horizontal", item.type)}
-                                            onLeave={() => onLeave("horizontal")}
-                                        >
-                                            <div
-                                                className={classNames(cls.icon, {
-                                                    [cls.active]: currentSlide.design.horizontalAlign === item.type
-                                                })}
-                                            >
-                                                {item.content}
-                                            </div>
-                                        </HoverElem>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
+                    {renderOptionIcons(optionsHorizontal, currentSlide.design.horizontalAlign, "horizontal")}
                 </div>
-            }
-            {
-                currentSlide.design.isVerticalAlign &&
+            )}
+
+            {currentSlide.design.isVerticalAlign && (
                 <div className={cls.component}>
                     <h2 className={cls.subTitleComponent}>Vertical alignment</h2>
-                    <div>
-                        <div className={cls.icons}>
-                            {
-                                optionsVertical.map(item => {
-                                    return (
-                                        <HoverElem
-                                            onClick={() => onChangeAlign("vertical", item.type)}
-                                            onEnter={() => onHover("vertical", item.type)}
-                                            onLeave={() => onLeave("vertical")}
-                                        >
-                                            <div
-                                                className={classNames(cls.icon, {
-                                                    [cls.active]: currentSlide.design.verticalAlign === item.type
-                                                })}
-                                            >
-                                                {item.content}
-                                            </div>
-                                        </HoverElem>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
+                    {renderOptionIcons(optionsVertical, currentSlide.design.verticalAlign, "vertical")}
                 </div>
-            }
+            )}
 
             <div className={cls.component}>
                 <h2 className={cls.subTitleComponent}>Text Size</h2>
-                <div>
-                    <div className={cls.controller}>
-                        <div
-                            className={classNames(cls.item, {
-                                [cls.disabled]: currentSlide.design.fontSize === 0
-                            })}
-                            onClick={() => {
-                                if (currentSlide.design.fontSize !== 0) onChangeFontSize("dec")
-                            }}
-                        >
-                            <i className="fa-solid fa-minus"></i>
-                        </div>
-                        <div
-                            className={classNames(cls.item, {
-                                [cls.disabled]: currentSlide.design.fontSize === 4
-                            })}
-                            onClick={() => {
-                                if (currentSlide.design.fontSize !== 4) onChangeFontSize("inc")
-                            }}
-                        >
-                            <i className="fa-solid fa-plus"></i>
-                        </div>
-                    </div>
-                </div>
-
+                {renderControlButtons(currentSlide.design.fontSize, () => handleSizeChange("font", "inc"), () => handleSizeChange("font", "dec"))}
             </div>
-
 
             <div className={cls.separator}/>
 
             <h2 className={cls.titleComponent}>Background</h2>
             <div className={cls.component}>
                 <h2 className={cls.subTitleComponent}>Background color</h2>
-
-                <div>
-                    <ColorPopup color={backgroundColor} setColor={onChangeBackgroundColor}/>
-                    {/*<ColorPicker color={color} onChange={setColor}  />;*/}
-                </div>
+                <ColorPopup color={backgroundColor} setColor={handleBackgroundChange}/>
             </div>
-
-
         </div>
-    )
-}
+    );
+};
 
+const HoverElem = React.memo(({children, onEnter, onLeave, onClick}) => (
+    <div onClick={onClick} onMouseEnter={onEnter} onMouseLeave={onLeave}>
+        {children}
+    </div>
+));
 
-
-
-
-const HoverElem = React.memo(({children, onEnter, onLeave, onClick}) => {
-
-        return (
-            <div
-                onClick={onClick}
-                onMouseEnter={onEnter}
-                onMouseLeave={onLeave}
-            >
-                {children}
-            </div>
-        )
-    }
-)
-
-export default DesignSidebar
+export default DesignSidebar;
