@@ -437,21 +437,22 @@ const Lesson = ({students, lessonId}) => {
     const getExercise = (studentId) => {
         request(`${BackUrl}teacher/student_exercise_block/${lessonId}/${studentId}`, "GET", null, headers())
             .then(res => {
-                setExercises(res?.data?.lesson?.blocks?.exercise_block?.map((item,i) => {
+                setExercises(res?.data?.student_lesson?.lesson_blocks?.map((item,i) => {
                     const index = i + 1
-                    if (item.type === "exc") {
-                        const block = item.exercise_block
-                        return {
-                            index: index + 1,
-                            completed: true,
-                            exc: {
-                                block
-                            },
-                            id: item.exercise_id,
-                            block_id: item.id,
-                            type: "exc"
-                        }
+
+                    const block = item.exercise
+                    return {
+                        completed: true,
+                        exc: {
+                            ...block,
+                            isCheckFinished: true
+                        },
+                        exercise_id: item.exercise_id,
+                        id: item.id,
+                        type: "exc",
+                        index: index,
                     }
+
                 }))
                 setLessonName(res?.data?.lesson?.name)
                 setActive(true)
@@ -471,7 +472,6 @@ const Lesson = ({students, lessonId}) => {
                     <td>{item.student_name}</td>
                     <td>{item.student_surname}</td>
                     <td>
-
                         {item.finished ?
                             <i style={{color: "green"}} className="fa-solid fa-check"></i>
                             :
