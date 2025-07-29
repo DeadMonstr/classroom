@@ -91,7 +91,7 @@ const MakeAttendanceIndex = () => {
         if (data.id) {
             setLoading(true)
 
-            request(`${BackUrl}attendance_classroom/${data.id}`, "GET", null, headers())
+            request(`${BackUrl}group/attendance_classroom/${data.id}`, "GET", null, headers())
                 .then(res => {
                     setUsers(res.users)
                     setLoading(false)
@@ -140,7 +140,7 @@ const MakeAttendanceIndex = () => {
                 }
                 setLoading(true)
 
-                const att = await request(`${BackUrl}make_attendance_classroom`, "POST", JSON.stringify(newItem), headers())
+                const att = await request(`${BackUrl}group/make_attendance_classroom`, "POST", JSON.stringify(newItem), headers())
                     .then(res => {
                         setLoading(false)
                         if (res?.errors?.length > 0) {
@@ -202,7 +202,7 @@ const MakeAttendanceIndex = () => {
             }
 
             setLoading(true)
-            const att = await request(`${BackUrl}make_attendance_classroom`, "POST", JSON.stringify(newItem), headers())
+            const att = await request(`${BackUrl}group/make_attendance_classroom`, "POST", JSON.stringify(newItem), headers())
                 .then(res => {
                     setLoading(false)
                     if (res?.errors?.length > 0) {
@@ -274,7 +274,7 @@ const MakeAttendanceIndex = () => {
     // 			}
     //
     //
-    // 			const att = await request(`${BackUrl}make_attendance_classroom`,"POST",JSON.stringify(newItem),headers())
+    // 			const att = await request(`${BackUrl}group/make_attendance_classroom`,"POST",JSON.stringify(newItem),headers())
     // 				.then(res => {
     // 					setLoading(false)
     // 					if (res?.errors?.length > 0) {
@@ -324,7 +324,7 @@ const MakeAttendanceIndex = () => {
     // 				score: defaultedScores
     // 			}
     //
-    // 			request(`${BackUrl}make_attendance_classroom`,"POST",JSON.stringify(newItem),headers())
+    // 			request(`${BackUrl}group/make_attendance_classroom`,"POST",JSON.stringify(newItem),headers())
     // 				.then(res => {
     // 					setLoading(false)
     // 					if (res?.errors?.length > 0) {
@@ -371,7 +371,7 @@ const MakeAttendanceIndex = () => {
         setUsers(users => users.map(item => {
             if (item.id === id && item.type !== "") {
                 setLoading(true)
-                request(`${BackUrl}delete_attendance_classroom/${item.attendance_id}/${item.id}/${data.platform_id}`,"GET",null,headers())
+                request(`${BackUrl}group/delete_attendance_classroom/${item.attendance_id}/${item.id}/${data.platform_id}`,"GET",null,headers())
                 	.then(res => {
                 		setLoading(false)
                 		if (res?.errors?.length > 0) {
@@ -450,7 +450,7 @@ const MakeAttendanceIndex = () => {
 
         setLoading(true)
 
-        request(`${BackUrl}make_attendance_classroom`, "POST", JSON.stringify({data: newData}), headers())
+        request(`${BackUrl}group/make_attendance_classroom`, "POST", JSON.stringify({data: newData}), headers())
             .then(res => {
                 setLoading(false)
                 if (res?.errors?.length > 0) {

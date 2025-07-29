@@ -60,7 +60,7 @@ const GroupTest = () => {
 
 
     useEffect(() => {
-        request(`${BackUrl}filter_test_datas/${id}`, "GET", null, headers())
+        request(`${BackUrl}group/filter_test_datas/${id}`, "GET", null, headers())
             .then(res => {
                 setMonths(res.month_list)
                 setYears(res.years_list)
@@ -86,7 +86,7 @@ const GroupTest = () => {
 
     useEffect(() => {
         if (year) {
-            request(`${BackUrl}filter_test_datas/${id}`, "POST", JSON.stringify({year}), headers())
+            request(`${BackUrl}group/filter_test_datas/${id}`, "POST", JSON.stringify({year}), headers())
                 .then(res => {
                     setMonths(res.month_list)
                 })
@@ -99,7 +99,7 @@ const GroupTest = () => {
 
     useEffect(() => {
         if (year && month) {
-            request(`${BackUrl}filter_test_group/${id}`, "POST", JSON.stringify({year, month}), headers())
+            request(`${BackUrl}group/filter_test_group/${id}`, "POST", JSON.stringify({year, month}), headers())
                 .then(res => {
                     setTests(res.tests)
                     setStudents(res.students)
@@ -112,7 +112,7 @@ const GroupTest = () => {
 
 
     // const onAddResultStudents = (data) => {
-    //     request(`${BackUrl}submit_test_group/${groupId}`, "POST",JSON.stringify({students,test_id: selectedTest}),headers())
+    //     request(`${BackUrl}group/submit_test_group/${groupId}`, "POST",JSON.stringify({students,test_id: selectedTest}),headers())
     //         .then(res => {
     //             setActiveTest(false)
     //             setTests(tests => [...tests,res.test])
@@ -144,7 +144,7 @@ const GroupTest = () => {
             setActiveTest(true)
         }
     }
-
+    console.log(year , month)
 
     return (
         <div className={cls.groupTest}>
@@ -162,7 +162,7 @@ const GroupTest = () => {
                                 value={year}
                                 title={"Yil"}
                                 options={years}
-                                onChangeOption={(e) => {
+                                onChange={(e) => {
                                     setYear(e)
                                 }}
                             /> : null
@@ -174,7 +174,8 @@ const GroupTest = () => {
                                 value={month}
                                 title={"Oy"}
                                 options={months}
-                                onChangeOption={(e) => {
+
+                                onChange={(e) => {
                                     setMonth(e)
                                 }}
                             /> : null
@@ -300,7 +301,7 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
                 test_id: changedTest.id
             }))
 
-            request(`${BackUrl}create_test/${groupId}`, "PUT", formData, headersImg())
+            request(`${BackUrl}group/create_test/${groupId}`, "PUT", formData, headersImg())
                 .then(res => {
                     setActiveTest(false)
                     setTests(tests => tests.map(item => {
@@ -329,7 +330,7 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
                 level,
             }))
 
-            request(`${BackUrl}create_test/${groupId}`, "POST", formData, headersImg())
+            request(`${BackUrl}group/create_test/${groupId}`, "POST", formData, headersImg())
                 .then(res => {
                     setActiveTest(false)
                     setTests(tests => [...tests, res.test])
@@ -353,7 +354,7 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
 
     const onDeleteTest = () => {
 
-        request(`${BackUrl}create_test/${groupId}`, "DELETE", JSON.stringify({test_id: changedTest.id}), headers())
+        request(`${BackUrl}group/create_test/${groupId}`, "DELETE", JSON.stringify({test_id: changedTest.id}), headers())
             .then(res => {
                 setActiveTest(false)
                 setTests(tests => tests.filter(item => item.id !== changedTest.id))
@@ -502,7 +503,7 @@ const SetResultModal = React.memo(({
 
     const onAddResultStudents = () => {
 
-        request(`${BackUrl}submit_test_group/${id}`, "POST", JSON.stringify({
+        request(`${BackUrl}group/submit_test_group/${id}`, "POST", JSON.stringify({
             students,
             test_id: selectedTest
         }), headers())
