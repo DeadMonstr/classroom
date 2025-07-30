@@ -128,18 +128,22 @@ const Profile = () => {
 							{/*<div className={styles.item}>*/}
 							{/*	<i className="fa-solid fa-camera"></i>*/}
 							{/*</div>*/}
-							<Link to={"../studentsCertificates"} className={styles.item}>
-								<i className="fa-solid fa-graduation-cap"></i>
-								<span>Bitiruvchilar sertifikatlari</span>
-							</Link>
+							<RequireAuthChildren allowedRules={[ROLES.Teacher]}>
+								<Link to={"../studentsCertificates"} className={styles.item}>
+									<i className="fa-solid fa-graduation-cap"></i>
+									<span>Bitiruvchilar sertifikatlari</span>
+								</Link>
+								<Link to={"../teacherSalary"} className={styles.item}>
+									<i className="fa-solid fa-dollar-sign"></i>
+									<span>Balans tarixi</span>
+								</Link>
+							</RequireAuthChildren>
+
 							<Link to={"../userLessonTime"} className={styles.item}>
 								<i className="fa-solid fa-user-clock"></i>
 								<span>Dars vaqti</span>
 							</Link>
-							<Link to={"../teacherSalary"} className={styles.item}>
-								<i className="fa-solid fa-dollar-sign"></i>
-								<span>Balans tarixi</span>
-							</Link>
+
 
 							<RequireAuthChildren allowedRules={[ROLES.Student]}>
 								<Link to={"../studentAttendance"} className={styles.item}>

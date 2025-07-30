@@ -418,8 +418,9 @@ const ViewExc = ({component, onDeleteComponent, type, lessonId, archiveId}) => {
         // }))
 
         const isAnsweredExc =  component.exc.isAnswered || false
+        const isChecking =  component.exc.isCheckFinished || false
 
-        if (isAnsweredExc) {
+        if (isAnsweredExc || isChecking) {
             setDisabled(true)
             setDisabledExc(true)
         }

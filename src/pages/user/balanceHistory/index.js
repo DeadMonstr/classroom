@@ -21,7 +21,7 @@ const BalanceHistory = () => {
 
 	useEffect(() => {
 
-		request(`${BackUrl}student_attendance_info`,"GET",null,headers())
+		request(`${BackUrl}student/student_attendance_info`,"GET",null,headers())
 			.then(res => {
 				setData(res.data)
 			})
