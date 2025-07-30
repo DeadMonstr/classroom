@@ -13,6 +13,8 @@ import {headingType} from "./headingType";
 import Label from "components/presentation/ui/label/Label";
 import {useDispatch, useSelector} from "react-redux";
 import {setContentHeading, setContentSubheading} from "slices/presentationSlice";
+import {makeIconComponent} from "helpers/makeIconComponent";
+import {paragraphType} from "components/presentation/types/content/paragraph";
 
 export const HeadingSidebar = () => {
 
@@ -48,7 +50,7 @@ export const HeadingSidebar = () => {
                     type={"present"}
                     extraClass={cls.type__btn}
                 >
-                    {headingType.icon}
+                    {makeIconComponent(headingType.icon)}
 
                     Heading
                 </Button>

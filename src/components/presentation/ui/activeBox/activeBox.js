@@ -48,6 +48,7 @@ const ActiveBox = ({
 
         if (type) {
             dispatch(setActiveType(type));
+
         }
     }, [dispatch, type]);
 

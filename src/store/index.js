@@ -44,9 +44,7 @@ const store = configureStore({
         presentation,
         chat,
         pisaTest,
-
         parentSlice,
-
         pisaTestResults
 
     },

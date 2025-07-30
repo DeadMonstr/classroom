@@ -17,7 +17,7 @@ export const HeadingContent = () => {
 
 
     return (
-        <ActiveBox  type={activeTypesSideBar.heading} >
+        <ActiveBox type={activeTypesSideBar.heading} >
             <ContainerSlide>
                 <TextSlide extraClass={cls.label} type={"small"}>
                     {label}

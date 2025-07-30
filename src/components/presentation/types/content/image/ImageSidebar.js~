@@ -13,7 +13,6 @@ import Label from "components/presentation/ui/label/Label";
 import {useDispatch, useSelector} from "react-redux";
 import {setContentHeading, setSlideImageType} from "slices/presentationSlice";
 import {imageType} from "./imageType";
-import {makeIconComponent} from "helpers/makeIconComponent";
 
 
 const types = [
@@ -49,6 +48,7 @@ export const ImageSidebar = () => {
     }
 
 
+    console.log(type)
     return (
         <div className={cls.sidebar}>
 
@@ -61,7 +61,7 @@ export const ImageSidebar = () => {
                     type={"present"}
                     extraClass={cls.type__btn}
                 >
-                    {makeIconComponent(imageType.icon)}
+                    {imageType.icon}
                     Image
                 </Button>
             </div>

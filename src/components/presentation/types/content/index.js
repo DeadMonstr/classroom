@@ -1,14 +1,9 @@
-
-
-
-import {HeadingSidebar,HeadingContent, headingType}  from "./heading"
-import {ImageSidebar,ImageContent, imageType}  from "./image"
-import {NumberSidebar,NumberContent, numberType}  from "./number"
-import {ParagraphSidebar,ParagraphContent, paragraphType}  from "./paragraph"
-import {QuoteContent,QuoteSidebar, quoteType}  from "./quote"
-import {VideoContent,VideoSidebar, videoType}  from "./video"
-
-
+import {headingType} from "./heading"
+import {imageType} from "./image"
+import {numberType} from "./number"
+import {paragraphType} from "./paragraph"
+import {quoteType} from "./quote"
+import {videoType} from "./video"
 
 
 export const contentTypes = [
@@ -21,9 +16,9 @@ export const contentTypes = [
 ]
 
 
-export {HeadingSidebar,HeadingContent, headingType}
-export {ImageSidebar,ImageContent, imageType}
-export {NumberSidebar,NumberContent, numberType}
-export {ParagraphSidebar,ParagraphContent, paragraphType}
-export {QuoteContent,QuoteSidebar, quoteType}
-export {VideoContent,VideoSidebar, videoType}
+export {headingType}
+export {imageType}
+export {numberType}
+export {paragraphType}
+export {quoteType}
+export {videoType}

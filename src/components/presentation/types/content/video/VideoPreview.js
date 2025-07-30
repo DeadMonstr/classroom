@@ -11,55 +11,28 @@ import {useSelector} from "react-redux";
 
 import {ReactComponent as VideoThumbnail} from "assets/icons/videoContent.svg";
 
-export const VideoContent = () => {
+export const VideoPreview = () => {
 
 
     const {currentSlide: {video,label,heading}} = useSelector(state => state.presentation)
-
-
-
-
-
-
-
-
-
     return (
         <ActiveBox type={activeTypesSideBar.video}>
             <div className={cls.video}>
 
 
                 <div className={cls.video__content}>
-                    {
-                        video ?
-                            <ReactPlayer
-                                width='100%'
-                                height='100%'
-                                config={{
-                                    youtube: {
-                                        playerVars: {
-                                            showinfo: 1
-                                        }
-                                    }
-                                }}
-                                controls={true}
-                                url={video}
-                            />
-                            : <VideoThumbnail className={cls.svg}/>
-
-                    }
-
+                    <VideoThumbnail className={cls.svg}/>
                 </div>
 
 
                 <div className={cls.video__text}>
 
                     <TextSlide type={"smaller"}>
-                        {label}
+                        Label
                     </TextSlide>
 
                     <TextSlide type={"normal"}>
-                        {heading}
+                        Video Title
                     </TextSlide>
                 </div>
 

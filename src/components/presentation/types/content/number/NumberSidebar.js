@@ -13,6 +13,7 @@ import {numberType} from "./numberType";
 import Label from "components/presentation/ui/label/Label";
 import {useDispatch, useSelector} from "react-redux";
 import {setContentHeading, setContentSubheading} from "slices/presentationSlice";
+import {makeIconComponent} from "helpers/makeIconComponent";
 
 
 const types = [
@@ -22,13 +23,10 @@ const types = [
 
 export const NumberSidebar = () => {
 
-
     const {setActiveModal} = useContext(PresentationSidebarContext)
     const {currentSlide} = useSelector(state => state.presentation)
 
     const { heading,subheading} = currentSlide
-
-
 
     const dispatch = useDispatch()
     const onChangeHeading = (e) => {
@@ -51,7 +49,7 @@ export const NumberSidebar = () => {
                     type={"present"}
                     extraClass={cls.type__btn}
                 >
-                    {numberType.icon}
+                    {makeIconComponent(numberType.icon)}
                     Number
                 </Button>
             </div>

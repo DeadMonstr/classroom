@@ -59,10 +59,6 @@ const Tooltip = ({children,extraClass}) => {
     const [active, setActive] = useState(false)
     const popupWrapper = useRef()
     const popupModal = useRef()
-    const arrow = useRef()
-
-
-
 
 
 

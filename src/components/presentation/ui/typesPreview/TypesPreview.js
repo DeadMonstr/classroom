@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 
 import cls from "./typesPreview.module.sass"
 import {contentTypes} from "components/presentation/types/content";
+import {useDispatch} from "react-redux";
+import {setSlideType} from "slices/presentationSlice";
 
 const types = [
     {
@@ -12,15 +14,13 @@ const types = [
 ]
 
 
-const TypesPreview = ({activeType}) => {
-
+const TypesPreview = ({active,setActive,type}) => {
 
     const [preview,setPreview] = useState()
 
 
 
     const onHover = (itemName,typeName) => {
-        console.log("hover")
         setPreview(types.filter(type => type.name === typeName)[0].items.filter(item => item.name === itemName)[0])
     }
 
@@ -31,16 +31,23 @@ const TypesPreview = ({activeType}) => {
     }
 
 
+    const dispatch = useDispatch()
+
     const onClick = (itemName,typeName) => {
-        
+
+        dispatch(setSlideType(itemName))
+        setActive(false)
+
     }
 
+
+    const Preview = preview?.preview
 
 
     return (
         <div className={cls.typesPreview}>
             <div className={cls.preview}>
-                {preview?.preview}
+                {Preview ? <Preview/> : null}
             </div>
             <div className={cls.types}>
                 {
@@ -53,19 +60,22 @@ const TypesPreview = ({activeType}) => {
 
                                 <div className={cls.items}>
                                     {
-                                        type.items.map(item => ((
-                                            <div
-                                                onMouseEnter={ () => onHover(item.name,type.name)}
-                                                onMouseLeave={onLeave}
-                                                onClick={() => onClick(item.name,type.name)}
-                                                className={cls.items__item}
-                                            >
-                                                <div className={cls.box}>
-                                                    {item.icon}
+                                        type.items.map(item => {
+                                            const Icon = item.icon
+                                            return (
+                                                <div
+                                                    onMouseEnter={ () => onHover(item.name,type.name)}
+                                                    onMouseLeave={onLeave}
+                                                    onClick={() => onClick(item.name,type.name)}
+                                                    className={cls.items__item}
+                                                >
+                                                    <div className={cls.box}>
+                                                        <Icon/>
+                                                    </div>
+                                                    <h2>{item.title}</h2>
                                                 </div>
-                                                <h2>{item.title}</h2>
-                                            </div>
-                                        )))
+                                            )
+                                        })
                                     }
                                 </div>
                             </div>
