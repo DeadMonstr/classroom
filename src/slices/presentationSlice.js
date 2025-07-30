@@ -16,14 +16,16 @@ const initialState = {
         id: 12,
         heading: '123123',
         subheading: "",
-        slideType: "paragraph",
+        slideType: "image",
         image: 'https://asset.gecdesigns.com/img/wallpapers/beautiful-fantasy-wallpaper-ultra-hd-wallpaper-4k-sr10012418-1706506236698-cover.webp',
+        video: "",
         imageType: 'center',
-        label: "",
-        activeType: "",
+        label: "label",
+        activeType: "layout",
+        activeSidebar: "",
+
 
         design: {
-
             layout: "default",
             verticalAlign: "center",
             horizontalAlign: "center",
@@ -31,15 +33,16 @@ const initialState = {
             fontSize: 3,
             fontColor: "#000000",
             backgroundColor: "",
-            isLayout: true,
-            isLayoutSize: true,
-            isVerticalAlign: true,
-            isHorizontalAlign: true
+            isLayout: false,
+            isLayoutSize: false,
+            isVerticalAlign: false,
+            isHorizontalAlign: true,
+
         },
 
 
         extraDesign: {
-            layout: "default",
+            layout: "",
             verticalAlign: "center",
             horizontalAlign: "center",
         }
@@ -155,9 +158,27 @@ const PresentationSlice = createSlice({
         setSlideImage: (state,action) => {
             state.image = action.payload
         },
+        setSlideVideo: (state,action) => {
+            if (action.payload) {
+                state.currentSlide.video = action.payload || null
+
+            } else {
+                state.currentSlide.video = ""
+
+            }
+        },
 
         setSlideImageType: (state,action) => {
             state.currentSlide.imageType = action.payload
+
+
+            if (action.payload === "full") {
+                state.currentSlide.design.layout = "background"
+                state.currentSlide.extraDesign.layout = "";
+            } else {
+                state.currentSlide.design.layout = "default"
+                state.currentSlide.extraDesign.layout = "";
+            }
         },
 
 
@@ -189,7 +210,16 @@ const PresentationSlice = createSlice({
         },
         setActiveType: (state, action) => {
             state.currentSlide.activeType = action.payload
+            state.currentSlide.activeSidebar = "edit"
         },
+        toggleSidebar: (state, action) => {
+            state.currentSlide.activeSidebar = action.payload
+        },
+
+
+        setSlideType: (state, action) => {
+            state.currentSlide.slideType = action.payload
+        }
 
     }
 })
@@ -212,5 +242,8 @@ export const {
     setContentLabel,
     setSlideImage,
     setSlideImageType,
-    setActiveType
+    setActiveType,
+    setSlideVideo,
+    toggleSidebar,
+    setSlideType
 } = actions

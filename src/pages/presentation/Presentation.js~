@@ -141,11 +141,7 @@ const Presentation = () => {
                 active={addNewSlide}
                 setActive={setAddNewSlide}
             >
-                <TypesPreview
-                    active={addNewSlide}
-                    setActive={setAddNewSlide}
-                    type={modalType}
-                />
+                <TypesPreview active={addNewSlide} setActive={setAddNewSlide}  />
             </Modal>
 
 

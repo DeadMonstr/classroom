@@ -1,7 +1,6 @@
 import {ReactComponent as NumberThumb } from "assets/icons/number.svg"
 import {NumberSidebar} from "./NumberSidebar";
 import {NumberPreview} from "./NumberPreview";
-import {NumberContent} from "./NumberContent";
 
 
 
@@ -10,6 +9,5 @@ export const numberType = {
     title: "Number",
     preview: NumberPreview,
     icon: NumberThumb,
-    sidebar: NumberSidebar,
-    content: NumberContent
+    sidebar: NumberSidebar
 }

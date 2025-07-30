@@ -1,7 +1,6 @@
 import {ReactComponent as HeadingThumb} from "assets/icons/heading.svg"
 import {HeadingPreview} from "./HeadingPreview"
 import {HeadingSidebar} from "./HeadingSidebar";
-import {HeadingContent} from "./HeadingContent";
 
 
 export const headingType = {
@@ -9,6 +8,5 @@ export const headingType = {
     title: "Heading",
     preview: HeadingPreview,
     icon: HeadingThumb,
-    sidebar: HeadingSidebar,
-    content: HeadingContent
+    sidebar: HeadingSidebar
 }

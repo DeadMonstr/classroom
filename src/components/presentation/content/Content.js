@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import cls from "./content.module.sass";
-import {activeTypesSideBar, HeadingContent, NumberContent, ParagraphContent} from "components/presentation/types";
+import {
+    activeTypesSideBar, contentTypes,
+} from "components/presentation/types";
 import {useDispatch, useSelector} from "react-redux";
-import classNames from "classnames";
-import {BackUrlForDoc} from "constants/global";
-import {setActiveType} from "slices/presentationSlice";
+
 import ActiveBox from "components/presentation/ui/activeBox/activeBox";
+import DesignSidebar from "components/presentation/sidebar/designSidebar/designSidebar";
 
 
 const layoutSizeTypes = [
@@ -83,6 +84,22 @@ const Content = () => {
 
 
 
+
+    const renderContent = () => {
+        return contentTypes.map(item => {
+
+
+            if (item.name === currentSlide.slideType) {
+                const Content = item.content
+
+                return Content ? <Content /> : null;
+            }
+        })
+    }
+
+
+
+
     return (
         <ActiveBox
             isParent={true}
@@ -107,12 +124,16 @@ const Content = () => {
 
 
 
-            <div className={cls.content} style={{backgroundColor: bgColor}}>
-                <HeadingContent />
-
-
+            <div className={cls.content} style={{backgroundColor: currentSlide.slideType !== "image" ? bgColor : null}}>
+                {/*<HeadingContent />*/}
                 {/*<ParagraphContent/>*/}
                 {/*<NumberContent/>*/}
+                {/*<ImageContent/>*/}
+                {/*<QuoteContent/>*/}
+                {/*<VideoContent/>*/}
+
+                {renderContent()}
+
             </div>
 
         </ActiveBox>

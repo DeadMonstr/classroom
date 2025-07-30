@@ -1,12 +1,11 @@
 import {ReactComponent as ParagraphThumb } from "assets/icons/paragraph.svg"
 import {ParagraphSidebar} from "./ParagraphSidebar";
 import {ParagraphPreview} from "./ParagraphPreview";
-import {ParagraphContent} from "./ParagraphContent";
+
 export const paragraphType = {
     name: "paragraph",
     title: "Paragraph",
     preview: ParagraphPreview,
     icon: ParagraphThumb ,
-    sidebar: ParagraphSidebar,
-    content: ParagraphContent
+    sidebar: ParagraphSidebar
 }

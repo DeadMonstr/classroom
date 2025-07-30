@@ -13,6 +13,7 @@ import {paragraphType} from "./paragraphType";
 import Label from "components/presentation/ui/label/Label";
 import {useDispatch, useSelector} from "react-redux";
 import {setContentHeading, setContentSubheading} from "slices/presentationSlice";
+import {makeIconComponent} from "helpers/makeIconComponent";
 
 
 
@@ -37,6 +38,8 @@ export const ParagraphSidebar = () => {
     }
 
 
+
+
     return (
         <div className={cls.sidebar}>
 
@@ -49,7 +52,7 @@ export const ParagraphSidebar = () => {
                     type={"present"}
                     extraClass={cls.type__btn}
                 >
-                    {paragraphType.icon}
+                    {makeIconComponent(paragraphType.icon)}
                     Paragraph
                 </Button>
             </div>

@@ -6,21 +6,12 @@ import cls from "./sidebar.module.sass"
 import {ReactComponent as Design} from "assets/icons/design.svg"
 import {ReactComponent as Content} from "assets/icons/Edit 2.svg"
 import Modal from "components/ui/modal";
-import {
-    HeadingSidebar,
-    ImageSidebar,
-    NumberSidebar,
-    ParagraphSidebar,
-    QuoteSidebar, VideoSidebar,
-    typesPresentation, contentTypes
-} from "components/presentation/types";
+import {contentTypes} from "components/presentation/types";
 
 
-
-import {PresentationSidebarContext} from "helpers/contexts";
 import DesignSidebar from "components/presentation/sidebar/designSidebar/designSidebar";
-import TypesPreview from "components/presentation/ui/typesPreview/TypesPreview";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {toggleSidebar} from "slices/presentationSlice";
 
 
 const menuOptions = [
@@ -39,37 +30,46 @@ const menuOptions = [
 const Sidebar = () => {
 
 
+    const {currentSlide: {activeSidebar}} = useSelector(state => state.presentation)
 
-    const [activeMenu,setActiveMenu] = useState()
+    // const [activeMenu,setActiveMenu] = useState("edit")
+    //
+    // const toggleActiveMenu = useCallback((name) => {
+    //     if (name === activeMenu) {
+    //         setActiveMenu(null)
+    //     } else {
+    //         setActiveMenu(name)
+    //     }
+    // },[activeMenu])
 
-    const toggleActiveMenu = useCallback((name) => {
-        if (name === activeMenu) {
-            setActiveMenu(null)
-        } else {
-            setActiveMenu(name)
-        }
-    },[activeMenu])
 
+    const dispatch = useDispatch()
 
+    const toggleActiveMenu = (name) => {
+        dispatch(toggleSidebar(name))
+    }
 
+    const onDisableMenu = () => {
+        dispatch(toggleSidebar(null))
+    }
 
 
     return (
         <div
             className={classNames(cls.sidebar__right, {
-                [cls.active]: activeMenu
+                [cls.active]: activeSidebar
             })}
         >
             <div className={cls.sidebar__wrapper}>
                 <div className={cls.container}>
                     <div className={cls.title}>
                         <h1>
-                            {activeMenu && menuOptions.filter(item => item.name === activeMenu)[0]?.title}
+                            {activeSidebar && menuOptions.filter(item => item.name === activeSidebar)[0]?.title}
                         </h1>
-                        <i onClick={() => setActiveMenu()} className="fa-solid fa-xmark"></i>
+                        <i onClick={onDisableMenu} className="fa-solid fa-xmark"></i>
                     </div>
 
-                    {activeMenu === "edit" ? <Edit/> : null }
+                    {activeSidebar === "edit" ? <Edit/> : null}
 
                 </div>
             </div>
@@ -79,7 +79,7 @@ const Sidebar = () => {
                         return (
                             <div
                                 className={classNames(cls.menu__item, {
-                                    [cls.active]: activeMenu === item.name
+                                    [cls.active]: activeSidebar === item.name
                                 })}
                                 onClick={() => toggleActiveMenu(item.name)}
                             >
@@ -95,53 +95,35 @@ const Sidebar = () => {
 }
 
 
-
-
-
 const Edit = () => {
 
-    const [activeModal,setActiveModal] = useState(false)
+    const [activeModal, setActiveModal] = useState(false)
 
 
-    const {currentSlide: {slideType,activeType}} = useSelector(state => state.presentation)
+    const {currentSlide: {activeType}} = useSelector(state => state.presentation)
 
 
     const renderSidebarOptions = useCallback(() => {
-
         return contentTypes.map(item => {
-            if (item.name === slideType) {
-                return item.sidebar
+            if (activeType === "layout") {
+                return <DesignSidebar/>
+            }
+
+            if (item.name === activeType) {
+                const SideBar = item.sidebar
+
+                return SideBar ? <SideBar/> : null;
             }
         })
-    },[slideType])
-
-
-
+    }, [activeType])
 
 
     return (
         <>
-            {/*<PresentationSidebarContext.Provider value={{setActiveModal}}>*/}
-                {/*<HeadingSidebar />*/}
-                {/*/!*<ImageSidebar />*!/*/}
-                {/*/!*<NumberSidebar />*!/*/}
-                {/*/!*<ParagraphSidebar />*!/*/}
-                {/*/!*<QuoteSidebar/>*!/*/}
-                {/*/!*<VideoSidebar/>*!/*/}
-            {/*</PresentationSidebarContext.Provider>*/}
-            <DesignSidebar/>
-            <Modal
-                type={"other"}
-                active={activeModal}
-                setActive={setActiveModal}
-            >
-                <TypesPreview />
-            </Modal>
+            {renderSidebarOptions()}
         </>
     )
 }
-
-
 
 
 export default Sidebar

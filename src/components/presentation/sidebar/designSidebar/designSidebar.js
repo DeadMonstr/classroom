@@ -36,8 +36,9 @@ import {
     setDesignLayoutSize,
     setDesignFontSize,
     setDesignFontColor,
-    setDesignBackgroundColor,
+    setDesignBackgroundColor, setSlideImageType,
 } from "slices/presentationSlice";
+import Radio from "components/ui/form/radio";
 
 const MAX_SIZE = 4;
 const MIN_SIZE = 0;
@@ -74,6 +75,12 @@ const optionsVertical = [
     {type: "bottom", content: <VrBottom/>},
 ];
 
+const optionsImageTypes = [
+    {title: "Center", value: "center"},
+    {title: "Full screen",value: "full"}
+];
+
+
 const DesignSidebar = () => {
     const dispatch = useDispatch();
     const {currentSlide} = useSelector((state) => state.presentation);
@@ -92,7 +99,6 @@ const DesignSidebar = () => {
         if (optionType === "horizontal" || optionType === "vertical") {
             handleAlign(optionType, value, "extra");
         } else if (optionType === "layout") {
-            console.log(extra,"exijnawsedjibnasidjb")
             handleLayout(value, extra,"extra");
         }
     }, []);
@@ -123,6 +129,10 @@ const DesignSidebar = () => {
     const handleBackgroundChange = useCallback((color) => {
         dispatch(setDesignBackgroundColor(color));
     }, [dispatch]);
+
+    const handelChangeImageType = useCallback((type) => {
+        dispatch(setSlideImageType(type))
+    },[])
 
     const renderControlButtons = (value, onInc, onDec) => (
         <div className={cls.controller}>
@@ -158,6 +168,15 @@ const DesignSidebar = () => {
         </div>
     );
 
+
+    const renderOptionImageTypes = useCallback(() => (
+        <div className={cls.imageTypes}>
+            {optionsImageTypes.map((item) => (
+                <Radio checked={currentSlide.imageType === item.value} onChange={ () => handelChangeImageType(item.value)}>{item.title}</Radio>
+            ))}
+        </div>
+    ),[handelChangeImageType, optionsImageTypes,currentSlide.imageType ])
+
     return (
         <div className={cls.design}>
             {currentSlide.design.isLayout && (
@@ -188,6 +207,14 @@ const DesignSidebar = () => {
                     <div className={cls.separator}/>
                 </div>
             )}
+
+            {currentSlide.slideType === "image" &&
+                <div className={classNames(cls.component,cls.fdc)}>
+                    <h2 className={cls.subTitleComponent}>Image type</h2>
+                    {renderOptionImageTypes()}
+                </div>
+            }
+
 
             <div className={cls.titleComponent}>Text</div>
             <div className={cls.component}>

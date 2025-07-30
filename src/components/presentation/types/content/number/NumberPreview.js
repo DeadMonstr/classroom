@@ -6,7 +6,7 @@ import cls from "components/presentation/types/typesContent.module.sass";
 import {activeTypesSideBar} from "components/presentation/types/index";
 import ActiveBox from "components/presentation/ui/activeBox/activeBox";
 
-export const NumberContent = () => {
+export const NumberPreview = () => {
     const {currentSlide} = useSelector(state => state.presentation)
 
     const { heading,label,subheading} = currentSlide
@@ -14,19 +14,19 @@ export const NumberContent = () => {
 
 
     return (
-        <ActiveBox type={activeTypesSideBar.number} >
-            <ContainerSlide>
-                <TextSlide extraClass={cls.label} type={"smaller"}>
-                    {label}
-                </TextSlide>
-                <TextSlide type={"extraBig"}>
-                    {heading}
-                </TextSlide>
-                <TextSlide >
-                    {subheading}
-                </TextSlide>
-            </ContainerSlide>
-        </ActiveBox>
+
+        <ContainerSlide>
+            <TextSlide extraClass={cls.label} type={"smaller"}>
+                label
+            </TextSlide>
+            <TextSlide type={"extraBig"}>
+                120000
+            </TextSlide>
+            <TextSlide >
+                subheading
+            </TextSlide>
+        </ContainerSlide>
+
 
     );
 };

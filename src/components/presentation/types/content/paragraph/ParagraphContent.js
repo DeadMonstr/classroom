@@ -3,6 +3,8 @@ import ContainerSlide from "components/presentation/ui/container/ContainerSlide"
 import TextSlide from "components/presentation/ui/text/TextSlide";
 import cls from "components/presentation/types/typesContent.module.sass";
 import {useSelector} from "react-redux";
+import ActiveBox from "components/presentation/ui/activeBox/activeBox";
+import {activeTypesSideBar} from "components/presentation/types/index";
 
 export const ParagraphContent = () => {
 
@@ -13,17 +15,21 @@ export const ParagraphContent = () => {
 
 
     return (
-        <ContainerSlide>
-            <TextSlide extraClass={cls.label} type={"smaller"}>
-                {label}
-            </TextSlide>
-            <TextSlide type={"big"}>
-                {heading}
-            </TextSlide>
-            <TextSlide >
-                {subheading}
-            </TextSlide>
-        </ContainerSlide>
+        <ActiveBox type={activeTypesSideBar.paragraph}>
+
+            <ContainerSlide>
+                <TextSlide extraClass={cls.label} type={"smaller"}>
+                    {label}
+                </TextSlide>
+                <TextSlide type={"normal"}>
+                    {heading}
+                </TextSlide>
+                <TextSlide >
+                    {subheading}
+                </TextSlide>
+            </ContainerSlide>
+        </ActiveBox>
+
     );
 };
 

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import cls from "../../typesSidebar.module.sass"
 import Button from "components/ui/button";
@@ -8,6 +8,10 @@ import {Switch} from "components/ui/switch/switch";
 import ImageModal from "components/presentation/ui/imageModal/ImageModal";
 import {PresentationSidebarContext} from "helpers/contexts";
 import {quoteType} from "./quoteType";
+import {makeIconComponent} from "helpers/makeIconComponent";
+import {setContentHeading, setContentSubheading} from "slices/presentationSlice";
+import Label from "components/presentation/ui/label/Label";
+import {useDispatch} from "react-redux";
 
 export const QuoteSidebar = () => {
 
@@ -20,6 +24,17 @@ export const QuoteSidebar = () => {
 
     const toggleLabel = (type,value) => {
         setLabel(state => ({...state,[type]: value}))
+    }
+
+
+    const dispatch = useDispatch()
+
+    const onChangeWho = (e) => {
+        dispatch(setContentHeading(e))
+    }
+
+    const onChangeQuote = (e) => {
+        dispatch(setContentSubheading(e))
     }
 
 
@@ -36,7 +51,7 @@ export const QuoteSidebar = () => {
                     type={"present"}
                     extraClass={cls.type__btn}
                 >
-                    {quoteType.icon}
+                    {makeIconComponent(quoteType.icon)}
                     Quote
                 </Button>
             </div>
@@ -44,23 +59,9 @@ export const QuoteSidebar = () => {
 
             <div className={cls.separator}/>
 
-            <Input extraClassNameLabel={cls.heading} title={"Who"}/>
+            <Input onChange={onChangeWho} extraClassNameLabel={cls.heading} title={"Who"}/>
 
-
-            <Textarea extraClassNameLabel={cls.subheading} title={"Quote"}/>
-
-
-            <div className={cls.separator} />
-
-
-            <div className={cls.label}>
-                <div className={cls.info}>
-                    <h2>Label</h2>
-                    <Switch switchOn={label.active} setSwitchOn={(e) => toggleLabel("active",e)}/>
-                </div>
-
-                {label.active && <Input onChange={e => toggleLabel("label",e)} extraClassNameLabel={cls.input} /> }
-            </div>
+            <Textarea onChange={onChangeQuote} extraClassNameLabel={cls.subheading} title={"Quote"}/>
 
             <div className={cls.separator} />
 
