@@ -42,7 +42,7 @@ const ObservedTeacherLessons = () => {
 
     useEffect(() => {
         if (groupData.id) {
-            request(`${BackUrl}observed_group/${groupData.id}`, "GET", null, headers())
+            request(`${BackUrl}teacher/observed_group/${groupData.id}`, "GET", null, headers())
                 .then(res => {
 
                     if (res.month_list.length === 1) {
@@ -67,7 +67,7 @@ const ObservedTeacherLessons = () => {
 
     useEffect(() => {
         if (year && month) {
-            request(`${BackUrl}observed_group/${groupData.id}/${year}-${month}`, "GET", null, headers())
+            request(`${BackUrl}teacher/observed_group/${groupData.id}/${year}-${month}`, "GET", null, headers())
                 .then(res => {
                     if (res.days.length === 1) {
                         setDay(res.days[0])
@@ -92,7 +92,7 @@ const ObservedTeacherLessons = () => {
 
 
         if (year && month && day && groupData?.id) {
-            request(`${BackUrl}observed_group_info/${groupData?.id}`, "POST", JSON.stringify(data), headers())
+            request(`${BackUrl}teacher/observed_group_info/${groupData?.id}`, "POST", JSON.stringify(data), headers())
                 .then(res => {
                     setObservationOptions(res.observation_options)
                     setInfo(res.info)

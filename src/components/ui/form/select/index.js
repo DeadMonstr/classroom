@@ -22,7 +22,8 @@ const Select = React.memo((
         extraClassName,
         all,
         multiNames = [],
-        keyValue
+        keyValue,
+        disabled
     }) => {
 
     const [currentOptions, setCurrentOptions] = useState([])
@@ -122,6 +123,7 @@ const Select = React.memo((
                         {
                             register ?
                                 <select
+                                    disabled={disabled}
                                     className={classNames(styles.select, extraClassName, {
                                         [styles.error]: errors?.[name]
                                     })}
@@ -130,7 +132,7 @@ const Select = React.memo((
                                         placeholder: placeholder,
                                         required: required,
                                     })}
-                                    onChange={onChange ? e => onChange(e.target.value) : null}
+                                    onChange={onChange ? e => onChange(e?.target?.value) : null}
                                     name={name}
                                     id={name}
                                     value={value}
@@ -145,13 +147,14 @@ const Select = React.memo((
                                 </select>
                                 :
                                 <select
+                                    disabled={disabled}
                                     className={classNames(styles.select, extraClassName, {
                                         [styles.error]: errors?.[name]
                                     })}
                                     value={value}
                                     required={required}
                                     placeholder={placeholder}
-                                    onChange={e => onChange(e.target.value)}
+                                    onChange={e => onChange(e?.target?.value)}
                                     name={name}
                                     id={name}
                                 >

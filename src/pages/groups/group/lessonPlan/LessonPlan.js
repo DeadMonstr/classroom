@@ -48,7 +48,7 @@ const LessonPlan = ({backBtn}) => {
 
     useEffect(() => {
         if (groupData.id) {
-            request(`${BackUrl}lesson_plan_list/${groupData.id}`, "GET", null, headers() )
+            request(`${BackUrl}teacher/lesson_plan_list/${groupData.id}`, "GET", null, headers() )
                 .then(res => {
                     if (res.month_list.length === 1) {
                         setMonth(res.month_list[0])
@@ -69,7 +69,7 @@ const LessonPlan = ({backBtn}) => {
 
     useEffect(() => {
         if (groupData.id && year && month ) {
-            request(`${BackUrl}lesson_plan_list/${groupData.id}/${year}-${month}`, "GET", null, headers() )
+            request(`${BackUrl}teacher/lesson_plan_list/${groupData.id}/${year}-${month}`, "GET", null, headers() )
                 .then(res => {
 
                     if (res.days.length === 1) {
@@ -93,7 +93,7 @@ const LessonPlan = ({backBtn}) => {
         }
 
         if (year && month && day && groupData.id) {
-            request(`${BackUrl}get_lesson_plan/${groupData.id}`,"POST",JSON.stringify(data),headers() )
+            request(`${BackUrl}teacher/get_lesson_plan/${groupData.id}`,"POST",JSON.stringify(data),headers() )
                 .then(res => {
 
                     setCanChange(res.status)
@@ -115,7 +115,7 @@ const LessonPlan = ({backBtn}) => {
 
     const onSubmit = (data) => {
 
-        request(`${BackUrl}change_lesson_plan/${planId}`,"POST",JSON.stringify({...data,students}), headers())
+        request(`${BackUrl}teacher/change_lesson_plan/${planId}`,"POST",JSON.stringify({...data,students}), headers())
             .then(res => {
                 const alert = {
                     active : true,

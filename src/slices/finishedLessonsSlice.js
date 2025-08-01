@@ -4,10 +4,9 @@ import { BackUrl, headers } from "constants/global";
 
 const initialState = {
 
-
-    selectedLesson: "",
-    selectedChapter: "",
     selectedLevel: "",
+    selectedChapter: "",
+    selectedLesson: "",
 
 
     data: [],
@@ -23,7 +22,7 @@ export const fetchDataLessonsDegree = createAsyncThunk(
     'FinishedLessons/fetchDataLessonsDegree',
     async (data) => {
         const {request} = useHttp();
-        return await request(`${BackUrl}group_degree`,"POST",JSON.stringify(data),headers())
+        return await request(`${BackUrl}teacher/group_degree/`,"POST",JSON.stringify(data),headers())
     }
 )
 
@@ -38,12 +37,15 @@ const FinishedLessonsSlice = createSlice({
             switch (action.payload.type) {
                 case "level":
                     state.selectedLevel = action.payload.id
+                    state.selectedChapter = ""
+                    state.selectedLesson = ""
                     break
                 case "lesson":
                     state.selectedLesson = action.payload.id
                     break
                 case "chapter":
                     state.selectedChapter = action.payload.id
+                    state.selectedLesson = ""
                     break
             }
 

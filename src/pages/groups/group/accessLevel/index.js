@@ -68,7 +68,7 @@ const AccessLevel = () => {
 	const {request} = useHttp()
 	useEffect(() => {
 		if (data?.id && selectedLevel) {
-			request(`${BackUrl}check_level/${data.id}/${selectedLevel}`)
+			request(`${BackUrl}group/check_level/${data.id}/${selectedLevel}`)
 				.then(res => {
 					console.log(res,"students")
 					setUsers(res.students)
@@ -112,7 +112,7 @@ const AccessLevel = () => {
 	const dispatch = useDispatch()
 
 	const onSubmit = () => {
-		request(`${BackUrl}check_level/${data.id}/${selectedLevel}`,"POST",JSON.stringify({users: users}),headers())
+		request(`${BackUrl}group/check_level/${data.id}/${selectedLevel}`,"POST",JSON.stringify({users: users}),headers())
 			.then(res => {
 				const alert = {
 					active : true,

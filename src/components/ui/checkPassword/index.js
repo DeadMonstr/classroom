@@ -26,7 +26,7 @@ const CheckPassword = ({active,setActive}) => {
 
 	const onSubmit = () => {
 		setLoading(true)
-		request(`${BackUrl}check_password`,"POST",JSON.stringify({password}),headers())
+		request(`${BackUrl}user/check_password`,"POST",JSON.stringify({password}),headers())
 			.then(res => {
 				setLoading(false)
 				if (res.password) {
@@ -40,6 +40,8 @@ const CheckPassword = ({active,setActive}) => {
 	const back = () => {
 		navigate(-1)
 	}
+
+
 	return (
 		<>
 			<Modal active={active} setActive={setActive ? setActive : back} title={"Foydalanuvchini tekshirish"}>

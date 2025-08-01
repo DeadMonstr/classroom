@@ -9,41 +9,72 @@ import {
     fetchChildrenAttendance,
     fetchChildrenAttendanceMonthly,
     fetchChildrenGroups,  fetchChildrenTests, fetchChildrenTestsDate
-} from "../../../slices/parentSlice";
+} from "slices/parentSlice";
+import LoaderPage from "components/ui/loader/Loader";
 
 
 
 
 
 const ChildrenMonthlyAttendance = () => {
+
+
+
     const [year, setYear] = useState();
     const [month, setMonth] = useState();
     const [group, setGroup] = useState();
+    const [availableMonths, setAvailableMonths] = useState([]);
+
     const dispatch = useDispatch()
     const [selectedDayId, setSelectedDayId] = useState();
     const currentMonth = localStorage.getItem("current_month")
     const currentYear = localStorage.getItem("current_year")
-    const groupId = (localStorage.getItem("group_id") || "").split(",")[0] || "None"
+    const groupId = (localStorage.getItem("group_id"))
     const currentUsername = localStorage.getItem("platform_id")
-    const {monthlyAttendance, groups, dates} = useSelector(state => state.parentSlice)
+    const {monthlyAttendance, groups, dates , loadingAttedance} = useSelector(state => state.parentSlice)
     const years = dates.data?.years
     const months = dates.data?.months?.flatMap(item => item.months) || [];
     const groupIds = groups.group_list
 
 
     useEffect(() => {
-       if(!currentUsername){
+        // setYear(years[0]?.id)
+        // setMonth(months[0]?.id)
+        // setGroup(groupIds[0]?.id)
+    } , [])
+
+
+    useEffect(() => {
+        if (year) {
+            const selectedYearData = dates.data?.months.find(item => item.year === year);
+            if (selectedYearData) {
+                setAvailableMonths(selectedYearData.months);
+            } else {
+                setAvailableMonths([]);
+            }
+        } else {
+            setAvailableMonths([]);
+        }
+    }, [year, dates.data?.months]);
+
+    useEffect(() => {
+
+       if(currentUsername || currentUsername !== undefined){
            dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
            dispatch(fetchChildrenGroups(currentUsername))
            dispatch(fetchChildrenAttendance(currentUsername))
-           dispatch(fetchChildrenTestsDate(groupId))
+
            if (!groupId && !currentYear && !currentMonth ) {
                dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
+           }
+           if (groupId || groupId !==  undefined) {
+               dispatch(fetchChildrenTestsDate(groupId))
            }
        }
     }, [currentMonth]);
 
 
+    // console.log(year , month, group , "grou")
     useEffect(() => {
         if (year && month && group) {
             dispatch(fetchChildrenAttendanceMonthly({
@@ -123,30 +154,29 @@ const ChildrenMonthlyAttendance = () => {
                 {!isMobile && (
                     <div className={styles.attendance__header__div}>
 
-                        <Select
+                        {years && <Select
                             title={"Yil"}
-                            value={year}
+
                             onChange={setYear}
                             options={years}
                             defaultOption={"Yil"}
                             style={{ width: "400px" }}
-                        />
-                        <Select
+                        />}
+                        {months && <Select
                             title={"Oy"}
-                            value={month}
+
                             onChange={setMonth}
-                            options={months}
-                            defaultOption={"Oy"}
+                            options={availableMonths}
+
                             style={{ width: "400px" }}
-                        />
-                        <Select
+                        />}
+                        {groupIds && <Select
                             title={"Guruh"}
-                            value={group}
                             onChange={setGroup}
                             options={groupIds}
                             defaultOption={"Guruh"}
                             style={{ width: "400px" }}
-                        />
+                        />}
                     </div>
 
                 )}
@@ -154,8 +184,8 @@ const ChildrenMonthlyAttendance = () => {
                     <div className={styles.attendance__header__second}>
                         {/*<h1>Davomat</h1>*/}
                         <div className={styles.attendance__header__second__box}>
-                            <Select defaultOption={"Yil"} title={"Yil"} value={year} onChange={setYear} options={years} extraClassName={styles.attendance__header__second__box__select} />
-                            <Select defaultOption={"Oy"} title={"Oy"} value={month} onChange={setMonth} options={months} extraClassName={styles.attendance__header__second__box__select} />
+                            <Select defaultOption={"Yil"} title={"Yil"} onChange={setYear} options={years} extraClassName={styles.attendance__header__second__box__select} />
+                            <Select  title={"Oy"}  onChange={setMonth} options={availableMonths} extraClassName={styles.attendance__header__second__box__select} />
                             <Select
                                 title={"Guruh"}
                                 value={group}
@@ -173,7 +203,7 @@ const ChildrenMonthlyAttendance = () => {
             {!isMobile && (
                 <Card extraClassname={styles.attendance__card}>
                     <h1>Davomat</h1>
-                    <div className={styles.attendance__card__list}>{renderCard()}</div>
+                    <div className={styles.attendance__card__list}>{loadingAttedance ? <LoaderPage /> : renderCard()}</div>
                 </Card>
             )
             }

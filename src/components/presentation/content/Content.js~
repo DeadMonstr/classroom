@@ -89,31 +89,38 @@ const Content = () => {
             clazz={[cls.main, cls[layout]]}
             type={activeTypesSideBar.layout}
         >
-            {
-                layout !== "default" &&
-                <div
-                    style={{
-                        minWidth: layoutSizeWidth,
-                        maxWidth: layoutSizeWidth,
-                        minHeight: layoutSizeHeight,
-                        maxHeight: layoutSizeHeight
-                    }}
-                    className={cls.image}
-                >
-                    <img src={image} alt=""/>
-                </div>
-            }
+            {/*{*/}
+            {/*    layout !== "default" &&*/}
+            {/*    <div*/}
+            {/*        style={{*/}
+            {/*            minWidth: layoutSizeWidth,*/}
+            {/*            maxWidth: layoutSizeWidth,*/}
+            {/*            minHeight: layoutSizeHeight,*/}
+            {/*            maxHeight: layoutSizeHeight*/}
+            {/*        }}*/}
+            {/*        className={cls.image}*/}
+            {/*    >*/}
+            {/*        <img src={image} alt=""/>*/}
+            {/*    </div>*/}
 
+            {/*}*/}
 
-
-
-            <div className={cls.content} style={{backgroundColor: bgColor}}>
-                <HeadingContent />
-
-
-                {/*<ParagraphContent/>*/}
-                {/*<NumberContent/>*/}
+            <div style={{ marginBottom: '10px' }}>
+                <strong>Parent ActiveBox</strong> - Try hovering here in the empty space
             </div>
+
+            <ActiveBox >
+                <h1>akjsndkjasdkj </h1>
+            </ActiveBox>
+
+            <HeadingContent />
+            <HeadingContent />
+            {/*<div className={cls.content} style={{backgroundColor: bgColor}}>*/}
+
+
+            {/*    /!*<ParagraphContent/>*!/*/}
+            {/*    /!*<NumberContent/>*!/*/}
+            {/*</div>*/}
 
         </ActiveBox>
     );

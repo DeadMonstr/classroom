@@ -17,15 +17,18 @@ import {DraggableWord, DroppableBox} from "./drag";
 import {arrayMove, sortableKeyboardCoordinates} from "@dnd-kit/sortable";
 import {ExcContext} from "helpers/contexts";
 import Input from "components/ui/form/input";
+import {BackUrl, headers} from "constants/global";
+import {useHttp} from "hooks/http.hook";
 
 
-const ExcText = React.memo(
+const  ExcText = React.memo(
     ({
          onChangeCompletedComponent,
          onSetCompletedComponent,
          component,
          onDeleteComponent,
-         setAnswers
+         setAnswers,
+         extra
      }) => {
 
         const [textComponent, setTextComponent] = useState({})
@@ -49,42 +52,35 @@ const ExcText = React.memo(
                 setTextComponent={setTextComponent}
                 onSetCompletedComponent={onSetCompletedComponent}
                 onDeleteComponent={onDeleteComponent}
+                extra={extra}
             />
 
 
     })
 
 
-const CreateExc = ({textComponent, onSetCompletedComponent, onDeleteComponent}) => {
+const CreateExc = ({textComponent, onSetCompletedComponent, onDeleteComponent,extra}) => {
 
-    const [text, setText] = useState(null)
-    const [editorState, setEditorState] = useState(null)
-
-    const [clone, setClone] = useState(null)
+    const {request} = useHttp()
 
 
-    useEffect(() => {
-        if (textComponent) {
-            // setDataText(textComponent?.text)
-            // setInnerType(textComponent.innerType ? textComponent.innerType : "text")
-            setText(textComponent?.text)
-            setEditorState(textComponent?.editorState)
+    const onAdd = (e) => {
+        let method = textComponent?.id ? "PUT" : "POST"
+        request(`${BackUrl}exercise/block/text/${textComponent.id ? textComponent.id + "/" : ""}`, method, JSON.stringify({...textComponent, ...e, ...extra}), headers())
+            .then(res => {
+                onSetCompletedComponent(e, res.id)
+            })
+    }
+
+    const onDelete = () => {
+        if (textComponent?.id) {
+            request(`${BackUrl}exercise/block/text/${textComponent?.id}/`, "DELETE", null, headers())
+                .then(res => {
+                    onDeleteComponent(textComponent.id)
+                })
+        } else {
+            onDeleteComponent(textComponent.id)
         }
-    }, [textComponent])
-
-
-    const ref = useRef()
-
-    const onSubmitText = (data) => {
-
-
-        const newData = {
-            ...data,
-            clone
-        }
-
-        onSetCompletedComponent(newData)
-
     }
 
 
@@ -92,14 +88,14 @@ const CreateExc = ({textComponent, onSetCompletedComponent, onDeleteComponent}) 
         <div className={styles.createText}>
             <div className={styles.subHeader}>
                 <i
-                    onClick={() => onDeleteComponent(textComponent.index)}
+                    onClick={onDelete}
                     className={`fa-solid fa-trash ${styles.trash}`}
                 />
             </div>
 
             <div className={styles.createText__container}>
-                <TextEditor options={{input: true, match: true, matchWrong: true}} onSubmit={onSubmitText} text={text}
-                            editorState={editorState}/>
+                <TextEditor options={{input: true, match: true, matchWrong: true}} onSubmit={onAdd} text={textComponent?.text}
+                            editorState={textComponent.editorState}/>
             </div>
         </div>
     )
@@ -420,7 +416,7 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                 <div className={styles.text}>
                     {
                         onChangeCompletedComponent ?
-                            <div onClick={() => onChangeCompletedComponent(textComponent?.index)}
+                            <div onClick={() => onChangeCompletedComponent(textComponent?.id)}
                                  className={styles.popup}>
                                 <i className="fa-sharp fa-solid fa-pen-to-square"/>
                             </div> : null

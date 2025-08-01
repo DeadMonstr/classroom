@@ -107,7 +107,7 @@ const CreateFile = React.memo(({component,onSetCompletedComponent,onDeleteCompon
                         uploadedFiles ?
                             <div className={styles.wrapper}>
                                 <FileSvg className={styles.icon}/>
-                                <h1>{uploadedFiles.name}</h1>
+                                <h1>{uploadedFiles?.name || "File"}</h1>
                             </div>
                             :
                             <h1>Faylni yuklang</h1>
@@ -135,7 +135,6 @@ const ViewFile = ({component,onChangeCompletedComponent,type}) => {
     },[component])
 
 
-
     return (
         <div className={styles.component__view}>
             <div className={styles.file}>
@@ -146,16 +145,10 @@ const ViewFile = ({component,onChangeCompletedComponent,type}) => {
                                 <i className="fa-sharp fa-solid fa-pen-to-square" />
                             </div> : null
                     }
-
-
                     {
                         file && <div className={styles.wrapper}>
                             <FileSvg className={styles.icon}/>
-                            {file.url && type === "view" ?
-                                <a download href={`${BackUrlForDoc}${file.url}`}><h1>{file?.name}</h1></a>
-                                : <h1>{file?.name}</h1>
-                            }
-
+                            <a download href={`${BackUrlForDoc}${file}`}><h1>File</h1></a>
                         </div>
                     }
 

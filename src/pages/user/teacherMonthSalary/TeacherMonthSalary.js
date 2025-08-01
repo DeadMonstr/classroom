@@ -26,7 +26,7 @@ const TeacherMonthSalary = () => {
     useEffect(() => {
 
 
-        request(`${BackUrl}teacher_salary_inside/${monthId}`,"GET",null,headers())
+        request(`${BackUrl}teacher/teacher_salary_inside/${monthId}`,"GET",null,headers())
             .then(res => {
                 setData(res.data)
             })

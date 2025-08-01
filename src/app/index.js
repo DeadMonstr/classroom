@@ -195,7 +195,7 @@ const App = () => {
                     <Route element={<RequireAuth allowedRules={[ROLES.Methodist]}/>}>
                         <Route path={"exercises"} element={<Exercises/>}/>
 
-                        <Route path={"createExercises"} element={<CreateExercises/>}/>
+                        <Route path={"createExercises/:id"} element={<CreateExercises/>}/>
                         <Route path={"changeExercises/:id"} element={<ChangeExercises/>}/>
                         <Route path={"createExercisesTypes"} element={<CreateExercisesTypes/>}/>
                         <Route path={"pisaTest"} element={<PisaTestList/>}/>

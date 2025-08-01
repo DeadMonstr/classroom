@@ -51,7 +51,6 @@ const Group = () => {
 				<Route path={"attendanceTable"} element={<AttendanceTable backBtn={true}/>} />
 				<Route path={"lessonsTime"} element={<LessonTime />} />
 				<Route path={"finishedLessons/*"} element={<FinishedLessons />} />
-				<Route path={"finishedLessons/*"} element={<FinishedLessons />} />
 				<Route path={"observedTeacherLessons/*"} element={<ObservedTeacherLessons />} />
 				<Route path={"test"} element={<GroupTest />} />
 				{/*<Route path={"onlineLesson"} element={<OnlineLesson />} />*/}

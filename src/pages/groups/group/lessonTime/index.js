@@ -45,7 +45,7 @@ const GennisTable = ({data}) => {
 
     useEffect(() => {
         if (data?.id) {
-            request(`${BackUrl}group_time_table2/${data.id}`, "GET", null, headers())
+            request(`${BackUrl}group/group_time_table2/${data.id}`, "GET", null, headers())
                 .then(res => {
                     setTimes(res.data)
                     setDays(res.days)
@@ -111,7 +111,7 @@ const TuronTable = ({data}) => {
 
     useEffect(() => {
         if (data?.id) {
-            request(`${BackUrl}group_time_table2/${data.id}`, "GET", null, headers())
+            request(`${BackUrl}group/group_time_table2/${data.id}`, "GET", null, headers())
                 .then(res => {
                     setTimes(res.times)
                     setDays(res.days)

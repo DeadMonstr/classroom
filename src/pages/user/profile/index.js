@@ -58,15 +58,15 @@ const Profile = () => {
 
 
 
-	const {username,age,img,name,surname,balance,born_date,father_name,parent_phone,phone} = data
+	const {username,age,img,name,surname,balance,born_date,father_name,parent_phone,phone,role} = data
 
 
-	console.log(img)
+	console.log(ROLES)
 
 	return (
 		<div className={styles.profile}>
 			<Back/>
-			{!ROLES.Parent && <div className={styles.header}>
+			{ROLES.Parent !== role  && <div className={styles.header}>
 				<div className={styles.username}>
 					<i className="fa-solid fa-user"></i>
 					<span>{username}</span>
@@ -212,9 +212,7 @@ const Profile = () => {
 							}
 						</div>
 					</div>
-
 				</div>
-
 			</div>
 
 			<div className={styles.footer}>
@@ -259,7 +257,7 @@ const ChangeImg = ({userImg,setActive}) => {
 		formData.append("file",img)
 
 
-		request(`${BackUrl}update_photo`,"POST",formData,headersImg())
+		request(`${BackUrl}user/update_photo`,"POST",formData,headersImg())
 			.then(res => {
 
 				console.log(res)
