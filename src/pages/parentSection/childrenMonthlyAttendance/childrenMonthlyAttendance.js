@@ -36,6 +36,15 @@ const ChildrenMonthlyAttendance = () => {
     const months = dates.data?.months?.flatMap(item => item.months) || [];
     const groupIds = groups.group_list
 
+    const formattedGroupOptions = groupIds?.map(item => ({
+        id: item.id,
+        name: `${item.name} - ${item.nameGroup}`
+    }));
+
+
+
+    console.log(formattedGroupOptions, 'log')
+
 
     useEffect(() => {
         // setYear(years[0]?.id)
@@ -173,7 +182,7 @@ const ChildrenMonthlyAttendance = () => {
                         {groupIds && <Select
                             title={"Guruh"}
                             onChange={setGroup}
-                            options={groupIds}
+                            options={formattedGroupOptions}
                             defaultOption={"Guruh"}
                             style={{ width: "400px" }}
                         />}
