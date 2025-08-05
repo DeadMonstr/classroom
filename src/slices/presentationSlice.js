@@ -16,7 +16,7 @@ const initialState = {
         id: 12,
         heading: '123123',
         subheading: "",
-        slideType: "image",
+        slideType: "multiple_choice",
         image: 'https://asset.gecdesigns.com/img/wallpapers/beautiful-fantasy-wallpaper-ultra-hd-wallpaper-4k-sr10012418-1706506236698-cover.webp',
         video: "",
         imageType: 'center',
@@ -37,8 +37,10 @@ const initialState = {
             isLayoutSize: false,
             isVerticalAlign: false,
             isHorizontalAlign: true,
-
         },
+
+
+        exercise: {},
 
 
         extraDesign: {
@@ -79,9 +81,6 @@ const initialState = {
             name: "video",
             heading: 'Title video',
         },
-
-
-
     ]
 }
 
@@ -219,7 +218,30 @@ const PresentationSlice = createSlice({
 
         setSlideType: (state, action) => {
             state.currentSlide.slideType = action.payload
-        }
+        },
+
+
+        setExerciseOptionsSlide: (state, action) => {
+            state.currentSlide.exercise = action.payload
+        },
+
+        setExerciseOptionSlide: (state, action) => {
+            const keys = Object.keys(action.payload)
+            for (let i = 0; i < keys.length; i++) {
+                state.currentSlide.exercise[keys[i]] = action.payload[keys[i]]
+            }
+        },
+
+        // onAddExerciseVariantsSlide: (state, action) => {
+        //     state.currentSlide.exercise.variants =
+        //
+        // },
+        //
+        //
+        // onDeleteExerciseVariantsSlide: (state, action) => {
+        //     state.currentSlide.exercise.variants =
+        //         [...state.currentSlide.exercise.variants,action.payload]
+        // },
 
     }
 })
@@ -245,5 +267,7 @@ export const {
     setActiveType,
     setSlideVideo,
     toggleSidebar,
-    setSlideType
+    setSlideType,
+    setExerciseOptionsSlide,
+    setExerciseOptionSlide
 } = actions

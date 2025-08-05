@@ -6,6 +6,8 @@ import {useSelector} from "react-redux";
 import ActiveBox from "components/presentation/ui/activeBox/activeBox";
 import {activeTypesSideBar} from "components/presentation/types/index";
 
+
+
 export const HeadingContent = () => {
 
 
@@ -17,7 +19,7 @@ export const HeadingContent = () => {
 
 
     return (
-        <ActiveBox type={activeTypesSideBar.heading} >
+        <ActiveBox type={activeTypesSideBar.heading}  >
             <ContainerSlide>
                 <TextSlide extraClass={cls.label} type={"small"}>
                     {label}

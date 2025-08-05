@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 import cls from "./typesPreview.module.sass"
 import {contentTypes} from "components/presentation/types/content";
+import {execTypes} from "components/presentation/types/exercise";
 import {useDispatch} from "react-redux";
 import {setSlideType} from "slices/presentationSlice";
 
@@ -10,6 +11,11 @@ const types = [
         title: "Content types",
         name: 'content',
         items: contentTypes
+    },
+    {
+        title: "Exercises",
+        name: 'exc',
+        items: execTypes
     },
 ]
 
@@ -34,10 +40,8 @@ const TypesPreview = ({active,setActive,type}) => {
     const dispatch = useDispatch()
 
     const onClick = (itemName,typeName) => {
-
         dispatch(setSlideType(itemName))
         setActive(false)
-
     }
 
 
@@ -53,7 +57,6 @@ const TypesPreview = ({active,setActive,type}) => {
                 {
                     types.map(type => {
                         return (
-
                             <div className={cls.types__wrapper}>
                                 <h1>{type.title}</h1>
 
@@ -70,7 +73,7 @@ const TypesPreview = ({active,setActive,type}) => {
                                                     className={cls.items__item}
                                                 >
                                                     <div className={cls.box}>
-                                                        <Icon/>
+                                                        {item.icon && <Icon/>}
                                                     </div>
                                                     <h2>{item.title}</h2>
                                                 </div>

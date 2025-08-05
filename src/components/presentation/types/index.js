@@ -1,6 +1,27 @@
-export {
-    contentTypes
+import {
+    contentTypes as types,
 } from "./content"
+
+
+import {
+    execTypes as exc,
+} from "./exercise"
+
+
+
+
+export const contentTypes = [
+    ...types,
+    ...exc
+]
+
+
+
+
+
+
+
+
 
 export const activeTypesSideBar = {
     layout: "layout",
@@ -10,4 +31,5 @@ export const activeTypesSideBar = {
     image: "image",
     quote: "quote",
     video: "video",
+    multipleChoice: "multiple_choice"
 }
