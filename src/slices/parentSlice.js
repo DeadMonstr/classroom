@@ -51,9 +51,9 @@ export const fetchChildrenAttendanceWeekly = createAsyncThunk(
 )
 export const fetchChildrenBalance = createAsyncThunk(
     'ParentSlice/fetchChildrenBalance',
-    async (username) => {
+    async ({username, status}) => {
         const {request} = useHttp()
-        return await request(`${BackUrl}parent/student_payments/${username}`, "GET", null, headers())
+        return await request(`${BackUrl}parent/student_payments?id=${username}&payment=${status}`, "GET", null, headers())
     }
 )
 
