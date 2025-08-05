@@ -36,9 +36,9 @@ export const fetchChildrenAttendance = createAsyncThunk(
 
 export const fetchChildrenGroups = createAsyncThunk(
     'ParentSlice/fetchChildrenGroups',
-    async (username) => {
+    async ({username,year, month}) => {
         const {request} = useHttp()
-        return await request(`${BackUrl}parent/student_group_list/${username}`, "GET", null, headers())
+        return await request(`${BackUrl}parent/student_group_list/${username}/${year}/${month}`, "GET", null, headers())
     }
 )
 
