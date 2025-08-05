@@ -42,6 +42,7 @@ import ChildrenLayoutMB from "../pages/parentSection/childrenLayoutMB/childrenLa
 import ChildrenWeeklyGrades from "../pages/parentSection/childrenWeeklyGrades/childrenWeeklyGrades";
 
 import {PisaTestResults} from "pages/pisaTestResults";
+import TestContent from "pages/testContent";
 
 
 
@@ -106,6 +107,11 @@ const App = () => {
                     index
                     path={"login"}
                     element={<Login/>}
+                />
+                <Route
+                    index
+                    path={"content"}
+                    element={<TestContent/>}
                 />
 
                 <Route

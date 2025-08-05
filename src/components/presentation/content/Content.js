@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 
 import ActiveBox from "components/presentation/ui/activeBox/activeBox";
 import DesignSidebar from "components/presentation/sidebar/designSidebar/designSidebar";
+import ResponsiveTransformBlock from "helpers/responsiveTransformBlock";
 
 
 const layoutSizeTypes = [
@@ -87,8 +88,6 @@ const Content = () => {
 
     const renderContent = () => {
         return contentTypes.map(item => {
-
-
             if (item.name === currentSlide.slideType) {
                 const Content = item.content
 
@@ -101,42 +100,34 @@ const Content = () => {
 
 
     return (
-        <ActiveBox
-            isParent={true}
-            clazz={[cls.main, cls[layout]]}
-            type={activeTypesSideBar.layout}
-        >
-            {
-                layout !== "default" &&
-                <div
-                    style={{
-                        minWidth: layoutSizeWidth,
-                        maxWidth: layoutSizeWidth,
-                        minHeight: layoutSizeHeight,
-                        maxHeight: layoutSizeHeight
-                    }}
-                    className={cls.image}
-                >
-                    <img src={image} alt=""/>
+        <ResponsiveTransformBlock>
+            <ActiveBox
+                isParent={true}
+                clazz={[cls.main, cls[layout]]}
+                type={activeTypesSideBar.layout}
+            >
+                {
+                    layout !== "default" &&
+                    <div
+                        style={{
+                            minWidth: layoutSizeWidth,
+                            maxWidth: layoutSizeWidth,
+                            minHeight: layoutSizeHeight,
+                            maxHeight: layoutSizeHeight
+                        }}
+                        className={cls.image}
+                    >
+                        <img src={image} alt=""/>
+                    </div>
+                }
+
+                <div className={cls.content} style={{backgroundColor: currentSlide.slideType !== "image" ? bgColor : null}}>
+                    {renderContent()}
                 </div>
-            }
 
+            </ActiveBox>
+        </ResponsiveTransformBlock>
 
-
-
-            <div className={cls.content} style={{backgroundColor: currentSlide.slideType !== "image" ? bgColor : null}}>
-                {/*<HeadingContent />*/}
-                {/*<ParagraphContent/>*/}
-                {/*<NumberContent/>*/}
-                {/*<ImageContent/>*/}
-                {/*<QuoteContent/>*/}
-                {/*<VideoContent/>*/}
-
-                {renderContent()}
-
-            </div>
-
-        </ActiveBox>
     );
 };
 

@@ -12,7 +12,7 @@ export const contentTypes = [
     numberType,
     paragraphType,
     quoteType,
-    videoType
+    videoType,
 ]
 
 

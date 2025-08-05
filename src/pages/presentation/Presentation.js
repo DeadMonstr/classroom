@@ -70,7 +70,6 @@ const Presentation = () => {
                         </Tooltip>
 
                     </div>
-
                 </div>
             )
         })
@@ -125,8 +124,11 @@ const Presentation = () => {
                     </div>
                 </div>
 
+                <div className={cls.contentArea}>
+                    <Content />
+                </div>
 
-                <Content/>
+
                 <PresentationSidebarContext.Provider
                     value={{setActiveModal: onChangeSlideType}}
                 >
