@@ -13,7 +13,8 @@ const initialState = {
     tests: [],
     test_dates: [],
     loading: false,
-    error: null
+    error: null,
+    loadingAttedance: false
 }
 
 
@@ -139,16 +140,16 @@ const ParentSlice = createSlice({
                 state.error = action.payload
             })
             .addCase(fetchChildrenAttendanceMonthly.pending, (state, action) => {
-                state.loading = true
+                state.loadingAttedance = true
                 state.error = null
             })
             .addCase(fetchChildrenAttendanceMonthly.fulfilled, (state, action) => {
-                state.loading = false
+                state.loadingAttedance = false
                 state.monthlyAttendance = action.payload.msg
                 state.error = null
             })
             .addCase(fetchChildrenAttendanceMonthly.rejected, (state, action) => {
-                state.loading = false
+                state.loadingAttedance = false
                 state.error = action.payload
             })
             .addCase(fetchChildrenBalance.pending, (state, action) => {
