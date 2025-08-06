@@ -24,7 +24,7 @@ const ChildrenMonthlyAttendance = () => {
     const [month, setMonth] = useState();
     const [group, setGroup] = useState();
     const [availableMonths, setAvailableMonths] = useState([]);
-
+    const sortedMonths = [...availableMonths].sort((a, b) => b.localeCompare(a));
     const dispatch = useDispatch()
     const [selectedDayId, setSelectedDayId] = useState();
     const currentMonth = localStorage.getItem("current_month")
@@ -79,7 +79,6 @@ const ChildrenMonthlyAttendance = () => {
         if (year && month && currentUsername) {
 
             dispatch(fetchChildrenGroups({username: currentUsername, year: year, month: month}))
-            console.log('ishld')
         }
     }, [year, month, currentUsername]);
 
@@ -173,7 +172,7 @@ const ChildrenMonthlyAttendance = () => {
                         {months && <Select
                             title={"Oy"}
                             onChange={setMonth}
-                            options={availableMonths}
+                            options={sortedMonths}
                             value={month}
                             style={{ width: "400px" }}
                         />}
@@ -193,7 +192,7 @@ const ChildrenMonthlyAttendance = () => {
                         {/*<h1>Davomat</h1>*/}
                         <div className={styles.attendance__header__second__box}>
                             <Select value={year} defaultOption={"Yil"} title={"Yil"} onChange={setYear} options={years} extraClassName={styles.attendance__header__second__box__select} />
-                            <Select value={month}  title={"Oy"}  onChange={setMonth} options={availableMonths} extraClassName={styles.attendance__header__second__box__select} />
+                            <Select value={month}  title={"Oy"}  onChange={setMonth} options={sortedMonths} extraClassName={styles.attendance__header__second__box__select} />
                             <Select
                                 title={"Guruh"}
                                 value={group}

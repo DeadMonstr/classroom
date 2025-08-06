@@ -11,23 +11,32 @@ import {
     fetchChildrenAttendanceMonthly,
     fetchChildrenGroups, fetchChildrenTests, fetchChildrenTestsDate
 } from "../../../slices/parentSlice";
+import LoaderPage from "../../../components/ui/loader/Loader";
 
 
 
 
 const ChildrenMonthlyGrades = () => {
-
+    const currentMonth = localStorage.getItem("current_month")
     const [year, setYear] = useState();
-    const [month, setMonth] = useState();
+    const [month, setMonth] = useState(currentMonth ? parseInt(currentMonth) : null);
     const [group, setGroup] = useState();
     const [availableMonths, setAvailableMonths] = useState([]);
+    const sortedMonths = [...availableMonths].sort((a, b) => b.localeCompare(a));
     const dispatch = useDispatch()
-    const currentMonth = localStorage.getItem("current_month")
+
     const currentYear = localStorage.getItem("current_year")
     const groupId = localStorage.getItem("group_id")
     const currentUsername = localStorage.getItem("platform_id")
-    const {monthlyAttendance, dates} = useSelector(state => state.parentSlice)
+    const {monthlyAttendance, dates, groups, loading} = useSelector(state => state.parentSlice)
+    const groupIds = groups.group_list
 
+    console.log(month, 'sre')
+
+    const formattedGroupOptions = groupIds?.map(item => ({
+        id: item.id,
+        name: `${item.name} - ${item.nameGroup}`
+    }));
     const years = dates.data?.years
 
     useEffect(() => {
@@ -45,7 +54,6 @@ const ChildrenMonthlyGrades = () => {
 
     useEffect(() => {
         dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
-        dispatch(fetchChildrenGroups(currentUsername))
         dispatch(fetchChildrenAttendance(currentUsername))
         if (!groupId) {
             dispatch(fetchChildrenTestsDate(groupId))
@@ -54,8 +62,12 @@ const ChildrenMonthlyGrades = () => {
             dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
         }
     }, [currentMonth]);
+    useEffect(() => {
+        if (year && month && currentUsername) {
+            dispatch(fetchChildrenGroups({username: currentUsername, year: year, month: month}))
+        }
+    }, [year, month, currentUsername]);
 
-    console.log(month, "month")
     useEffect(() => {
         if (year || month || group) {
             dispatch(fetchChildrenAttendanceMonthly({
@@ -116,12 +128,21 @@ const ChildrenMonthlyGrades = () => {
                                     />
                                     <Select
                                         title={"Oy"}
+                                        type={"simple"}
                                         value={month}
                                         onChange={setMonth}
-                                        options={availableMonths}
-                                        defaultOption={"Oy"}
+                                        options={sortedMonths}
+                                        defaultOption={currentMonth}
                                         style={{ width: "400px" }}
                                     />
+                                    {groupIds && <Select
+                                        title={"Guruh"}
+                                        value={group}
+                                        onChange={setGroup}
+                                        options={formattedGroupOptions}
+                                        defaultOption={"Guruh"}
+                                        style={{ width: "400px" }}
+                                    />}
                                 </div>
 
 
@@ -134,7 +155,7 @@ const ChildrenMonthlyGrades = () => {
                                     <div className={styles.grades__header__second__box}>
 
                                         <Select title={"Yil"} value={year} onChange={setYear} options={years} extraClassName={styles.grades__header__second__box__select} />
-                                        <Select title={"Oy"} value={month} onChange={setMonth} options={availableMonths} extraClassName={styles.grades__header__second__box__select} />
+                                        <Select title={"Oy"} value={month} onChange={setMonth} options={sortedMonths} extraClassName={styles.grades__header__second__box__select} />
                                     </div>
                                 </div>
                             )
@@ -151,7 +172,13 @@ const ChildrenMonthlyGrades = () => {
                     )
                 }
                 <div className={styles.grades__card__box}>
-                    {renderMonthlyGrades()}
+                    {loading ? (
+                        <LoaderPage />
+                    ) : monthlyAttendance.length === 0 ? (
+                        <h1 style={{display: "flex", alignSelf: "center", color: "#ccc", justifyItems: "center", textTransform: 'uppercase'}}>Baholar yo‘q</h1>
+                    ) : (
+                        renderMonthlyGrades()
+                    )}
                 </div>
 
             </Card>
