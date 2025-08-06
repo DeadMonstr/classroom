@@ -48,7 +48,6 @@ const ParentSection = () => {
             dispatch(fetchChildrenAttendance(selectedChild?.platform_id))
             dispatch(fetchChildrenGroups(selectedChild?.platform_id))
             dispatch(fetchChildrenAttendanceWeekly(selectedChild?.platform_id))
-            dispatch(fetchChildrenBalance(selectedChild?.platform_id))
             if (!groupId ) {
                 dispatch(fetchChildrenTestsDate(groupId))
             }

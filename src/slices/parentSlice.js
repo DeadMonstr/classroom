@@ -10,6 +10,7 @@ const initialState = {
     weeklyAttendance: [],
     monthlyAttendance: [],
     balance: [],
+    debts: [],
     tests: [],
     test_dates: [],
     loading: false,
@@ -54,6 +55,13 @@ export const fetchChildrenBalance = createAsyncThunk(
     async ({username, status}) => {
         const {request} = useHttp()
         return await request(`${BackUrl}parent/student_payments?id=${username}&payment=${status}`, "GET", null, headers())
+    }
+)
+export const fetchChildrenDebtBalance = createAsyncThunk(
+    'ParentSlice/fetchChildrenDebtBalance',
+    async (username) => {
+        const {request} = useHttp()
+        return await request(`${BackUrl}parent/student_payments/${username}`, "GET", null, headers())
     }
 )
 
@@ -162,6 +170,19 @@ const ParentSlice = createSlice({
                 state.error = null
             })
             .addCase(fetchChildrenBalance.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(fetchChildrenDebtBalance.pending, (state, action) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchChildrenDebtBalance.fulfilled, (state, action) => {
+                state.loading = false
+                state.debts = action.payload
+                state.error = null
+            })
+            .addCase(fetchChildrenDebtBalance.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })
