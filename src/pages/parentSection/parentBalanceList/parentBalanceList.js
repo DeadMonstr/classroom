@@ -9,6 +9,7 @@ import {fetchChildrenBalance, fetchChildrenDebtBalance} from "../../../slices/pa
 import {useDispatch, useSelector} from "react-redux";
 import Button from "../../../components/ui/button";
 import classNames from "classnames";
+import LoaderPage from "../../../components/ui/loader/Loader";
 
 const years = [
     "2025",
@@ -49,7 +50,7 @@ const ParentBalanceList = () => {
     const dispatch = useDispatch()
     const [active, setActive] = useState(1);
     const platformID = localStorage.getItem("platform_id")
-    const {balance, debts} = useSelector(state => state.parentSlice)
+    const {balance, debts, loading} = useSelector(state => state.parentSlice)
     const [status, setStatus] = useState(true)
 
     // useEffect(() => {
@@ -185,9 +186,11 @@ const ParentBalanceList = () => {
                                     <th>To'lov turi</th>
                                     <th>Sana</th>
                                     </thead>
-                                    <tbody>
-                                    {renderTable()}
-                                    </tbody>
+                                    {
+                                        loading ? <LoaderPage/> : <tbody>
+                                        {renderTable()}
+                                        </tbody>
+                                    }
                                 </Table>
                             )
                         }
@@ -205,7 +208,7 @@ const ParentBalanceList = () => {
                                     <th>Hamma qarzi</th>
                                     </thead>
                                     <tbody>
-                                    {renderDebtTable()}
+                                    {loading ? <LoaderPage/> :renderDebtTable()}
                                     </tbody>
                                 </Table>
                             )
@@ -219,7 +222,9 @@ const ParentBalanceList = () => {
                                     <th>Sana</th>
                                     </thead>
                                     <tbody>
-                                    {renderDiscountTable()}
+                                    {
+                                        loading ? <LoaderPage/> : renderDiscountTable()
+                                    }
                                     </tbody>
                                 </Table>
                             )

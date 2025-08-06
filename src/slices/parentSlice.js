@@ -15,7 +15,7 @@ const initialState = {
     test_dates: [],
     loading: false,
     error: null,
-    loadingAttedance: false
+    loadingAttedance: false,
 }
 
 

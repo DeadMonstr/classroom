@@ -27,6 +27,7 @@
   align-items: center;
 }
 .card__daysList__dayBox {
+  width: 25%;
   height: fit-content;
   display: flex;
   flex-direction: column;

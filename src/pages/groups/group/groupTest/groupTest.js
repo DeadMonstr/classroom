@@ -174,7 +174,6 @@ const GroupTest = () => {
                                 value={month}
                                 title={"Oy"}
                                 options={months}
-
                                 onChange={(e) => {
                                     setMonth(e)
                                 }}
