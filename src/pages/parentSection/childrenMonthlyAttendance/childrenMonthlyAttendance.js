@@ -43,14 +43,7 @@ const ChildrenMonthlyAttendance = () => {
 
 
 
-    console.log(formattedGroupOptions, 'log')
 
-
-    useEffect(() => {
-        // setYear(years[0]?.id)
-        // setMonth(months[0]?.id)
-        // setGroup(groupIds[0]?.id)
-    } , [])
 
 
     useEffect(() => {
@@ -70,7 +63,7 @@ const ChildrenMonthlyAttendance = () => {
 
        if(currentUsername || currentUsername !== undefined){
            dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
-           dispatch(fetchChildrenGroups(currentUsername))
+
            dispatch(fetchChildrenAttendance(currentUsername))
 
            if (!groupId && !currentYear && !currentMonth ) {
@@ -82,8 +75,14 @@ const ChildrenMonthlyAttendance = () => {
        }
     }, [currentMonth]);
 
+    useEffect(() => {
+        if (year && month && currentUsername) {
 
-    // console.log(year , month, group , "grou")
+            dispatch(fetchChildrenGroups({username: currentUsername, year: year, month: month}))
+            console.log('ishld')
+        }
+    }, [year, month, currentUsername]);
+
     useEffect(() => {
         if (year && month && group) {
             dispatch(fetchChildrenAttendanceMonthly({
@@ -165,7 +164,7 @@ const ChildrenMonthlyAttendance = () => {
 
                         {years && <Select
                             title={"Yil"}
-
+                            value={year}
                             onChange={setYear}
                             options={years}
                             defaultOption={"Yil"}
@@ -173,14 +172,14 @@ const ChildrenMonthlyAttendance = () => {
                         />}
                         {months && <Select
                             title={"Oy"}
-
                             onChange={setMonth}
                             options={availableMonths}
-
+                            value={month}
                             style={{ width: "400px" }}
                         />}
                         {groupIds && <Select
                             title={"Guruh"}
+                            value={group}
                             onChange={setGroup}
                             options={formattedGroupOptions}
                             defaultOption={"Guruh"}
@@ -193,8 +192,8 @@ const ChildrenMonthlyAttendance = () => {
                     <div className={styles.attendance__header__second}>
                         {/*<h1>Davomat</h1>*/}
                         <div className={styles.attendance__header__second__box}>
-                            <Select defaultOption={"Yil"} title={"Yil"} onChange={setYear} options={years} extraClassName={styles.attendance__header__second__box__select} />
-                            <Select  title={"Oy"}  onChange={setMonth} options={availableMonths} extraClassName={styles.attendance__header__second__box__select} />
+                            <Select value={year} defaultOption={"Yil"} title={"Yil"} onChange={setYear} options={years} extraClassName={styles.attendance__header__second__box__select} />
+                            <Select value={month}  title={"Oy"}  onChange={setMonth} options={availableMonths} extraClassName={styles.attendance__header__second__box__select} />
                             <Select
                                 title={"Guruh"}
                                 value={group}
