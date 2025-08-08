@@ -31,5 +31,7 @@ export const activeTypesSideBar = {
     image: "image",
     quote: "quote",
     video: "video",
-    multipleChoice: "multiple_choice"
+    multipleChoice: "multiple_choice",
+    wordCloud: "word_cloud",
+    openEnded: "open_ended"
 }

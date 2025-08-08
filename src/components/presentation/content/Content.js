@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import cls from "./content.module.sass";
 import {
     activeTypesSideBar, contentTypes,
@@ -8,6 +8,8 @@ import {useDispatch, useSelector} from "react-redux";
 import ActiveBox from "components/presentation/ui/activeBox/activeBox";
 import DesignSidebar from "components/presentation/sidebar/designSidebar/designSidebar";
 import ResponsiveTransformBlock from "helpers/responsiveTransformBlock";
+
+import MathInput from "components/ui/mathField";
 
 
 const layoutSizeTypes = [
@@ -97,8 +99,6 @@ const Content = () => {
     }
 
 
-
-
     return (
         <ResponsiveTransformBlock>
             <ActiveBox
@@ -106,25 +106,25 @@ const Content = () => {
                 clazz={[cls.main, cls[layout]]}
                 type={activeTypesSideBar.layout}
             >
-                {
-                    layout !== "default" &&
-                    <div
-                        style={{
-                            minWidth: layoutSizeWidth,
-                            maxWidth: layoutSizeWidth,
-                            minHeight: layoutSizeHeight,
-                            maxHeight: layoutSizeHeight
-                        }}
-                        className={cls.image}
-                    >
-                        <img src={image} alt=""/>
-                    </div>
-                }
+                {/*{*/}
+                {/*    layout !== "default" &&*/}
+                {/*    <div*/}
+                {/*        style={{*/}
+                {/*            minWidth: layoutSizeWidth,*/}
+                {/*            maxWidth: layoutSizeWidth,*/}
+                {/*            minHeight: layoutSizeHeight,*/}
+                {/*            maxHeight: layoutSizeHeight*/}
+                {/*        }}*/}
+                {/*        className={cls.image}*/}
+                {/*    >*/}
+                {/*        <img src={image} alt=""/>*/}
+                {/*    </div>*/}
+                {/*}*/}
 
-                <div className={cls.content} style={{backgroundColor: currentSlide.slideType !== "image" ? bgColor : null}}>
-                    {renderContent()}
-                </div>
-
+                {/*<div className={cls.content} style={{backgroundColor: currentSlide.slideType !== "image" ? bgColor : null}}>*/}
+                {/*    {renderContent()}*/}
+                {/*</div>*/}
+                <MathInput/>
             </ActiveBox>
         </ResponsiveTransformBlock>
 

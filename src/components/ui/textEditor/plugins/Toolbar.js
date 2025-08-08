@@ -11,12 +11,24 @@ import {
     $getSelection,
     $isRangeSelection,
     $createParagraphNode,
-    $getNodeByKey, COMMAND_PRIORITY_CRITICAL
+    $getNodeByKey,
+    COMMAND_PRIORITY_CRITICAL,
+    $isNodeSelection,
+    CLICK_COMMAND,
+    COMMAND_PRIORITY_LOW,
+    $createTextNode,
+    $getRoot
 } from "lexical";
 import {$isLinkNode, TOGGLE_LINK_COMMAND} from "@lexical/link";
-import { $wrapNodes, $isAtNodeEnd, $patchStyleText, $getSelectionStyleValueForProperty} from "@lexical/selection";
+import {$wrapNodes, $isAtNodeEnd, $patchStyleText, $getSelectionStyleValueForProperty} from "@lexical/selection";
 import {$findMatchingParent, $getNearestNodeOfType, mergeRegister} from "@lexical/utils";
-import { INSERT_ORDERED_LIST_COMMAND, INSERT_UNORDERED_LIST_COMMAND, REMOVE_LIST_COMMAND, $isListNode, ListNode} from "@lexical/list";
+import {
+    INSERT_ORDERED_LIST_COMMAND,
+    INSERT_UNORDERED_LIST_COMMAND,
+    REMOVE_LIST_COMMAND,
+    $isListNode,
+    ListNode
+} from "@lexical/list";
 import {createPortal} from "react-dom";
 import {$createHeadingNode, $createQuoteNode, $isHeadingNode} from "@lexical/rich-text";
 import {$createCodeNode, $isCodeNode, getDefaultCodeLanguage, getCodeLanguages} from "@lexical/code";
@@ -28,6 +40,9 @@ import {INSERT_HORIZONTAL_RULE_COMMAND} from "@lexical/react/LexicalHorizontalRu
 import useModal from "hooks/useModal";
 import {InsertTableDialog} from "components/ui/textEditor/plugins/TablePlugin";
 import {$isTableNode} from "@lexical/table";
+import {InsertMathModal} from "./MathPlugin/mathPlugin";
+import {$createMathNode, $isMathNode} from "components/ui/textEditor/nodes/MathNode";
+import {$createWrapperNode} from "components/ui/textEditor/nodes/WrapperNode";
 
 
 const LowPriority = 1;
@@ -371,10 +386,10 @@ function DropdownColorPicker({disabled = false, stopCloseOnClickSelf = true, col
 
 const InputToolBarPlugin = () => {
     const [editor] = useLexicalComposerContext()
-    const [value,setValue] = useState(0)
+    const [value, setValue] = useState(0)
 
 
-    const onClick = () => {
+    const onClick = ({symbol = "?/", mirror = "/?", condition = () => true}) => {
         editor.update(() => {
             const selection = $getSelection()
 
@@ -382,7 +397,6 @@ const InputToolBarPlugin = () => {
 
                 // const selectedItem = editor.getElementByKey(nodes[0].getKey())
                 // selectedItem.setAttribute("data-input","true")
-
 
 
                 // $wrapNodes(selection,() => $createInputNode())
@@ -395,6 +409,8 @@ const InputToolBarPlugin = () => {
 
 
                 const nodes = selection.getNodes()
+
+
                 const selectedText = selection.getTextContent();
                 const wrappedText = `?/${selectedText}/?`;
 
@@ -406,7 +422,7 @@ const InputToolBarPlugin = () => {
 
 
                 selection.insertText(wrappedText);
-                setValue(old => old +1)
+                setValue(old => old + 1)
 
             }
         })
@@ -418,7 +434,13 @@ const InputToolBarPlugin = () => {
         <button
             className={"toolbar-item spaced"}
             aria-label="Format Italics"
-            onClick={onClick}
+            onClick={() => {
+                onClick({
+                    symbol: "?/",
+                    mirror: "/?",
+                    condition: (node) => $isMathNode(node),
+                })
+            }}
         >
             <i className="input format"/>
         </button>
@@ -427,10 +449,9 @@ const InputToolBarPlugin = () => {
 }
 
 
-
 const MatchToolBarPlugin = () => {
     const [editor] = useLexicalComposerContext()
-    const [value,setValue] = useState(0)
+    const [value, setValue] = useState(0)
     const onClick = () => {
         editor.update(() => {
             const selection = $getSelection()
@@ -459,8 +480,40 @@ const MatchToolBarPlugin = () => {
                 // selectedItem.classList.add("Excinput")
 
                 selection.insertText(wrappedText);
-                setValue(old => old +1)
+                setValue(old => old + 1)
 
+            }
+
+            else {
+                const nodes = selection.getNodes()
+
+                nodes.forEach((node) => {
+                    if (!$isMathNode(node)) return;
+
+                    let parent = node.getParentOrThrow();
+
+                    if (parent.getType() === "root") {
+                        const paragraph = $createParagraphNode();
+                        $getRoot().insertBefore(paragraph, node);
+                        node.remove();
+                        paragraph.append(node);
+                        parent = paragraph;
+                    }
+
+                    const wrapper = $createWrapperNode("matchWord");
+                    wrapper.setStyle({
+                        border: "1px dashed #888",
+                        padding: "2px 4px",
+                        borderRadius: "6px",
+                        backgroundColor: "#fdfdfd",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                    });
+                    parent.insertBefore(wrapper, node);
+                    node.remove();
+                    wrapper.append(node);
+                });
             }
         })
 
@@ -481,7 +534,7 @@ const MatchToolBarPlugin = () => {
 
 const MatchWrongToolBarPlugin = () => {
     const [editor] = useLexicalComposerContext()
-    const [value,setValue] = useState(0)
+    const [value, setValue] = useState(0)
     const onClick = () => {
         editor.update(() => {
             const selection = $getSelection()
@@ -510,7 +563,7 @@ const MatchWrongToolBarPlugin = () => {
                 // selectedItem.classList.add("Excinput")
 
                 selection.insertText(wrappedText);
-                setValue(old => old +1)
+                setValue(old => old + 1)
 
             }
         })
@@ -567,7 +620,10 @@ export default function ToolbarPlugin({options}) {
 
     const updateToolbar = useCallback(() => {
         const selection = $getSelection();
+
+
         if ($isRangeSelection(selection)) {
+
             const anchorNode = selection.anchor.getNode();
             const element = anchorNode.getKey() === "root" ? anchorNode : anchorNode.getTopLevelElementOrThrow();
             const elementKey = element.getKey();
@@ -586,7 +642,6 @@ export default function ToolbarPlugin({options}) {
                     }
                 }
             }
-
 
 
             // Update text format
@@ -645,7 +700,6 @@ export default function ToolbarPlugin({options}) {
     }, [editor, updateToolbar]);
 
 
-
     useEffect(() => {
         return editor.registerCommand(
             SELECTION_CHANGE_COMMAND,
@@ -679,20 +733,48 @@ export default function ToolbarPlugin({options}) {
     }, [editor, isLink]);
 
 
+    // const applyStyleText = useCallback(
+    //     (styles, skipHistoryStack) => {
+    //         activeEditor.update(
+    //             () => {
+    //                 const selection = $getSelection();
+    //                 if (selection !== null) {
+    //                     $patchStyleText(selection, styles);
+    //                 }
+    //             },
+    //             skipHistoryStack ? {tag: 'historic'} : {},
+    //         );
+    //     },
+    //     [activeEditor],
+    // );
+
     const applyStyleText = useCallback(
         (styles, skipHistoryStack) => {
             activeEditor.update(
                 () => {
                     const selection = $getSelection();
-                    if (selection !== null) {
+                    if (!selection) return;
+
+                    if ($isNodeSelection(selection)) {
+                        const nodes = selection.getNodes();
+                        nodes.forEach((node) => {
+                            if ($isMathNode(node)) {
+                                node.setStyle(styles);
+                            }
+                        });
+                        return;
+                    }
+
+                    if ($isRangeSelection(selection)) {
                         $patchStyleText(selection, styles);
                     }
                 },
-                skipHistoryStack ? {tag: 'historic'} : {},
+                skipHistoryStack ? {tag: "historic"} : {}
             );
         },
-        [activeEditor],
+        [activeEditor]
     );
+
 
     const onFontColorSelect = useCallback(
         (value, skipHistoryStack) => {
@@ -733,7 +815,10 @@ export default function ToolbarPlugin({options}) {
                 <i className="format redo"/>
             </button>
             <Divider/>
-            <BlockOptions editor={editor} blockType={blockType}/>
+            <BlockOptions
+                editor={editor}
+                blockType={blockType}
+            />
             <Divider/>
             {blockType === "code" ? (
                 <>
@@ -749,7 +834,7 @@ export default function ToolbarPlugin({options}) {
                 <>
 
                     <FontSize
-                        selectionFontSize={fontSize.slice(0,-2)}
+                        selectionFontSize={fontSize.slice(0, -2)}
                         editor={editor}
                     />
                     <button
@@ -806,7 +891,9 @@ export default function ToolbarPlugin({options}) {
                         <i className="format link"/>
                     </button>
                     {
-                        options?.input && <InputToolBarPlugin/>
+                        options?.input && <InputToolBarPlugin
+
+                        />
                     }
                     {
                         options?.match && <MatchToolBarPlugin/>
@@ -915,9 +1002,24 @@ export default function ToolbarPlugin({options}) {
                                     />
                                 ));
                             }}
-                            className="item">
-                            <i className="icon table" />
+                            className="item"
+                        >
+                            <i className="icon table"/>
                             <span className="text">Table</span>
+                        </DropDownItem>
+                        <DropDownItem
+                            onClick={() => {
+                                showModal('Insert Math', (onClose) => (
+                                    <InsertMathModal
+                                        activeEditor={activeEditor}
+                                        onClose={onClose}
+                                    />
+                                ));
+                            }}
+                            className="item"
+                        >
+                            <i className="icon table"/>
+                            <span className="text">Math</span>
                         </DropDownItem>
                         {/*<DropDownItem*/}
                         {/*    onClick={() => {*/}
@@ -1039,8 +1141,60 @@ export default function ToolbarPlugin({options}) {
                     </button>
 
                     {modal}
+
+
                 </>
             )}
+
+
+            {/*<MathDoubleClickPlugin*/}
+            {/*    onOpenModal={(node) => {*/}
+            {/*        showModal("Edit Math", (onClose) => (*/}
+            {/*            <InsertMathModal activeEditor={editor} node={node} onClose={onClose}/>*/}
+            {/*        ));*/}
+            {/*    }}*/}
+            {/*/>*/}
         </div>
     );
 }
+
+// export function MathDoubleClickPlugin({onOpenModal}) {
+//     const [editor] = useLexicalComposerContext();
+//     let lastClickTime = 0;
+//
+//     useEffect(() => {
+//         return editor.registerCommand(
+//             CLICK_COMMAND,
+//             (event) => {
+//                 const target = event.target.closest(".math-node");
+//                 if (!target) return false;
+//
+//
+//                 const key = target.getAttribute("data-lexical-node-key");
+//                 if (!key) return false;
+//
+//                 const now = Date.now();
+//                 const isDoubleClick = now - lastClickTime < 300;
+//                 lastClickTime = now;
+//
+//                 editor.update(() => {
+//                     const node = $getNodeByKey(key);
+//                     if (node && $isMathNode(node)) {
+//
+//                         if (isDoubleClick && onOpenModal) {
+//                             console.log("helllo")
+//
+//                             // ✅ Double-click → open modal in toolbar
+//                             onOpenModal(node);
+//                         }
+//                     }
+//                 });
+//
+//                 return true;
+//             },
+//             COMMAND_PRIORITY_LOW
+//         );
+//     }, [editor, onOpenModal]);
+//
+//     return null;
+// }

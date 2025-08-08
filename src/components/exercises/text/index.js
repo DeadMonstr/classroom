@@ -4,7 +4,7 @@ import styles from "./style.module.sass";
 
 import TextEditor from "components/ui/textEditor/TextEditor";
 
-import parse, {attributesToProps} from 'html-react-parser';
+import parse, {attributesToProps, domToReact} from 'html-react-parser';
 import {
     DndContext,
     KeyboardSensor,
@@ -128,6 +128,10 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
     }
 
 
+    console.log(text)
+
+
+
     const optionsData = useCallback((words) => ({
         replace: (domNode) => {
             if (domNode.type === 'tag') {
@@ -135,25 +139,33 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                 const regex = /\{\{(\d+)\}\}/g;
                 // Process children if they contain text nodes
 
+
                 const children = domNode?.children.map(child => {
+
+
                     if (child.type === 'text' && regex.test(child.data)) {
+
 
 
                         hasMatchingText = true;
 
                         const parts = child.data.split(regex);
 
-
                         const props = {...attributesToProps(domNode?.attribs)};
 
+
+
+
                         return parts.map((part, index) => {
-                            // console.log(part)
+
                             if (index % 2 === 1 && words?.length > 0) {
+
                                 const wordData = words.filter(item => item?.index === +part)[0]
-                                if (container.items.length) {
+                                if (container?.items?.length) {
+                                    console.log("error")
                                     setContainer(container => ({
                                         ...container,
-                                        items: container.items.map(item => {
+                                        items: container?.items?.map(item => {
                                             if (item.index === wordData.index) {
                                                 return {
                                                     ...item,
@@ -166,6 +178,7 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                                     }))
                                 }
                                 if (wordData?.type === "input") {
+
                                     const style = {display: "inline-block", padding: 0}
                                     return (
                                         <Input
@@ -205,8 +218,15 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                                 <Fragment>{part}</Fragment>
                         });
                     }
-                    return child;
+
+
+                    console.log(child)
+                    return domToReact([child]); // ✅ convert raw DOM node to React element
+
                 }).flat();
+
+
+
 
 
                 if (hasMatchingText) {
@@ -220,6 +240,8 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
 
                     return React.createElement(domNode.name, props, children);
                 }
+
+
             }
         }
     }), [words, container])

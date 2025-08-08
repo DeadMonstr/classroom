@@ -6,66 +6,30 @@ import Button from "components/ui/button";
 import {PresentationSidebarContext} from "helpers/contexts";
 
 
-import {multipleChoiceType} from "./MultipleChoiceType";
+import {wordCloudType} from "components/presentation/types/exercise/wordCloud/WordCloudType";
 import {useDispatch, useSelector} from "react-redux";
 import {setContentHeading, setContentSubheading, setExerciseOptionSlide} from "slices/presentationSlice";
-import VariantsSlide from "components/presentation/ui/variants/VariantsSlide";
 import OptionSwitcherSlide from "components/presentation/ui/optionSwitcher/OptionSwitcherSlide";
 import OptionInputSlide from "components/presentation/ui/optionInput/optionInputSlide";
-import {getRandomColor} from "helpers/colorRandomizer";
 import Input from "components/ui/form/input";
 import Textarea from "components/ui/form/textarea";
 import {makeIconComponent} from "helpers/makeIconComponent";
 
-export const MultipleChoiceSidebar = () => {
+export const WordCloudSidebar = () => {
 
 
     const {setActiveModal} = useContext(PresentationSidebarContext)
     const {currentSlide} = useSelector(state => state.presentation)
 
-    const {heading,subheading,exercise} = currentSlide
-    const {variants,correctAnswer,multipleOptions,count} = exercise
+    const { heading,subheading,exercise} = currentSlide
 
+    const {variants,multipleOptions,count} = exercise
 
     const dispatch = useDispatch()
 
-    const onAddVariant = () => {
-        if (variants.length < 10) {
-            dispatch(setExerciseOptionSlide({
-                variants: [...variants, {
-                    id: variants.length + 1,
-                    name: "",
-                    correct: false,
-                    value: 1,
-                    color: getRandomColor()
-                }]
-            }))
-        }
-    }
 
-    const onChangeVariant = (changeditem) => {
-        dispatch(setExerciseOptionSlide({
-            variants: variants.map(item => {
-                if (item.id === changeditem.id) {
-                    return changeditem
-                }
-                return item
-            })
-        }))
-    }
 
-    const onDeleteVariant = (id) => {
-        dispatch(setExerciseOptionSlide({
-            variants: variants.filter(item => item.id !== id)
-        }))
-    }
 
-    const onChangeCorrectAnswer = () => {
-        dispatch(setExerciseOptionSlide({
-            correctAnswer: !correctAnswer,
-            variants: variants.map(item => ({...item,correct: false}))
-        }))
-    }
 
 
     const onChangeMultipleOptions = () => {
@@ -80,6 +44,7 @@ export const MultipleChoiceSidebar = () => {
             count
         }))
     }
+
     const onChangeHeading = (e) => {
         dispatch(setContentHeading(e))
     }
@@ -87,6 +52,7 @@ export const MultipleChoiceSidebar = () => {
     const onChangeSubheading = (e) => {
         dispatch(setContentSubheading(e))
     }
+
 
 
 
@@ -103,47 +69,27 @@ export const MultipleChoiceSidebar = () => {
                     type={"present"}
                     extraClass={cls.type__btn}
                 >
-                    {makeIconComponent(multipleChoiceType.icon)}
-                    {multipleChoiceType.title}
+                    {makeIconComponent(wordCloudType.icon)}
+                    {wordCloudType.title}
                 </Button>
             </div>
             <div className={cls.separator}/>
-
             <Input value={heading} onChange={onChangeHeading} extraClassNameLabel={cls.heading} title={"Heading"}/>
-
-
             <Textarea value={subheading} onChange={onChangeSubheading} extraClassNameLabel={cls.subheading} title={"Subheading"}/>
 
-
-            {
-                variants &&
-                <VariantsSlide
-                    haveCorrect={correctAnswer}
-                    variants={variants}
-                    onAdd={onAddVariant}
-                    onChange={onChangeVariant}
-                    onDelete={onDeleteVariant}
-                />
-            }
             <div className={cls.separator}/>
-            <OptionSwitcherSlide
-                title={"Correct answer"}
-                onToggle={onChangeCorrectAnswer}
-                active={correctAnswer}
-            />
+
             <br/>
             <OptionSwitcherSlide
                 onToggle={onChangeMultipleOptions}
                 active={multipleOptions}
-                title={"Multiple options"}
+                title={"Multiple Answers"}
             >
                 <OptionInputSlide
                     title={"Count"}
                     value={count}
                     onChange={onChangeCount}
                     type={"number"}
-                    max={variants?.length}
-                    min={1}
                 />
             </OptionSwitcherSlide>
             <br/>
