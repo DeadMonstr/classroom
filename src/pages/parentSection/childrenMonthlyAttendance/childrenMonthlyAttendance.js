@@ -69,7 +69,7 @@ const ChildrenMonthlyAttendance = () => {
            if (!groupId && !currentYear && !currentMonth ) {
                dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
            }
-           if (groupId || groupId !==  undefined) {
+           if (!groupId || groupId !==  undefined) {
                dispatch(fetchChildrenTestsDate(groupId))
            }
        }

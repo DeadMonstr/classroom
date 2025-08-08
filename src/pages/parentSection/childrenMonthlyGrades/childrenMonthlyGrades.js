@@ -53,10 +53,11 @@ const ChildrenMonthlyGrades = () => {
     }, [year, dates.data?.months]);
 
     useEffect(() => {
-        dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
+
         dispatch(fetchChildrenAttendance(currentUsername))
         if (!groupId) {
             dispatch(fetchChildrenTestsDate(groupId))
+            dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
         }
         if (!groupId && !currentYear && !currentMonth ) {
             dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
@@ -69,7 +70,7 @@ const ChildrenMonthlyGrades = () => {
     }, [year, month, currentUsername]);
 
     useEffect(() => {
-        if (year || month || group) {
+        if (year && month && group) {
             dispatch(fetchChildrenAttendanceMonthly({
                 username: currentUsername,
                 groupId: group,
