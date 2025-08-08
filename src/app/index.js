@@ -76,6 +76,8 @@ const App = () => {
     }, [isMobile]);
 
 
+
+
     const router = createBrowserRouter(
         createRoutesFromElements(
             <>

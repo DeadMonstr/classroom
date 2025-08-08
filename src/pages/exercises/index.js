@@ -46,7 +46,7 @@ const Exercises = () => {
 
 
     useEffect(() => {
-        dispatch(fetchExercisesData())
+        // dispatch(fetchExercisesData())
         dispatch(fetchExercisesTypeData())
         dispatch(fetchSubjectsData())
     }, [])

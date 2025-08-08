@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import styles from "../style.module.sass";
 import classNames from "classnames";
 import {useDraggable, useDroppable} from "@dnd-kit/core";
@@ -39,6 +39,16 @@ function DraggableWord({item,disabled}) {
 		transform: CSS.Translate.toString(transform),
 	};
 
+	const mathFieldRef = useRef(null);
+
+
+
+	useEffect(() => {
+		if (mathFieldRef.current) {
+			mathFieldRef.current.value = item.text;
+		}
+	}, [item.text]);
+
 	return (
 		<div
 			style={style}
@@ -46,8 +56,22 @@ function DraggableWord({item,disabled}) {
 			{...attributes}
 			className={styles.matchedWord}
 			ref={setNodeRef}
+
 		>
-			<div style={item.styles}  className={item.classNames} dangerouslySetInnerHTML={{__html: item.text}}></div>
+			{item.isMath ?
+				<math-field
+					ref={mathFieldRef}
+					readOnly
+					style={{
+						userSelect: "none",
+					width: "fit-content",
+					height: "fit-content",
+					...styles,
+				}}
+				/>
+				:
+				<div style={item.styles}  className={item.classNames} dangerouslySetInnerHTML={{__html: item.text}}></div>
+			}
 		</div>
 	);
 }

@@ -16,7 +16,7 @@ const initialState = {
         id: 12,
         heading: '123123',
         subheading: "",
-        slideType: "multiple_choice",
+        slideType: "open_ended",
         image: 'https://asset.gecdesigns.com/img/wallpapers/beautiful-fantasy-wallpaper-ultra-hd-wallpaper-4k-sr10012418-1706506236698-cover.webp',
         video: "",
         imageType: 'center',
