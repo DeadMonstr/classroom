@@ -61,6 +61,7 @@ const ChildrenMonthlyTestsResults = lazy(() => import("pages/parentSection/child
 const ChildrenMonthlyGrades = lazy(() => import("pages/parentSection/childrenMonthlyGrades/childrenMonthlyGrades"))
 const ChildrenMonthlyAttendance = lazy(() => import("pages/parentSection/childrenMonthlyAttendance/childrenMonthlyAttendance"))
 
+
 const App = () => {
 
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 375);
@@ -74,7 +75,6 @@ const App = () => {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, [isMobile]);
-
 
 
 

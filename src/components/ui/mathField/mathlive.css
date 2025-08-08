@@ -1,4 +1,8 @@
 math-field {
     min-height: 2.5rem;
     display: block;
+    font-size: 2rem;
+    /*--selection-background-color: lightgoldenrodyellow;*/
+    background: #252525;
+    color: white;
 }

@@ -1,41 +1,42 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import "mathlive";
-//
-//
 import "./mathlive.css"
 
-// import "https://esm.run/mathlive";
+export default function MathField({ value = "", onChange, readOnly = false, ...attrs }) {
+    const ref = useRef(null);
 
-const MathInput = ({latex,setLatex}) => {
-    const mathFieldRef = useRef(null);
-
+    // init listeners and readOnly property once
     useEffect(() => {
-        const mf = mathFieldRef.current;
-        if (mf) {
-            // Set initial value once
-            mf.value = latex;
+        const el = ref.current;
+        if (!el) return;
 
-            // Input event listener (MathLive's native event)
-            const handleInput = (evt) => {
-                setLatex(mf.value);
-            };
+        // if you see "HTMLElement" here, mathlive wasn't imported
+        // console.log(el.constructor.name);
 
-            mf.addEventListener("input", handleInput);
+        const inputHandler = () => onChange?.(el.value ?? "");
+        el.addEventListener("input", inputHandler);
 
-            // Cleanup on unmount
-            return () => {
-                mf.removeEventListener("input", handleInput);
-            };
-        }
-    }, []);
+        el.readOnly = !!readOnly;
+
+        return () => el.removeEventListener("input", inputHandler);
+    }, [onChange, readOnly]);
+
+    // keep element value in sync with React state (no extra options)
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        if ((el.value ?? "") !== (value ?? "")) el.value = value ?? "";
+    }, [value]);
 
     return (
         <math-field
-            ref={mathFieldRef}
-            virtual-keyboard-mode="manual"
-            style={{ fontSize: "18px", display: "block", minHeight: "2.5rem" }}
+            ref={ref}
+            virtual-keyboard-mode="onfocus"
+            smart-fence
+            smart-superscript
+            displaystyle
+            style={{ minHeight: 48, width: "100%" }}
+            {...attrs}
         />
     );
-};
-
-export default MathInput;
+}

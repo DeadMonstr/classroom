@@ -2,6 +2,7 @@ import React, {useCallback, useContext, useEffect, useLayoutEffect, useRef, useS
 import styles from "../style.module.sass";
 import {QuestionContext} from "../index";
 import {BackUrlForDoc} from "constants/global";
+import MathField from "components/ui/mathField";
 
 const QuestionVariants = ({setVariants,variants}) => {
 
@@ -78,6 +79,7 @@ const QuestionVariantsCreate = React.memo(({getVariants,typeVariants,setTypeVari
 				<select value={typeVariants} onChange={e => setTypeVariants(e.target.value)}  name="" id="">
 					<option value="input">Input</option>
 					<option value="select">select</option>
+					<option value="math">Math</option>
 				</select>
 			</div>
 			<div className={styles.createQuestion__variantsCreate_container}>
@@ -238,7 +240,7 @@ const Select = ({variants,onSubmitVariant,type}) => {
 
 
 	const onSubmit = () => {
-		const isEmpty = options.every(item => item.innerType === "text" ? item.text.length > 0 : item.img)
+		const isEmpty = options.every(item => item.innerType === "text" || item.innerType === "math"  ? item.text.length > 0 : item.img)
 		const isChecked = options.some(item => item.isTrue)
 
 		if (isChecked && isEmpty) {
@@ -324,6 +326,16 @@ const Option = React.memo( ({index,item,onChange,onChangeIsTrue,isView,onDeleteO
 				{
 					item.innerType === "text" ?
 						<span>{item.text}</span>
+						: item.innerType === "math" ?
+							<MathField
+								style={{
+									backgroundColor: "white",
+									color:"black",
+									border: "none",
+									fontSize: "2.5rem",}}
+								value={item.text}
+								readOnly
+							/>
 						:
 						<img src={typeof item.img === "string" ? `${BackUrlForDoc}${item.img}` : URL.createObjectURL(item.img)} alt=""/>
 				}
@@ -349,6 +361,14 @@ const Option = React.memo( ({index,item,onChange,onChangeIsTrue,isView,onDeleteO
 							innerType === "text" ?
 								<input value={text} className={styles.option__input} onChange={e => setText(e.target.value)} type="text"/>
 								:
+								innerType === "math" ?
+									<div className={styles.option__math}>
+										<MathField
+											value={text} onChange={setText} default-mode="math"
+										/>
+									</div>
+
+								:
 								<div onClick={onGetImage} className={styles.option__img}>
 
 									{
@@ -364,8 +384,9 @@ const Option = React.memo( ({index,item,onChange,onChangeIsTrue,isView,onDeleteO
 								</div>
 						}
 						<select value={innerType} onChange={e => setInnerType(e.target.value)} name="" id="">
-							<option value="text">text</option>
-							<option value="img">image</option>
+							<option value="text">Text</option>
+							<option value="img">Image</option>
+							<option value="math">Math</option>
 						</select>
 						{
 							index !== 0 ?

@@ -14,6 +14,7 @@ import {$createMathNode} from "components/ui/textEditor/nodes/MathNode";
 import {$createParagraphNode, $getRoot, $getSelection, $isRangeSelection} from "lexical";
 import MathField from "components/ui/mathField";
 import {$isWrapperNode} from "components/ui/textEditor/nodes/WrapperNode";
+import Button from "components/ui/textEditor/ui/Button";
 
 
 
@@ -22,6 +23,7 @@ export function InsertMathModal({
                                       activeEditor,
                                       onClose,
                                   }) {
+
     const [latex, setLatex] = useState("");
 
     const handleInsertMath = (latex) => {
@@ -31,7 +33,6 @@ export function InsertMathModal({
 
             const anchorNode = selection.anchor.getNode();
 
-            // 🧠 Find if cursor is inside a WrapperNode
             let parent = anchorNode;
             while (parent && !$isWrapperNode(parent)) {
                 parent = parent.getParent();
@@ -66,15 +67,15 @@ export function InsertMathModal({
                 <h3>Insert Math</h3>
                 <MathField latex={latex} setLatex={setLatex} />
                 <div className="actions">
-                    <button onClick={onClose}>Cancel</button>
-                    <button
+                    <Button onClick={onClose}>Cancel</Button>
+                    <Button
                         onClick={() => {
                             handleInsertMath(latex);
                             setLatex("");
                         }}
                     >
                         Insert
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

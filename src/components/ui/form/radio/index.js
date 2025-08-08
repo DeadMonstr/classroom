@@ -25,6 +25,8 @@ const Radio = ({ name, id, value, onChange, checked, children, extraClassname,di
 				id={id}
 				value={value}
 				onChange={(e) => {
+					e.stopPropagation();
+					e.preventDefault();
 					onChange(value)
 					setActive(e.target.checked)
 				}}
@@ -35,7 +37,15 @@ const Radio = ({ name, id, value, onChange, checked, children, extraClassname,di
 					[styles.active] : active
 				})} />
 			</div>
-			<span className={styles.text}>
+			<span
+				onMouseDownCapture={(e) => {
+					const radio = e.currentTarget.closest('label')?.querySelector('input[type="radio"]');
+					if (radio && !radio.checked) {
+						radio.click();
+					}
+				}}
+				className={styles.text}
+			>
 				{children}
 			</span>
 		</label>
