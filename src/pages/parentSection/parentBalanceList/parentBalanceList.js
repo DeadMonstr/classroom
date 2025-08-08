@@ -5,10 +5,11 @@ import Select from "../../../components/ui/form/select";
 import Card from "../../../components/ui/card";
 import Table from "../../../components/ui/table";
 import {isMobile} from "react-device-detect";
-import {fetchChildrenBalance} from "../../../slices/parentSlice";
+import {fetchChildrenBalance, fetchChildrenDebtBalance} from "../../../slices/parentSlice";
 import {useDispatch, useSelector} from "react-redux";
 import Button from "../../../components/ui/button";
 import classNames from "classnames";
+import LoaderPage from "../../../components/ui/loader/Loader";
 
 const years = [
     "2025",
@@ -49,87 +50,96 @@ const ParentBalanceList = () => {
     const dispatch = useDispatch()
     const [active, setActive] = useState(1);
     const platformID = localStorage.getItem("platform_id")
-    const {balance} = useSelector(state => state.parentSlice)
+    const {balance, debts, loading} = useSelector(state => state.parentSlice)
+    const [status, setStatus] = useState(true)
 
-    console.log(balance, 'ssd')
+    // useEffect(() => {
+    //     dispatch(fetchChildrenBalance({username: platformID, status: status}))
+    //
+    // }, [platformID, status]);
+
     useEffect(() => {
-        dispatch(fetchChildrenBalance(platformID))
+        dispatch(fetchChildrenDebtBalance(platformID))
     }, [platformID]);
 
+    console.log(debts, "debbbbb")
+
     const renderTable = () => {
-        return balance?.data?.debts.map((item, index) => {
-            return(
-                <tr key={index}>
-                    <td>{item.id}</td>
-                    <td>{item.group_name}</td>
-                    <td>{item.payment}</td>
-                    <td>{item.month}</td>
-                    <td>{item.total_debt}</td>
-                </tr>
-            )
-        })
+
+        return debts?.data?.payments?.map((item, index) => {
+                return(
+                    <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{item.payment.toLocaleString()}</td>
+                        <td>{item.type_payment}</td>
+                        <td>{item.date}</td>
+                    </tr>
+                )
+            })
     }
 
-    const renderDiscountTable = () => {
-        return balance?.data?.debts.map((item, index) => {
-            return(
-                <tr key={index}>
-                    <td>{index}</td>
-                    <td>{item.discount}</td>
-                    <td>{item.month}</td>
-                </tr>
-            )
-        })
-    }
+        const renderDiscountTable = () => {
+            return debts?.data?.discounts?.map((item, index) => {
+                return(
+                    <tr key={index}>
+                        <td>{index+1}</td>
+                        <td style={{fontWeight: "bold"}}>{item.payment.toLocaleString()}</td>
+                        <td style={{fontWeight: "bold"}}>{item.date}</td>
+                    </tr>
+                )
+            })
+        }
 
-    const renderDebtTable = () => {
-        return balance?.data?.debts.map((item, index) => {
-            return(
-                <tr key={index} >
-                    <td>{index}</td>
-                    <td>{item.group_name}</td>
-                    <td>{item.days}</td>
-                    <td>{item.absent}</td>
-                    <td>{item.discount}</td>
-                    <td>{item.payment}</td>
-                    <td>{item.month}</td>
-                    <td>{item.total_debt}</td>
 
-                </tr>
-            )
-        })
-    }
+
+
+        const renderDebtTable = () => {
+
+            return debts?.data?.debts?.map((item, index) => {
+                    return (
+                        <tr key={index} >
+                            <td>{index+1}</td>
+                            <td>{item.group_name}</td>
+                            <td>{item.days}</td>
+                            <td>{item.absent}</td>
+                            <td>{item.discount}</td>
+                            <td>{item.payment.toLocaleString()}</td>
+                            <td>{item.month}</td>
+                            <td>{item.total_debt.toLocaleString()}</td>
+
+                        </tr>
+                    )
+                })
+            }
+
+
+
 
 
     const renderMobileTable = () => {
-        return balance?.data?.debts.map((item, index) => {
+        return debts?.data?.debts?.map((item, index) => {
             return (
                 <Card extraClassname={styles.balance__mobile__list__card}>
                     <div className={styles.balance__mobile__list__card__header}>
                         <h2>{item.group_name}</h2>
-                        <h2>{item.days}</h2>
+                        <h2>{item.type_payment}</h2>
+                        <h2>{item.date}</h2>
                     </div>
                     <div className={styles.balance__mobile__list__card__main}>
                         <span>
                             {item.payment}
                         </span>
-                        <h2>{item.total_debt}</h2>
+
                     </div>
                 </Card>
             )
         })
     }
 
-    const [year, setYear] = React.useState()
     return (
         <div className={styles.balance}>
             <div className={styles.balance__header}>
                 <Back className={styles.balance__header__btn}/>
-                {/*{*/}
-                {/*    !isMobile && (*/}
-                {/*        <Select title={"Yil"} value={year} onChange={setYear} options={years}/>*/}
-                {/*    )*/}
-                {/*}*/}
 
             </div>
             {
@@ -141,17 +151,29 @@ const ParentBalanceList = () => {
                                 <Button
                                     extraClass={classNames(styles.balance__card__box__panel__btn, active === 1 ? styles.active  : '')}
                                     children={"To'lov"}
-                                    onClick={() => setActive(1)}
+                                    onClick={() => {
+                                        setActive(1)
+                                        setStatus(true)
+                                    }}
                                 />
+
                                 <Button
                                     children={"Qarzlar"}
                                     extraClass={classNames(styles.balance__card__box__panel__btn, active === 2 ? styles.active  : '')}
-                                    onClick={() => setActive(2)}
+                                    onClick={() =>
+                                    {
+                                        setActive(2)
+                                        setStatus(true)
+                                    }}
                                 />
                                 <Button
-                                    children={"Chegirma"}
+                                    children={"Chegirmalar"}
                                     extraClass={classNames(styles.balance__card__box__panel__btn, active === 3 ? styles.active  : '')}
-                                    onClick={() => setActive(3)}
+                                    onClick={() =>
+                                    {
+                                        setActive(3)
+                                        setStatus(false)
+                                    }}
                                 />
                             </div>
                         </div>
@@ -160,14 +182,15 @@ const ParentBalanceList = () => {
                                 <Table>
                                     <thead className={styles.balance__card__header}>
                                     <th>№</th>
-                                    <th>Fan nomi</th>
-                                    <th>To'lov</th>
+                                    <th>To'lov miqdori</th>
+                                    <th>To'lov turi</th>
                                     <th>Sana</th>
-                                    <th>Umumiy qarz</th>
                                     </thead>
-                                    <tbody>
-                                    {renderTable()}
-                                    </tbody>
+                                    {
+                                        loading ? <LoaderPage/> : <tbody>
+                                        {renderTable()}
+                                        </tbody>
+                                    }
                                 </Table>
                             )
                         }
@@ -185,7 +208,7 @@ const ParentBalanceList = () => {
                                     <th>Hamma qarzi</th>
                                     </thead>
                                     <tbody>
-                                    {renderDebtTable()}
+                                    {loading ? <LoaderPage/> :renderDebtTable()}
                                     </tbody>
                                 </Table>
                             )
@@ -195,15 +218,18 @@ const ParentBalanceList = () => {
                                 <Table>
                                     <thead  className={styles.balance__card__header}>
                                     <th>№</th>
-                                    <th>To'lov</th>
+                                    <th>To'lov miqdori</th>
                                     <th>Sana</th>
                                     </thead>
                                     <tbody>
-                                    {renderDiscountTable()}
+                                    {
+                                        loading ? <LoaderPage/> : renderDiscountTable()
+                                    }
                                     </tbody>
                                 </Table>
                             )
                         }
+
 
                     </Card>
                 )

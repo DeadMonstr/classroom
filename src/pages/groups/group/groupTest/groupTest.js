@@ -174,7 +174,6 @@ const GroupTest = () => {
                                 value={month}
                                 title={"Oy"}
                                 options={months}
-
                                 onChange={(e) => {
                                     setMonth(e)
                                 }}
@@ -196,16 +195,16 @@ const GroupTest = () => {
                                 clazz={cls.accordion}
                                 subtitle={"Jami: " + item?.percentage + "%"}
                                 btns={[
-                                    <a href={`${PlatformUrl}${item.file}`} download><i
+                                    <a href={`${PlatformUrl}${item?.file}`} download><i
                                         style={{color: "grey", fontSize: "3rem"}} className="fas fa-file"></i></a>,
-                                    <h1>Level: {item.level}</h1>,
+                                    <h1>Level: {item?.level}</h1>,
                                     <Button type={"submit"} onClick={() => onClick(item, "result")}>
-                                        {item.students.length > 0 ? "Natijani O'zgartirish" : "Natijani Qo'shish"}
+                                        {item?.students?.length > 0 ? "Natijani O'zgartirish" : "Natijani Qo'shish"}
                                     </Button>,
                                     <Button onClick={() => onClick(item, "test")}>Test O'zgartirish</Button>
 
                                 ]}
-                                title={item.name}
+                                title={item?.name}
                             >
                                 <Table>
                                     <thead>
@@ -217,12 +216,12 @@ const GroupTest = () => {
                                     </thead>
                                     <tbody>
                                     {
-                                        item.students.map((item, index) => {
+                                        item?.students?.map((item, index) => {
                                             return (
                                                 <tr>
                                                     <td>{index + 1}</td>
-                                                    <td>{item.student_name} {item.student_surname}</td>
-                                                    <td>{item.percentage}</td>
+                                                    <td>{item?.student_name} {item?.student_surname}</td>
+                                                    <td>{item?.percentage}</td>
                                                 </tr>
                                             )
                                         })
@@ -285,11 +284,14 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
         }
     }, [changedTest])
 
+    console.log(register, "register2")
 
     const dispatch = useDispatch()
     const {request} = useHttp()
 
     const onCreateTest = (data) => {
+
+        console.log(data, "data")
         if (changedTest.id) {
 
             const formData = new FormData()
@@ -329,6 +331,7 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
                 ...data,
                 level,
             }))
+
 
             request(`${BackUrl}group/create_test/${groupId}`, "POST", formData, headersImg())
                 .then(res => {
@@ -375,7 +378,7 @@ const ChangeCreateTestModal = ({activeTest, setActiveTest, setTests, setChangedT
 
     return (
         <Modal title={changedTest.name ? "Test o'zgartirmoq" : "Test qo'shmoq"} active={activeTest} setActive={() => {
-            reset()
+            // reset()
             setLevel(null)
             setChangedTest({})
             setActiveTest(false)
@@ -480,10 +483,10 @@ const SetResultModal = React.memo(({
 
     useEffect(() => {
         if (students.length && selectedTest) {
-            const max = tests.filter(item => item.id === +selectedTest)[0].number
+            const max = tests?.filter(item => item?.id === +selectedTest)[0]?.number
 
-            setError(students.some(item => item?.true_answers > max))
-            setIsDisabled(students.some(item => item?.true_answers > max))
+            setError(students?.some(item => item?.true_answers > max))
+            setIsDisabled(students?.some(item => item?.true_answers > max))
 
         } else {
             setIsDisabled(true)
@@ -526,8 +529,8 @@ const SetResultModal = React.memo(({
     }
 
     const onSetStudentsResult = (id, name, value) => {
-        setStudents(students => students.map(item => {
-            if (item.id === id) {
+        setStudents(students => students?.map(item => {
+            if (item?.id === id) {
                 return {...item, [name]: +value}
             }
             return item
@@ -536,14 +539,14 @@ const SetResultModal = React.memo(({
 
 
     const resetBalls = () => {
-        setStudents(students => students.map(item => {
+        setStudents(students => students?.map(item => {
             return {...item, true_answers: null}
         }))
     }
 
     const onChangeCanEditResult = (id, value) => {
-        setStudents(students => students.map(item => {
-            if (item.id === id) {
+        setStudents(students => students?.map(item => {
+            if (item?.id === id) {
                 return {...item, true_answers: 0, can_edit: value}
             }
             return item
@@ -557,7 +560,7 @@ const SetResultModal = React.memo(({
             setChangedTest({})
         }}>
             <div className={cls.createTest}>
-                {!Object.keys(changedTest).length > 0 &&
+                {!Object?.keys(changedTest)?.length > 0 &&
                     <Select required={true} title={"Testlar"} value={selectedTest} options={tests}
                             onChange={setSelectedTest}/>}
                 {isError &&
@@ -567,15 +570,15 @@ const SetResultModal = React.memo(({
                     </h1>
                 }
                 {
-                    students.map(item => {
+                    students?.map(item => {
                         return (
                             <div className={cls.student}>
                                 <div className={cls.info}>
-                                    <h1>{item.name}</h1>
-                                    <h1>{item.surname}</h1>
+                                    <h1>{item?.name}</h1>
+                                    <h1>{item?.surname}</h1>
                                     <h1>
                                         <input
-                                            onChange={e => onChangeCanEditResult(item.id, e.target.checked)}
+                                            onChange={e => onChangeCanEditResult(item?.id, e?.target?.checked)}
                                             type="checkbox"
                                             checked={item.can_edit}
                                         />
@@ -584,13 +587,13 @@ const SetResultModal = React.memo(({
                                 <div>
                                     <Input
                                         onChange={(e) => onSetStudentsResult(item.id, "true_answers", e || 0)}
-                                        value={item.true_answers}
+                                        value={item?.true_answers}
                                         title={"Tog'ri javoblar"}
                                         type={"number"}
-                                        disabled={!item.can_edit}
+                                        disabled={!item?.can_edit}
                                         others={{
                                             // min: 0,
-                                            max: tests.filter(test => test.id === +selectedTest)[0]?.number,
+                                            max: tests?.filter(test => test?.id === +selectedTest)[0]?.number,
                                         }}
                                     />
                                 </div>

@@ -198,6 +198,10 @@ const Input = ({
 		...rest,
 	};
 
+
+	console.log(register, name, "hello")
+
+
 	return (
 		<label style={style} className={classNames(styles.inputLabel, extraClassNameLabel)} htmlFor={name}>
 			{(title || subTitle) && (
@@ -210,6 +214,7 @@ const Input = ({
 			<div className={styles.field}>
 				{register ? (
 					<input
+						{...inputProps}
 						{...register(name, {
 							pattern,
 							min,
@@ -217,9 +222,9 @@ const Input = ({
 							value,
 							...extraValues,
 						})}
-						{...inputProps}
-						onChange={handleChange}
-						onBlur={handleBlur}
+
+						// onChange={handleChange}
+						// onBlur={handleBlur}
 					/>
 				) : (
 					<input
@@ -244,5 +249,5 @@ const Input = ({
 		</label>
 	);
 };
-
+//
 export default Input;

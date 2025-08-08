@@ -24,7 +24,7 @@ const ChildrenMonthlyAttendance = () => {
     const [month, setMonth] = useState();
     const [group, setGroup] = useState();
     const [availableMonths, setAvailableMonths] = useState([]);
-
+    const sortedMonths = [...availableMonths].sort((a, b) => b.localeCompare(a));
     const dispatch = useDispatch()
     const [selectedDayId, setSelectedDayId] = useState();
     const currentMonth = localStorage.getItem("current_month")
@@ -36,12 +36,14 @@ const ChildrenMonthlyAttendance = () => {
     const months = dates.data?.months?.flatMap(item => item.months) || [];
     const groupIds = groups.group_list
 
+    const formattedGroupOptions = groupIds?.map(item => ({
+        id: item.id,
+        name: `${item.name} - ${item.nameGroup}`
+    }));
 
-    useEffect(() => {
-        // setYear(years[0]?.id)
-        // setMonth(months[0]?.id)
-        // setGroup(groupIds[0]?.id)
-    } , [])
+
+
+
 
 
     useEffect(() => {
@@ -61,20 +63,25 @@ const ChildrenMonthlyAttendance = () => {
 
        if(currentUsername || currentUsername !== undefined){
            dispatch(fetchChildrenAttendanceMonthly({username: currentUsername, groupId: groupId, year: currentYear, month: currentMonth}))
-           dispatch(fetchChildrenGroups(currentUsername))
+
            dispatch(fetchChildrenAttendance(currentUsername))
 
            if (!groupId && !currentYear && !currentMonth ) {
                dispatch(fetchChildrenTests({groupId: groupId, year: currentYear, month: currentMonth}))
            }
-           if (groupId || groupId !==  undefined) {
+           if (!groupId || groupId !==  undefined) {
                dispatch(fetchChildrenTestsDate(groupId))
            }
        }
     }, [currentMonth]);
 
+    useEffect(() => {
+        if (year && month && currentUsername) {
 
-    // console.log(year , month, group , "grou")
+            dispatch(fetchChildrenGroups({username: currentUsername, year: year, month: month}))
+        }
+    }, [year, month, currentUsername]);
+
     useEffect(() => {
         if (year && month && group) {
             dispatch(fetchChildrenAttendanceMonthly({
@@ -156,7 +163,7 @@ const ChildrenMonthlyAttendance = () => {
 
                         {years && <Select
                             title={"Yil"}
-
+                            value={year}
                             onChange={setYear}
                             options={years}
                             defaultOption={"Yil"}
@@ -164,16 +171,16 @@ const ChildrenMonthlyAttendance = () => {
                         />}
                         {months && <Select
                             title={"Oy"}
-
                             onChange={setMonth}
-                            options={availableMonths}
-
+                            options={sortedMonths}
+                            value={month}
                             style={{ width: "400px" }}
                         />}
                         {groupIds && <Select
                             title={"Guruh"}
+                            value={group}
                             onChange={setGroup}
-                            options={groupIds}
+                            options={formattedGroupOptions}
                             defaultOption={"Guruh"}
                             style={{ width: "400px" }}
                         />}
@@ -184,8 +191,8 @@ const ChildrenMonthlyAttendance = () => {
                     <div className={styles.attendance__header__second}>
                         {/*<h1>Davomat</h1>*/}
                         <div className={styles.attendance__header__second__box}>
-                            <Select defaultOption={"Yil"} title={"Yil"} onChange={setYear} options={years} extraClassName={styles.attendance__header__second__box__select} />
-                            <Select  title={"Oy"}  onChange={setMonth} options={availableMonths} extraClassName={styles.attendance__header__second__box__select} />
+                            <Select value={year} defaultOption={"Yil"} title={"Yil"} onChange={setYear} options={years} extraClassName={styles.attendance__header__second__box__select} />
+                            <Select value={month}  title={"Oy"}  onChange={setMonth} options={sortedMonths} extraClassName={styles.attendance__header__second__box__select} />
                             <Select
                                 title={"Guruh"}
                                 value={group}

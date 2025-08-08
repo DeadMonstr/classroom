@@ -44,11 +44,10 @@ const ParentSection = () => {
         const currentMonth = localStorage.getItem("current_month")
         const currentYear = localStorage.getItem("current_year")
 
-        if (selectedChild?.platform_id) {
+        if (selectedChild?.platform_id || selectedChild?.platform_id !==  undefined) {
             dispatch(fetchChildrenAttendance(selectedChild?.platform_id))
-            dispatch(fetchChildrenGroups(selectedChild?.platform_id))
+            // dispatch(fetchChildrenGroups({username: selectedChild?.platform_id}))
             dispatch(fetchChildrenAttendanceWeekly(selectedChild?.platform_id))
-            dispatch(fetchChildrenBalance(selectedChild?.platform_id))
             if (!groupId ) {
                 dispatch(fetchChildrenTestsDate(groupId))
             }

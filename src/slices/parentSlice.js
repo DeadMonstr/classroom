@@ -10,11 +10,12 @@ const initialState = {
     weeklyAttendance: [],
     monthlyAttendance: [],
     balance: [],
+    debts: [],
     tests: [],
     test_dates: [],
     loading: false,
     error: null,
-    loadingAttedance: false
+    loadingAttedance: false,
 }
 
 
@@ -36,9 +37,10 @@ export const fetchChildrenAttendance = createAsyncThunk(
 
 export const fetchChildrenGroups = createAsyncThunk(
     'ParentSlice/fetchChildrenGroups',
-    async (username) => {
+    async ({username,year, month}) => {
+        console.log(username)
         const {request} = useHttp()
-        return await request(`${BackUrl}parent/student_group_list/${username}`, "GET", null, headers())
+        return await request(`${BackUrl}parent/student_group_list/${username}/${year}/${month}`, "GET", null, headers())
     }
 )
 
@@ -51,6 +53,13 @@ export const fetchChildrenAttendanceWeekly = createAsyncThunk(
 )
 export const fetchChildrenBalance = createAsyncThunk(
     'ParentSlice/fetchChildrenBalance',
+    async ({username, status}) => {
+        const {request} = useHttp()
+        return await request(`${BackUrl}parent/student_payments?id=${username}&payment=${status}`, "GET", null, headers())
+    }
+)
+export const fetchChildrenDebtBalance = createAsyncThunk(
+    'ParentSlice/fetchChildrenDebtBalance',
     async (username) => {
         const {request} = useHttp()
         return await request(`${BackUrl}parent/student_payments/${username}`, "GET", null, headers())
@@ -162,6 +171,19 @@ const ParentSlice = createSlice({
                 state.error = null
             })
             .addCase(fetchChildrenBalance.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+            .addCase(fetchChildrenDebtBalance.pending, (state, action) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(fetchChildrenDebtBalance.fulfilled, (state, action) => {
+                state.loading = false
+                state.debts = action.payload
+                state.error = null
+            })
+            .addCase(fetchChildrenDebtBalance.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })
