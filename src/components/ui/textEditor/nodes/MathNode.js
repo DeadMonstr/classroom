@@ -57,6 +57,7 @@ import React, {useEffect, useRef} from "react";
 // }
 
 import {useLexicalNodeSelection} from "@lexical/react/useLexicalNodeSelection";
+import MathField from "components/ui/mathField";
 
 export class MathNode extends DecoratorNode {
     static getType() {
@@ -88,21 +89,47 @@ export class MathNode extends DecoratorNode {
             ...super.exportJSON(),
             type: "math",
             latex: this.__latex,
-            styles: this .__styles,
+            styles: this.__styles,
             version: 1,
         };
     }
 
     exportDOM() {
-        const span = document.createElement("span");
-        span.className = "math-node";
-        span.textContent = this.__latex;
-        span.style.backgroundColor = this.__color;
-        span.style.padding = "2px 4px";
-        span.style.borderRadius = "4px";
-        return { element: span };
+        const el = document.createElement("math-field");
+        el.setAttribute("readonly", "");
+        el.setAttribute("data-latex", this.__latex);
+        el.style.display = "inline-block";
+        el.style.color = "black";
+        el.style.backgroundColor = "white";
+        // MathLive reads textContent as LaTeX
+        el.textContent = this.__latex;
+        return { element: el };
     }
 
+    // Allow pasting/rehydration from HTML that has <math-field> or legacy .math-node
+    static importDOM() {
+        return {
+            "math-field": () => ({
+                conversion: (node) => {
+                    const latex = (node.getAttribute("data-latex") ?? node.textContent ?? "").trim();
+                    return { node: new MathNode(latex) };
+                },
+                priority: 3,
+            }),
+            "span": (domNode) => {
+                if (domNode.classList?.contains("math-node")) {
+                    return {
+                        conversion: (node) => {
+                            const latex = (node.getAttribute("data-latex") ?? node.textContent ?? "").trim();
+                            return { node: new MathNode(latex) };
+                        },
+                        priority: 2,
+                    };
+                }
+                return null;
+            },
+        };
+    }
     setStyle(newStyles) {
         const writable = this.getWritable();
         writable.__styles = {...writable.__styles, ...newStyles}; // ✅ merge new styles
@@ -129,15 +156,6 @@ export class MathNode extends DecoratorNode {
 function MathComponent({latex, styles, nodeKey}) {
     const [isSelected] = useLexicalNodeSelection(nodeKey);
 
-    const mathFieldRef = useRef(null);
-
-
-
-    useEffect(() => {
-        if (mathFieldRef.current) {
-            mathFieldRef.current.value = latex;
-        }
-    }, [latex]);
 
     return (
         <span
@@ -146,19 +164,22 @@ function MathComponent({latex, styles, nodeKey}) {
                 display: "inline-flex",
                 width: "fit-content",
                 height: "fit-content",
+                padding: "5px",
                 ...styles,
-                border: isSelected ? "2px solid blue" : styles.border || "none", // ✅ selection highlight
+                border: isSelected ? "2px solid blue" : "1px dotted black", // ✅ selection highlight
             }}
         >
-            <math-field
-                ref={mathFieldRef}
-                readOnly
-                style={{
-                    width: "fit-content",
-                    height: "fit-content",
-                    ...styles,
-                }}
-            />
+         <MathField
+             style={{
+                 userSelect: "none",
+                 backgroundColor: "white",
+                 color: "black",
+                 border: "none",
+                 fontSize: "2rem",
+
+             }}
+             value={latex} readOnly
+         />
     </span>
     );
 }

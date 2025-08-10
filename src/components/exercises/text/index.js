@@ -1,4 +1,4 @@
-import React, {Fragment, useCallback, useContext, useEffect, useRef, useState} from "react";
+import React, {Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 import classNames from "classnames";
 import styles from "./style.module.sass";
 
@@ -128,129 +128,126 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
     }
 
 
-    console.log(text)
 
 
+    // const optionsData = useCallback((words) => ({
+    //     replace: (domNode) => {
+    //         if (domNode.type === 'tag') {
+    //             let hasMatchingText = false;
+    //             const regex = /\{\{(\d+)\}\}/g;
+    //             // Process children if they contain text nodes
+    //
+    //
+    //             const children = domNode?.children.map(child => {
+    //
+    //
+    //                 if (child.type === 'text' && regex.test(child.data)) {
+    //
+    //
+    //
+    //                     hasMatchingText = true;
+    //
+    //                     const parts = child.data.split(regex);
+    //
+    //                     const props = {...attributesToProps(domNode?.attribs)};
+    //
+    //
+    //
+    //
+    //                     return parts.map((part, index) => {
+    //
+    //                         if (index % 2 === 1 && words?.length > 0) {
+    //
+    //                             const wordData = words.filter(item => item?.index === +part)[0]
+    //                             if (container?.items?.length) {
+    //                                 setContainer(container => ({
+    //                                     ...container,
+    //                                     items: container?.items?.map(item => {
+    //                                         if (item.index === wordData.index) {
+    //                                             return {
+    //                                                 ...item,
+    //                                                 styles: props.style,
+    //                                                 classNames: props.className
+    //                                             }
+    //                                         }
+    //                                         return item
+    //                                     })
+    //                                 }))
+    //                             }
+    //                             if (wordData?.type === "input") {
+    //
+    //                                 const style = {display: "inline-block", padding: 0}
+    //                                 return (
+    //                                     <Input
+    //                                         onChange={(e) => onChangeWordsInput(wordData.index, e)}
+    //                                         // data-index={wordData?.index}
+    //                                         className={classNames(styles.text_input, props?.className)}
+    //                                         style={style}
+    //                                         // key={index}
+    //                                         placeholder={!isView && wordData?.text}
+    //                                         disabled={disabledExc}
+    //                                         value={wordData.value || ""}
+    //                                         extraClassName={wordData.status !== undefined && wordData.status ? styles.active :
+    //                                             wordData.status !== undefined && !wordData.status ? styles.error : null}
+    //                                     />
+    //                                 )
+    //                             }
+    //
+    //                             return (
+    //                                 <DroppableBox
+    //                                     key={`box-${wordData?.index}`}
+    //                                     id={`box-${wordData?.index}`}
+    //                                     status={wordData?.status}
+    //                                     // items={wordData?.items}
+    //                                 >
+    //                                     {wordData?.item?.index &&
+    //                                         <DraggableWord
+    //                                             disabled={disabledExc}
+    //                                             item={wordData.item}
+    //                                             key={wordData.item.index}
+    //                                         />
+    //                                     }
+    //                                 </DroppableBox>
+    //                             )
+    //                         }
+    //                         return part ?
+    //                             <span style={props?.style} className={props?.className} key={index}>{part}</span> :
+    //                             <Fragment>{part}</Fragment>
+    //                     });
+    //                 }
+    //
+    //
+    //                 return domToReact([child]); // ✅ convert raw DOM node to React element
+    //
+    //             }).flat();
+    //
+    //
+    //
+    //
+    //
+    //             if (hasMatchingText) {
+    //                 const props = {...attributesToProps(domNode?.attribs)};
+    //                 if (props.className === "editor-text-code" || props.style) {
+    //                     props.className = ""
+    //
+    //                     return React.createElement('span', {}, children);
+    //                 }
+    //
+    //
+    //                 return React.createElement(domNode.name, props, children);
+    //             }
+    //
+    //
+    //         }
+    //     }
+    // }), [words, container])
+    //
+    // useEffect(() => {
+    //     const parsedContent = parse(text || "", optionsData(words))
+    //     setParsedText(parsedContent)
+    // }, [words, text])
 
-    const optionsData = useCallback((words) => ({
-        replace: (domNode) => {
-            if (domNode.type === 'tag') {
-                let hasMatchingText = false;
-                const regex = /\{\{(\d+)\}\}/g;
-                // Process children if they contain text nodes
 
-
-                const children = domNode?.children.map(child => {
-
-
-                    if (child.type === 'text' && regex.test(child.data)) {
-
-
-
-                        hasMatchingText = true;
-
-                        const parts = child.data.split(regex);
-
-                        const props = {...attributesToProps(domNode?.attribs)};
-
-
-
-
-                        return parts.map((part, index) => {
-
-                            if (index % 2 === 1 && words?.length > 0) {
-
-                                const wordData = words.filter(item => item?.index === +part)[0]
-                                if (container?.items?.length) {
-                                    console.log("error")
-                                    setContainer(container => ({
-                                        ...container,
-                                        items: container?.items?.map(item => {
-                                            if (item.index === wordData.index) {
-                                                return {
-                                                    ...item,
-                                                    styles: props.style,
-                                                    classNames: props.className
-                                                }
-                                            }
-                                            return item
-                                        })
-                                    }))
-                                }
-                                if (wordData?.type === "input") {
-
-                                    const style = {display: "inline-block", padding: 0}
-                                    return (
-                                        <Input
-                                            onChange={(e) => onChangeWordsInput(wordData.index, e)}
-                                            // data-index={wordData?.index}
-                                            className={classNames(styles.text_input, props?.className)}
-                                            style={style}
-                                            // key={index}
-                                            placeholder={!isView && wordData?.text}
-                                            disabled={disabledExc}
-                                            value={wordData.value || ""}
-                                            extraClassName={wordData.status !== undefined && wordData.status ? styles.active :
-                                                wordData.status !== undefined && !wordData.status ? styles.error : null}
-                                        />
-                                    )
-                                }
-
-                                return (
-                                    <DroppableBox
-                                        key={`box-${wordData?.index}`}
-                                        id={`box-${wordData?.index}`}
-                                        status={wordData?.status}
-                                        // items={wordData?.items}
-                                    >
-                                        {wordData?.item?.index &&
-                                            <DraggableWord
-                                                disabled={disabledExc}
-                                                item={wordData.item}
-                                                key={wordData.item.index}
-                                            />
-                                        }
-                                    </DroppableBox>
-                                )
-                            }
-                            return part ?
-                                <span style={props?.style} className={props?.className} key={index}>{part}</span> :
-                                <Fragment>{part}</Fragment>
-                        });
-                    }
-
-
-                    console.log(child)
-                    return domToReact([child]); // ✅ convert raw DOM node to React element
-
-                }).flat();
-
-
-
-
-
-                if (hasMatchingText) {
-                    const props = {...attributesToProps(domNode?.attribs)};
-                    if (props.className === "editor-text-code" || props.style) {
-                        props.className = ""
-
-                        return React.createElement('span', {}, children);
-                    }
-
-
-                    return React.createElement(domNode.name, props, children);
-                }
-
-
-            }
-        }
-    }), [words, container])
-
-
-    useEffect(() => {
-        const parsedContent = parse(text || "", optionsData(words))
-        setParsedText(parsedContent)
-    }, [words, text])
 
 
     useEffect(() => {
@@ -287,7 +284,7 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
     const onDragStart = ({active}) => {
         setActiveItem(words.filter(item => item.index === active.id)[0]);
     };
-
+    console.log(words)
 
     const onDragEnd = useCallback(({active, over}) => {
 
@@ -443,7 +440,16 @@ const ViewExc = React.memo(({textComponent, setTextComponent, onChangeCompletedC
                                 <i className="fa-sharp fa-solid fa-pen-to-square"/>
                             </div> : null
                     }
-                    {parsedText}
+
+                    <HtmlParser
+                        text={textComponent.text}
+                        words={words}
+                        // disabled={disabled}
+                        isView={isView}
+                        onChangeWordsInput={onChangeWordsInput}
+                        onWordDrop={setContainer}
+                    />
+
                 </div>
                 {
                     words?.length > 0 && !disabledExc > 0 && words.some(item => item.type === "matchWord") &&
@@ -470,6 +476,181 @@ const AllWordsContainer = ({container}) => {
                     <DraggableWord item={item} key={item.index}/>
                 )
             })}
+        </div>
+    )
+}
+
+
+
+
+export function HtmlParser({
+                                       text,
+                                       words,
+                                       disabled = false,
+                                       isView = false,
+                                       onChangeWordsInput,
+                                       onWordDrop,
+                                       className = "",
+                                       style = {},
+                                       showDebugInfo = false,
+                                   }) {
+    const [parsedText, setParsedText] = useState(null)
+
+    const handleInputChange = (index, e) => {
+        if (onChangeWordsInput) {
+            onChangeWordsInput(index, e)
+        } else {
+            console.log(`Input changed for index ${index}:`, e.target.value)
+        }
+    }
+
+    const handleWordDrop = (wordIndex, targetIndex) => {
+        if (onWordDrop) {
+            onWordDrop(wordIndex, targetIndex)
+        } else {
+            console.log(`Word ${wordIndex} dropped on target ${targetIndex}`)
+        }
+    }
+
+    useEffect(() => {
+        if (!text || !words) {
+            setParsedText(null)
+            return
+        }
+
+        // Create a words map for quick lookup
+        const wordsMap = new Map()
+        words.forEach((word) => wordsMap.set(word.index, word))
+
+        // First, let's do a simple string replacement approach
+        let processedHtml = text
+
+        // Replace each {{index}} with a unique placeholder that we can identify later
+        const placeholders = new Map()
+        let placeholderCounter = 0
+
+        processedHtml = processedHtml.replace(/\{\{(\d+)\}\}/g, (match, indexStr) => {
+            const index = Number.parseInt(indexStr, 10)
+            const wordData = wordsMap.get(index)
+
+            if (wordData) {
+                const placeholderId = `__PLACEHOLDER_${placeholderCounter++}__`
+                placeholders.set(placeholderId, { wordData, originalMatch: match })
+                return placeholderId
+            }
+
+            return match // Keep original if no word data found
+        })
+
+        // Now parse the HTML with placeholders
+        const options = {
+            replace: (domNode) => {
+                if (domNode.type === "text" && domNode.data) {
+                    // Check if this text node contains our placeholders
+                    const hasPlaceholder = Array.from(placeholders.keys()).some((placeholder) =>
+                        domNode.data.includes(placeholder),
+                    )
+
+                    if (hasPlaceholder) {
+                        // Split the text by placeholders and create React elements
+                        let parts = [domNode.data]
+
+                        placeholders.forEach((data, placeholderId) => {
+                            const newParts = []
+                            parts.forEach((part) => {
+                                if (typeof part === "string" && part.includes(placeholderId)) {
+                                    const splitParts = part.split(placeholderId)
+                                    for (let i = 0; i < splitParts.length; i++) {
+                                        if (splitParts[i]) {
+                                            newParts.push(splitParts[i])
+                                        }
+                                        if (i < splitParts.length - 1) {
+                                            // Insert the React component here
+                                            const { wordData } = data
+
+                                            if (wordData.type === "input") {
+                                                newParts.push(
+                                                    <Input
+                                                        key={`input-${wordData.index}`}
+                                                        onChange={(e) => handleInputChange(wordData.index, e)}
+                                                        className="text-input"
+                                                        style={{ display: "inline-block", padding: 0 }}
+                                                        placeholder={!isView ? wordData.text : ""}
+                                                        disabled={disabled}
+                                                        value={wordData.value || ""}
+                                                        extraClassName={
+                                                            wordData.status !== undefined ? (wordData.status ? "active" : "error") : null
+                                                        }
+                                                    />,
+                                                )
+                                            } else {
+                                                newParts.push(
+                                                    <DroppableBox
+                                                        key={`box-${wordData.index}`}
+                                                        id={`box-${wordData.index}`}
+                                                        status={wordData.status}
+                                                    >
+                                                        {wordData.item?.index && (
+                                                            <DraggableWord
+                                                                disabled={disabled}
+                                                                item={wordData.item}
+                                                                key={`word-${wordData.item.index}`}
+                                                            />
+                                                        )}
+                                                    </DroppableBox>,
+                                                )
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    newParts.push(part)
+                                }
+                            })
+                            parts = newParts
+                        })
+
+                        return <Fragment>{parts}</Fragment>
+                    }
+                }
+            },
+        }
+
+        try {
+            const parsed = parse(processedHtml, options)
+            setParsedText(parsed)
+        } catch (error) {
+            console.error("Error parsing HTML:", error)
+            setParsedText(<div>Error parsing content</div>)
+        }
+    }, [text, words, disabled, isView])
+
+    return (
+        <div className={`html-parser-container ${className}`} style={style}>
+            {showDebugInfo && (
+                <>
+                    <h2>Original HTML:</h2>
+                    <pre style={{ background: "#f5f5f5", padding: "10px", fontSize: "12px", whiteSpace: "pre-wrap" }}>{text}</pre>
+                </>
+            )}
+
+            <div
+                style={{
+                    border: showDebugInfo ? "1px solid #ccc" : "none",
+                    padding: showDebugInfo ? "20px" : "0",
+                    minHeight: showDebugInfo ? "100px" : "auto",
+                }}
+            >
+                {parsedText}
+            </div>
+
+            {showDebugInfo && (
+                <>
+                    <h2>Words Data:</h2>
+                    <pre style={{ background: "#f5f5f5", padding: "10px", fontSize: "12px" }}>
+            {JSON.stringify(words, null, 2)}
+          </pre>
+                </>
+            )}
         </div>
     )
 }

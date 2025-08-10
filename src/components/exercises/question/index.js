@@ -170,7 +170,8 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
                                                                 backgroundColor: "white",
                                                                 color:"black",
                                                                 border: "none",
-                                                                fontSize: "2.5rem",}}
+                                                                fontSize: "2.5rem",
+                                                            }}
                                                             value={item.text}
                                                             readOnly
                                                         />
@@ -372,8 +373,6 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
 
     return (
         <div className={styles.createQuestion}>
-
-
             <div className={styles.subHeader}>
                 <i
                     onClick={onDelete}

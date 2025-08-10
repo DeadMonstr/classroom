@@ -406,7 +406,7 @@ img.chevron-down
 
 
 .dropdown
-  z-index: 5
+  z-index: 50
   display: block
   position: absolute
   box-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5)
@@ -870,4 +870,95 @@ i.match
 
 .ExampleEditorTheme__tableCellActionButton:hover
   background-color: #ddd
+
+.wrapper-node
+  position: relative
+  border: 1px solid grey
+  padding: 10px
+  user-select: text
+
+
+.table-cell-action-button-container
+  position: absolute
+  z-index: 3
+  top: 0
+  left: 0
+
+  will-change: transform
+
+.table-cell-action-button-container.table-cell-action-button-container--active
+  pointer-events: auto
+  opacity: 1
+
+.table-cell-action-button-container.table-cell-action-button-container--inactive
+  pointer-events: none
+  opacity: 0
+
+
+.table-cell-action-button
+  display: flex
+  justify-content: center
+  align-items: center
+  border: 0
+  position: absolute
+  top: 10px
+  right: 10px
+  margin: 0
+
+  border-radius: 15px
+  color: #222
+  display: inline-block
+  cursor: pointer
+
+
+.TableNode__contentEditable
+  min-height: 20px
+  border: 0px
+  resize: none
+  cursor: text
+  display: block
+  position: relative
+  outline: 0px
+  padding: 0
+  user-select: text
+  font-size: 15px
+  white-space: pre-wrap
+  word-break: break-word
+  z-index: 3
+
+i.chevron-down
+  background-color: transparent
+  background-size: contain
+  display: inline-block
+  height: 8px
+  width: 8px
+  background-image: url(/assets/textEditor/chevron-down.svg)
+
+
+button.toolbar-item:disabled .icon,
+button.toolbar-item:disabled .text,
+button.toolbar-item:disabled i.format,
+button.toolbar-item:disabled .chevron-down
+  opacity: 0.2
+
+
+
+.toolbar i.chevron-down,
+.toolbar-item i.chevron-down
+  margin-top: 3px
+  width: 16px
+  height: 16px
+  display: flex
+  user-select: none
+
+
+.toolbar i.chevron-down.inside
+  width: 16px
+  height: 16px
+  display: flex
+  margin-left: -25px
+  margin-top: 11px
+  margin-right: 10px
+  pointer-events: none
+
 

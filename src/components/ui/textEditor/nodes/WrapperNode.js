@@ -24,6 +24,14 @@ export class WrapperNode extends ElementNode {
         return dom;
     }
 
+    exportDOM() {
+        const span = document.createElement('span');
+        span.className = 'wrapper-node';
+        span.setAttribute('data-wrapper-type', this.__wrapperType);
+
+        return { element: span };
+    }
+
     updateDOM() {
         return false;
     }

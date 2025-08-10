@@ -1,3 +1,12 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {
     INSERT_TABLE_COMMAND,
@@ -5,6 +14,7 @@ import {
     TableNode,
     TableRowNode,
 } from '@lexical/table';
+import {EditorThemeClasses, Klass, LexicalEditor, LexicalNode} from 'lexical';
 import {createContext, useContext, useEffect, useMemo, useState} from 'react';
 
 import Button from '../ui/Button';
@@ -12,14 +22,22 @@ import {DialogActions} from '../ui/Dialog';
 import TextInput from '../ui/TextInput';
 
 
-export const CellContext = createContext(null);
+
+
+
+export const CellContext = createContext({
+    cellEditorConfig: null,
+    cellEditorPlugins: null,
+    set: () => {
+        // Empty
+    },
+});
 
 export function TableContext({children}) {
     const [contextValue, setContextValue] = useState({
         cellEditorConfig: null,
         cellEditorPlugins: null,
     });
-
     return (
         <CellContext.Provider
             value={useMemo(
@@ -56,10 +74,8 @@ export function InsertTableDialog({
     }, [rows, columns]);
 
     const onClick = () => {
-        console.log("hello oooooo")
         activeEditor.dispatchCommand(INSERT_TABLE_COMMAND, {
             columns,
-            includeHeaders: true,
             rows,
         });
 
@@ -102,11 +118,13 @@ export function TablePlugin({
     useEffect(() => {
         if (!editor.hasNodes([TableNode, TableRowNode, TableCellNode])) {
             throw new Error(
-                'Internal Lexical error: invariant() is meant to be replaced at compile ' +
-                'time. There is no runtime version. Error: '
+                'TablePlugin: TableNode, TableRowNode, or TableCellNode is not registered on editor',
             );
         }
     }, [editor]);
+
+
+
     useEffect(() => {
         cellContext.set(cellEditorConfig, children);
     }, [cellContext, cellEditorConfig, children]);

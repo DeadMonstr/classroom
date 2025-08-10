@@ -65,7 +65,7 @@ export function InsertMathModal({
         <div className="modal">
             <div className="modal-content">
                 <h3>Insert Math</h3>
-                <MathField latex={latex} setLatex={setLatex} />
+                <MathField value={latex} onChange={setLatex} default-mode="math" />
                 <div className="actions">
                     <Button onClick={onClose}>Cancel</Button>
                     <Button

@@ -1,38 +1,29 @@
+// plugins/TableHoverActionsPlugin.js
+import React, {useEffect, useMemo, useRef, useState} from 'react';
+import {createPortal} from 'react-dom';
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 import {useLexicalEditable} from '@lexical/react/useLexicalEditable';
 import {
     $getTableAndElementByKey,
     $getTableColumnIndexFromTableCellNode,
     $getTableRowIndexFromTableCellNode,
-    $insertTableColumn__EXPERIMENTAL,
-    $insertTableRow__EXPERIMENTAL,
+    $insertTableColumn,
+    $insertTableRow,
     $isTableCellNode,
     $isTableNode,
     getTableElement,
-    TableCellNode,
     TableNode,
-    TableRowNode,
 } from '@lexical/table';
 import {$findMatchingParent, mergeRegister} from '@lexical/utils';
-import {
-    $getNearestNodeFromDOMNode,
-    EditorThemeClasses,
-    isHTMLElement,
-    NodeKey,
-} from 'lexical';
-import {useEffect, useMemo, useRef, useState} from 'react';
-import * as React from 'react';
-import {createPortal} from 'react-dom';
-import debounce from 'lodash.debounce';
-
+import {$getNearestNodeFromDOMNode, isHTMLElement} from 'lexical';
 
 const BUTTON_WIDTH_PX = 20;
 
-
+/* Helpers */
 function getThemeSelector(getTheme, name) {
     const className = getTheme()?.[name];
     if (typeof className !== 'string') {
-        throw new Error(`getThemeClass: required theme property ${String(name)} not defined`);
+        throw new Error(`getThemeSelector: required theme property ${String(name)} not defined`);
     }
     return className
         .split(/\s+/g)
@@ -40,30 +31,59 @@ function getThemeSelector(getTheme, name) {
         .join('');
 }
 
-
 function useDebounce(fn, ms, maxWait) {
-    const funcRef = useRef(null);
-    funcRef.current = fn;
+    const funcRef = useRef(fn);
+    const timerRef = useRef(null);
+    const startRef = useRef(null);
 
-    return useMemo(
-        () =>
-            debounce(
-                (...args) => {
-                    if (funcRef.current) {
-                        funcRef.current(...args);
-                    }
-                },
-                ms,
-                {maxWait}
-            ),
-        [ms, maxWait]
-    );
+    useEffect(() => { funcRef.current = fn; }, [fn]);
+    useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+    return useMemo(() => {
+        return (...args) => {
+            const now = Date.now();
+            if (!startRef.current) startRef.current = now;
+
+            if (timerRef.current) clearTimeout(timerRef.current);
+            timerRef.current = setTimeout(() => {
+                startRef.current = null;
+                timerRef.current = null;
+                if (funcRef.current) funcRef.current(...args);
+            }, ms);
+
+            if (maxWait && now - startRef.current >= maxWait) {
+                startRef.current = null;
+                if (timerRef.current) {
+                    clearTimeout(timerRef.current);
+                    timerRef.current = null;
+                }
+                if (funcRef.current) funcRef.current(...args);
+            }
+        };
+    }, [ms, maxWait]);
 }
 
+function getMouseInfo(event, getTheme) {
+    const target = event.target;
+    const tableCellClass = getThemeSelector(getTheme, 'tableCell');
+    if (!isHTMLElement(target)) return {isOutside: true, tableDOMNode: null};
+
+    const tableDOMNode = target.closest(`td${tableCellClass}, th${tableCellClass}`);
+
+    const isOutside = !(
+        tableDOMNode ||
+        target.closest(`button${getThemeSelector(getTheme, 'tableAddRows')}`) ||
+        target.closest(`button${getThemeSelector(getTheme, 'tableAddColumns')}`) ||
+        target.closest('div.TableCellResizer__resizer')
+    );
+
+    return {isOutside, tableDOMNode};
+}
 
 function TableHoverActionsContainer({anchorElem}) {
     const [editor, {getTheme}] = useLexicalComposerContext();
     const isEditable = useLexicalEditable();
+
     const [isShownRow, setShownRow] = useState(false);
     const [isShownColumn, setShownColumn] = useState(false);
     const [shouldListenMouseMove, setShouldListenMouseMove] = useState(false);
@@ -73,19 +93,15 @@ function TableHoverActionsContainer({anchorElem}) {
 
     const debouncedOnMouseMove = useDebounce(
         (event) => {
-            if (!editor) return;
+            if (!editor.getRootElement()) return;
 
             const {isOutside, tableDOMNode} = getMouseInfo(event, getTheme);
-
             if (isOutside) {
                 setShownRow(false);
                 setShownColumn(false);
                 return;
             }
-
-            if (!tableDOMNode) {
-                return;
-            }
+            if (!tableDOMNode) return;
 
             tableCellDOMNodeRef.current = tableDOMNode;
 
@@ -93,28 +109,19 @@ function TableHoverActionsContainer({anchorElem}) {
             let hoveredColumnNode = null;
             let tableDOMElement = null;
 
-
+            // READ
             editor.read(() => {
                 const maybeTableCell = $getNearestNodeFromDOMNode(tableDOMNode);
+                if ($isTableCellNode(maybeTableCell)) {
+                    const table = $findMatchingParent(maybeTableCell, (node) => $isTableNode(node));
+                    if (!$isTableNode(table)) return;
 
-                if (!maybeTableCell || !$isTableCellNode(maybeTableCell)) {
-                    return;
-                }
+                    tableDOMElement = getTableElement(
+                        table,
+                        editor.getElementByKey(table.getKey())
+                    );
+                    if (!tableDOMElement) return;
 
-                const table = $findMatchingParent(maybeTableCell, (node) =>
-                    $isTableNode(node)
-                );
-
-                if (!table || !$isTableNode(table)) {
-                    return;
-                }
-
-                tableDOMElement = getTableElement(
-                    table,
-                    editor.getElementByKey(table.getKey())
-                );
-
-                if (tableDOMElement) {
                     const rowCount = table.getChildrenSize();
                     const firstRow = table.getChildAtIndex(0);
                     const colCount = firstRow ? firstRow.getChildrenSize() : 0;
@@ -130,7 +137,6 @@ function TableHoverActionsContainer({anchorElem}) {
                 }
             });
 
-
             if (tableDOMElement) {
                 const {
                     width: tableElemWidth,
@@ -143,35 +149,27 @@ function TableHoverActionsContainer({anchorElem}) {
 
                 const parentElement = tableDOMElement.parentElement;
                 let tableHasScroll = false;
-
                 if (
                     parentElement &&
-                    parentElement.classList.contains(
-                        "PlaygroundEditorTheme__tableScrollableWrapper"
-                    )
+                    parentElement.classList.contains('PlaygroundEditorTheme__tableScrollableWrapper')
                 ) {
                     tableHasScroll = parentElement.scrollWidth > parentElement.clientWidth;
                 }
 
-                if (!anchorElem) return;
-
-                const {y: editorElemY, left: editorElemLeft} =
-                    anchorElem.getBoundingClientRect();
+                const {y: editorElemY, left: editorElemLeft} = anchorElem.getBoundingClientRect();
 
                 if (hoveredRowNode) {
                     setShownColumn(false);
                     setShownRow(true);
                     setPosition({
                         height: BUTTON_WIDTH_PX,
-                        left:
-                            tableHasScroll && parentElement
-                                ? parentElement.offsetLeft
-                                : tableElemLeft - editorElemLeft,
+                        left: tableHasScroll && parentElement
+                            ? parentElement.offsetLeft
+                            : tableElemLeft - editorElemLeft,
                         top: tableElemBottom - editorElemY + 5,
-                        width:
-                            tableHasScroll && parentElement
-                                ? parentElement.offsetWidth
-                                : tableElemWidth,
+                        width: tableHasScroll && parentElement
+                            ? parentElement.offsetWidth
+                            : tableElemWidth,
                     });
                 } else if (hoveredColumnNode) {
                     setShownColumn(true);
@@ -182,6 +180,9 @@ function TableHoverActionsContainer({anchorElem}) {
                         top: tableElemY - editorElemY,
                         width: BUTTON_WIDTH_PX,
                     });
+                } else {
+                    setShownRow(false);
+                    setShownColumn(false);
                 }
             }
         },
@@ -189,7 +190,7 @@ function TableHoverActionsContainer({anchorElem}) {
         250
     );
 
-
+    // hide buttons on table resize
     const tableResizeObserver = useMemo(() => {
         return new ResizeObserver(() => {
             setShownRow(false);
@@ -198,47 +199,31 @@ function TableHoverActionsContainer({anchorElem}) {
     }, []);
 
     useEffect(() => {
-        if (!shouldListenMouseMove) {
-            return;
-        }
-
+        if (!shouldListenMouseMove) return;
         document.addEventListener('mousemove', debouncedOnMouseMove);
-
         return () => {
             setShownRow(false);
             setShownColumn(false);
-            debouncedOnMouseMove.cancel();
+            if (debouncedOnMouseMove.cancel) debouncedOnMouseMove.cancel();
             document.removeEventListener('mousemove', debouncedOnMouseMove);
         };
     }, [shouldListenMouseMove, debouncedOnMouseMove]);
 
-    console.log("helloasdasd asd asd")
-
     useEffect(() => {
-        if (!editor || !tableResizeObserver) return;
-
-        console.log(editor);
-
         return mergeRegister(
             editor.registerMutationListener(
                 TableNode,
                 (mutations) => {
-                    editor.update(() => { // ✅ Wrap inside update()
+                    // READ
+                    editor.read(() => {
                         let resetObserver = false;
                         for (const [key, type] of mutations) {
-                            switch (type) {
-                                case 'created': {
-                                    tableSetRef.current.add(key);
-                                    resetObserver = true;
-                                    break;
-                                }
-                                case 'destroyed': {
-                                    tableSetRef.current.delete(key);
-                                    resetObserver = true;
-                                    break;
-                                }
-                                default:
-                                    break;
+                            if (type === 'created') {
+                                tableSetRef.current.add(key);
+                                resetObserver = true;
+                            } else if (type === 'destroyed') {
+                                tableSetRef.current.delete(key);
+                                resetObserver = true;
                             }
                         }
                         if (resetObserver) {
@@ -256,32 +241,23 @@ function TableHoverActionsContainer({anchorElem}) {
         );
     }, [editor, tableResizeObserver]);
 
-
     const insertAction = (insertRow) => {
-        if (!editor) return;
-
-
+        // WRITE
         editor.update(() => {
-            if (tableCellDOMNodeRef.current) {
-                const maybeTableNode = $getNearestNodeFromDOMNode(
-                    tableCellDOMNodeRef.current
-                );
-                maybeTableNode?.selectEnd();
-                if (insertRow) {
-                    $insertTableRow__EXPERIMENTAL();
-                    setShownRow(false);
-                } else {
-                    $insertTableColumn__EXPERIMENTAL();
-                    setShownColumn(false);
-                }
+            if (!tableCellDOMNodeRef.current) return;
+            const maybeCell = $getNearestNodeFromDOMNode(tableCellDOMNodeRef.current);
+            maybeCell?.selectEnd();
+            if (insertRow) {
+                $insertTableRow();
+                setShownRow(false);
+            } else {
+                $insertTableColumn();
+                setShownColumn(false);
             }
         });
     };
 
-    if (!isEditable) {
-        return null;
-    }
-
+    if (!isEditable) return null;
 
     return (
         <>
@@ -303,38 +279,12 @@ function TableHoverActionsContainer({anchorElem}) {
     );
 }
 
-function getMouseInfo(event, getTheme) {
-    const target = event.target;
-    const tableCellClass = getThemeSelector(getTheme, 'tableCell');
-
-
-    console.log(tableCellClass, "tableCellClass")
-
-    if (isHTMLElement(target)) {
-        const tableDOMNode = target.closest(
-            `td${tableCellClass}, th${tableCellClass}`
-        );
-
-        const isOutside = !(
-            tableDOMNode ||
-            target.closest(`button${getThemeSelector(getTheme, 'tableAddRows')}`) ||
-            target.closest(`button${getThemeSelector(getTheme, 'tableAddColumns')}`) ||
-            target.closest('div.TableCellResizer__resizer')
-        );
-
-        return {isOutside, tableDOMNode};
-    } else {
-        return {isOutside: true, tableDOMNode: null};
-    }
-}
-
 export default function TableHoverActionsPlugin({anchorElem = document.body}) {
     const isEditable = useLexicalEditable();
 
+    console.log("hello      oooooooooooooooooooooooooooooo  ")
+
     return isEditable
-        ? createPortal(
-            <TableHoverActionsContainer anchorElem={anchorElem}/>,
-            anchorElem
-        )
+        ? createPortal(<TableHoverActionsContainer anchorElem={anchorElem} />, anchorElem)
         : null;
 }
