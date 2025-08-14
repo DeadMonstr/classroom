@@ -21,9 +21,9 @@ import {setAlertOptions} from "slices/layoutSlice";
 const ChangeProfile = () => {
 	const {isCheckedPassword} = useAuth()
 
-	if (!isCheckedPassword) {
-		return <CheckPassword active={true} />
-	}
+	// if (!isCheckedPassword) {
+	// 	return <CheckPassword active={true} />
+	// }
 
 	return (
 		<div className={styles.changeProfile}>
@@ -118,7 +118,7 @@ const Username = () => {
 						message: "Username 3 tadan kam bo'lmasligi kerak"
 					},
 				}}
-				value={username}
+				defaultValue={username}
 				errors={errors}
 				register={register}
 				name={"username"}
