@@ -19,6 +19,7 @@ import Sidebar from "components/presentation/sidebar/Sidebar";
 
 
 import {PresentationSidebarContext} from "helpers/contexts";
+import Popup from "components/ui/popup/Popup";
 
 
 
@@ -27,7 +28,7 @@ const Presentation = () => {
     const [addNewSlide,setAddNewSlide] = useState(false)
     const [modalType,setModalType] = useState("add")
 
-    const {slides,currentSlide} = useSelector(state => state.presentation)
+    const {slides} = useSelector(state => state.presentation)
 
 
     const onChangeSlideType = () => {
@@ -42,38 +43,15 @@ const Presentation = () => {
     }
 
 
+
     const renderSlides = useCallback(() => {
         return slides.map((item,index) => {
 
-
-
-            const Icon = contentTypes.filter(type => type.name === item.name)[0].icon
-
-
-
             return (
-                <div
-                    className={classNames(cls.tabs__item, {
-                        [cls.active]: currentSlide.id === item.id
-                    })}
-                >
-                    <div className={cls.num}>
-                        {index + 1}
-                    </div>
-
-                    <div className={cls.info}>
-                        {Icon ? <Icon/> : ''}
-
-
-                        <Tooltip>
-                            {item.heading}
-                        </Tooltip>
-
-                    </div>
-                </div>
+                <Slide item={item} index={index}/>
             )
         })
-    },[slides,currentSlide])
+    },[slides])
 
 
 
@@ -154,6 +132,63 @@ const Presentation = () => {
         </div>
     );
 };
+
+
+const Slide = ({item,index}) => {
+    const Icon = contentTypes.filter(type => type.name === item.name)[0].icon
+    const {currentSlide} = useSelector(state => state.presentation)
+
+
+    const popupOptions = [
+        {
+            // onClick: onChange,
+            children: (
+                <>
+                    <span><i className="fa-solid fa-copy"></i></span>
+                    <span>Duplicate Slide</span>
+                </>
+            )
+        },
+        {
+            // onClick: onDel,
+            children: (
+                <>
+                    <span><i style={{color: 'red'}} className="fa-solid fa-trash"></i></span>
+                    <span style={{textWrap: "nowrap"}}>Delete slide</span>
+                </>
+            )
+        }
+    ]
+
+    return (
+        <div
+            className={classNames(cls.tabs__item, {
+                [cls.active]: currentSlide.id === item.id
+            })}
+        >
+            <div className={cls.controller}>
+                <div className={cls.num}>
+                    {index + 1}
+                </div>
+
+                <div className={cls.menu}>
+                    <Popup styles={{optionsWidth: "20rem"}} trigger={<i className="fa-solid fa-ellipsis"></i>} options={popupOptions}/>
+                </div>
+            </div>
+
+
+            <div className={cls.info}>
+                {Icon ? <Icon/> : ''}
+
+
+                <Tooltip>
+                    {item.heading}
+                </Tooltip>
+
+            </div>
+        </div>
+    )
+}
 
 
 

@@ -37,7 +37,12 @@ const Select = React.memo((
 
 
             if (all) {
-                onChange("all")
+
+                if (value) {
+                    onChange(value)
+                } else {
+                    onChange("all")
+                }
                 allObj = [{
                     name: "Hammasi",
                     value: "all",

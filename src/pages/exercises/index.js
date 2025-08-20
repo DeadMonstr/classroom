@@ -12,7 +12,8 @@ import {setAlertOptions} from "slices/layoutSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchExercisesData,
-    fetchExercisesTypeData, onDeleteExc,
+    fetchExercisesTypeData,
+    onDeleteExc,
     setSearch,
     setTypes
 } from "slices/exercisesSlice";
@@ -22,6 +23,7 @@ import Pagination from "components/ui/pagination";
 import useDebounce from "hooks/useDebounce";
 import Modal from "components/ui/modal";
 import Button from "components/ui/button";
+import Loader from "components/ui/loader/Loader";
 
 
 const Exercises = () => {
@@ -32,61 +34,50 @@ const Exercises = () => {
 
 
     const {subjects} = useSelector(state => state.subjects)
-    const {excs, types, type, subject, level, search} = useSelector(state => state.exercises)
+    const {excs, types, type, subject, level, search,fetchExercisesStatus,totalCount} = useSelector(state => state.exercises)
     const {levels} = useSelector(state => state.subject)
 
 
-    const [selectedType, setSelectedType] = useState(null)
-    const [selectedSubject, setSelectedSubject] = useState(null)
-    const [selectedLevel, setSelectedLevel] = useState(null)
-    const [data,setData] = useState([])
+
+
+
+    // const [data,setData] = useState([])
     const [addActiveModal,setAddActiveModal] = useState(false)
 
     const {request} = useHttp()
 
 
     useEffect(() => {
-        // dispatch(fetchExercisesData())
         dispatch(fetchExercisesTypeData())
         dispatch(fetchSubjectsData())
     }, [])
 
-    useEffect(() => {
-        setSelectedType(type)
-        setSelectedSubject(subject)
-        setSelectedLevel(level)
-    }, [])
 
 
     useEffect(() => {
-        if (selectedSubject && selectedSubject !== "all") {
-            dispatch(fetchSubjectLevelsData(selectedSubject))
+        if (subject && subject !== "all") {
+            dispatch(fetchSubjectLevelsData(subject))
         }
-    }, [selectedSubject])
+    }, [subject])
 
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalCount, setTotalCount] = useState(1);
     let PageSize = useMemo(() => 50, [])
 
     useDebounce(() => {
-        if (!selectedSubject && !selectedType && !selectedLevel) return;
+        if (!subject && !type && !level) return;
 
         const data = {
             search,
-            subject:selectedSubject,
-            type:selectedType,
-            level:selectedLevel,
+            subject:subject,
+            type:type,
+            level:level,
             page:currentPage,
             per_page: PageSize
         }
 
-        request(`${BackUrl}exercise/crud/?${new URLSearchParams(data).toString()}`, "GET", null, headers())
-            .then(res => {
-                setData(res.data)
-                setTotalCount(res.total)
-            })
-    }, 0.5,[search, selectedLevel,selectedType,selectedSubject,currentPage,PageSize])
+        dispatch(fetchExercisesData({data}))
+    }, 0.5,[search, level,type,subject,currentPage,PageSize])
 
 
     // const multiPropsFilter = useMemo(() => {
@@ -138,14 +129,22 @@ const Exercises = () => {
     }
 
     const onChangeTypes = (status, data) => {
-        if (status === "type") {
-            setSelectedType(data)
-        } else if (status === "subject") {
-            setSelectedSubject(data)
-        } else if (status === "level") {
-            setSelectedLevel(data)
+
+        const typesData = {
+            type,
+            subject,
+            level
         }
-        dispatch(setTypes({status, data}))
+
+
+        if (typesData[status] !== data) {
+            console.log(type, status,data)
+            dispatch(setTypes({status, data}))
+
+            // const localItem = localStorage.getItem()
+
+        }
+
     }
 
 
@@ -170,7 +169,8 @@ const Exercises = () => {
                     <Input title={"Qidiruv"} type={"text"} onChange={onSetSearch}/>
                     <Select
                         all={true}
-                        value={selectedType}
+                        defaultOption={type}
+                        value={type}
                         options={types}
                         title={"Mashq turi"}
                         onChange={e => onChangeTypes("type", e)}
@@ -180,7 +180,7 @@ const Exercises = () => {
                         title={"Fan"}
                         name={"subject"}
                         options={subjects}
-                        value={selectedSubject}
+                        value={subject}
                         all={true}
                     /> : null}
 
@@ -189,7 +189,7 @@ const Exercises = () => {
                         title={"Mashq darajasi"}
                         name={"level-exc"}
                         options={levels}
-                        value={selectedLevel}
+                        value={level}
                         all={true}
                     /> : null}
                 </div>
@@ -203,7 +203,10 @@ const Exercises = () => {
                 </div>
             </div>
             <div className={styles.container}>
-                <ExcTable onDelete={onDelete} data={data}/>
+                {
+                    fetchExercisesStatus === "loading" ? <Loader/> :  <ExcTable onDelete={onDelete} data={excs}/>
+                }
+
                 <Pagination
                     className="pagination-bar"
                     currentPage={currentPage}

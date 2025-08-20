@@ -1,48 +1,49 @@
-import  {useEffect, useRef} from 'react';
+import { useEffect, useRef, useCallback } from "react";
 
-// const UseHorizontalScroll = (items,limit) => {
-//
-// 	const elRef = useRef();
-//
-//
-//
-// 	useEffect(() => {
-// 		const el = elRef.current;
-//
-// 		if (el && items.length >= limit) {
-// 			const onWheel = e => {
-// 				if (e.deltaY === 0) return;
-// 				e.preventDefault();
-// 				el.scrollTo({
-// 					left: el.scrollLeft + e.deltaY
-// 				});
-// 			};
-// 			el.addEventListener("wheel", onWheel);
-// 			return () => el.removeEventListener("wheel", onWheel);
-// 		}
-// 	}, [items,limit]);
-// 	return elRef;
-// };
-
-const useHorizontalScroll = () => {
-	const elRef = useRef(null);
+export function useHorizontalScroll({
+										speed = 1, // scroll sensitivity multiplier
+										smooth = true, // smooth scroll or instant
+									} = {}) {
+	const scrollRef = useRef(null);
 
 	useEffect(() => {
-		const el = elRef.current;
+		const el = scrollRef.current;
 		if (!el) return;
 
 		const onWheel = (e) => {
-			if (e.deltaY === 0) return;
-			e.preventDefault();
-			el.scrollLeft += e.deltaY;
+			// Only scroll horizontally if vertical scroll is minimal
+			if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+				e.preventDefault();
+				el.scrollTo({
+					left: el.scrollLeft + e.deltaY * speed,
+					behavior: smooth ? "smooth" : "auto",
+				});
+			}
 		};
 
 		el.addEventListener("wheel", onWheel, { passive: false });
-
 		return () => el.removeEventListener("wheel", onWheel);
-	}, []);
+	}, [speed, smooth]);
 
-	return elRef;
-};
+	// Scroll by given offset
+	const scrollBy = useCallback((offset) => {
+		if (scrollRef.current) {
+			scrollRef.current.scrollTo({
+				left: scrollRef.current.scrollLeft + offset,
+				behavior: smooth ? "smooth" : "auto",
+			});
+		}
+	}, [smooth]);
 
-export default useHorizontalScroll;
+	// Scroll to exact position
+	const scrollTo = useCallback((pos) => {
+		if (scrollRef.current) {
+			scrollRef.current.scrollTo({
+				left: pos,
+				behavior: smooth ? "smooth" : "auto",
+			});
+		}
+	}, [smooth]);
+
+	return { scrollRef, scrollBy, scrollTo };
+}

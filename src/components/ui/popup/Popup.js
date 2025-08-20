@@ -125,7 +125,7 @@ const setPositionModal = (popupWrapper, popupModal) => {
 }
 
 
-const Popup = ({children, position, trigger, childrenType = "options", options = []}) => {
+const Popup = ({children, position, trigger, childrenType = "options", options = [],styles}) => {
 
     const [active, setActive] = useState(false)
     const popupWrapper = useRef()
@@ -205,9 +205,17 @@ const Popup = ({children, position, trigger, childrenType = "options", options =
     }
 
     return (
-        <div className={cls.popup} ref={popupWrapper}>
+        <div
+
+            className={cls.popup}
+            ref={popupWrapper}
+        >
             {active ? createPortal(
                 <div
+                    style={{
+                        width: styles?.optionsWidth,
+                        height: styles?.optionsHeight
+                    }}
                     ref={popupModal}
                     className={classNames(cls.popup__modal, {
                         [cls.options]: childrenType === "options",

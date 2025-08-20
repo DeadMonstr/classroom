@@ -108,8 +108,11 @@
       i
         font-size: 2rem
         color: $color-grey-dark
-    .createLevel
-      padding: 2rem 1rem
+.createLevel
+  display: flex
+  flex-direction: column
+  gap: 2rem
+
 
 
 
@@ -143,6 +146,10 @@
 .levels
   width: 100%
   margin-top: 2rem
+  .header
+    display: flex
+    align-items: center
+    justify-content: space-between
   .title
     font-style: normal
     font-weight: 400

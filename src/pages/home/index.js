@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import styles from "./styles.module.sass"
 import img from "assets/english.png"
-import useHorizontalScroll from "hooks/useHorizontalScroll";
+import {useHorizontalScroll} from "hooks/useHorizontalScroll";
 import {Link, useNavigate} from "react-router-dom";
 import useChangeMenuParams from "hooks/useChangeMenuParams";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,7 +58,6 @@ const Subjects = React.memo(() => {
 
 
     const [subjects,setSubjects] = useState([])
-    const ref = useHorizontalScroll(subjects,3)
     const [activeCreate,setActiveCreate] = useState(false)
 
     const onSubmit = (data) => {
@@ -81,9 +80,12 @@ const Subjects = React.memo(() => {
             })
     },[])
 
+    const { scrollRef, scrollBy } = useHorizontalScroll({ speed: 5 });
+
+
 
     return (
-        <div ref={ref} className={styles.subjects}>
+        <div  className={styles.subjects}>
             <div className={styles.subjects__header}>
                 <h1 className={styles.title}>Fanlar: </h1>
 
@@ -93,7 +95,7 @@ const Subjects = React.memo(() => {
                     </div>
                 </RequireAuthChildren>
             </div>
-            <div className={styles.subjects__wrapper}>
+            <div className={styles.subjects__wrapper} ref={scrollRef}>
                 {
                     subjects.map((item,index) => {
                         return (
@@ -129,7 +131,7 @@ const PisaTests = React.memo(() => {
 
 
     const [tests,setTests] = useState([])
-    const ref = useHorizontalScroll(tests,3)
+    const { scrollRef, scrollBy } = useHorizontalScroll({ speed: 10 });
     const [activeCreate,setActiveCreate] = useState(false)
 
     const onSubmit = (data) => {
@@ -164,13 +166,13 @@ const PisaTests = React.memo(() => {
 
 
     return (
-        <div ref={ref} className={styles.subjects}>
+        <div  className={styles.subjects}>
             <div className={styles.subjects__header}>
                 <h1 className={styles.title}>Pisa Testlar: </h1>
 
 
             </div>
-            <div className={styles.subjects__wrapper}>
+            <div className={styles.subjects__wrapper} ref={scrollRef}>
                 {
                     tests.map((item,index) => {
                         return (

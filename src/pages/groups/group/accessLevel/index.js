@@ -27,7 +27,6 @@ const lev = [
 
 const AccessLevel = () => {
 
-	const [levels,setLevels] = useState(lev)
 	const [selectedLevel,setSelectedLevel] = useState()
 	const [users,setUsers]= useState([])
 

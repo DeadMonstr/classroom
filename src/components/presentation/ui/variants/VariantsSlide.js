@@ -9,7 +9,7 @@ import Input from "components/ui/form/input";
 import ColorPopup from "components/ui/colorPopup/colorPopup";
 
 
-const VariantsSlide = ({variants, onAdd, onChange, onDelete, haveCorrect}) => {
+const VariantsSlide = ({variants, onAdd, onChange, onDelete, haveCorrect,max}) => {
 
 
     const renderVariants = () => {
@@ -43,9 +43,9 @@ const VariantsSlide = ({variants, onAdd, onChange, onDelete, haveCorrect}) => {
                 type={"present"}
                 extraClass={cls.addBtn}
                 onClick={onAdd}
-                disabled={variants.length >= 10}
+                disabled={variants.length >= max}
             >
-                {/*{makeIconComponent(multipleChoiceType.icon)}*/}
+                {/*{makeIconComponent(rankingType.icon)}*/}
 
                 Add variant
             </Button>
