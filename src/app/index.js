@@ -160,7 +160,7 @@ const App = () => {
 
                     </Route>
 
-                        <Route path={"home"} element={<Home/>}/>
+                    <Route path={"home"} element={<Home/>}/>
 
 
 
@@ -228,17 +228,7 @@ const App = () => {
                         path="*"
                         element={<Navigate to="/home" replace/>}
                     />
-
-
-
-
                 </Route>
-
-
-
-
-
-
             </>
         )
     );

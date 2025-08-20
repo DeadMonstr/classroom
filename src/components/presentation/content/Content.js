@@ -106,25 +106,24 @@ const Content = () => {
                 clazz={[cls.main, cls[layout]]}
                 type={activeTypesSideBar.layout}
             >
-                {/*{*/}
-                {/*    layout !== "default" &&*/}
-                {/*    <div*/}
-                {/*        style={{*/}
-                {/*            minWidth: layoutSizeWidth,*/}
-                {/*            maxWidth: layoutSizeWidth,*/}
-                {/*            minHeight: layoutSizeHeight,*/}
-                {/*            maxHeight: layoutSizeHeight*/}
-                {/*        }}*/}
-                {/*        className={cls.image}*/}
-                {/*    >*/}
-                {/*        <img src={image} alt=""/>*/}
-                {/*    </div>*/}
-                {/*}*/}
+                {
+                    layout !== "default" &&
+                    <div
+                        style={{
+                            minWidth: layoutSizeWidth,
+                            maxWidth: layoutSizeWidth,
+                            minHeight: layoutSizeHeight,
+                            maxHeight: layoutSizeHeight
+                        }}
+                        className={cls.image}
+                    >
+                        <img src={image} alt=""/>
+                    </div>
+                }
 
-                {/*<div className={cls.content} style={{backgroundColor: currentSlide.slideType !== "image" ? bgColor : null}}>*/}
-                {/*    {renderContent()}*/}
-                {/*</div>*/}
-                <MathInput/>
+                <div className={cls.content} style={{backgroundColor: currentSlide.slideType !== "image" ? bgColor : null}}>
+                    {renderContent()}
+                </div>
             </ActiveBox>
         </ResponsiveTransformBlock>
 

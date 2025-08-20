@@ -12,11 +12,11 @@ export const ScalesTypeTOptionsSlice = {
     variants: [],
     dimensions: {
         left: {
-            name: null,
+            title: "Agree",
             value: 0
         },
         right: {
-            name: null,
+            title: "Disagree",
             value: 5
         }
     }

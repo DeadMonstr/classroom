@@ -6,6 +6,7 @@ const initialState = {
     excs: [],
     types: [],
     subjects: [],
+    totalCount:0,
 
     type: "",
     subject: "",
@@ -16,9 +17,9 @@ const initialState = {
 }
 export const fetchExercisesData = createAsyncThunk(
     'ExercisesSlice/fetchExercisesData',
-    async () => {
+    async ({data}) => {
         const {request} = useHttp();
-        return await request(`${BackUrl}info_exercise`,"GET",null,headers())
+        return await request(`${BackUrl}exercise/crud/?${new URLSearchParams(data).toString()}`,"GET",null,headers())
     }
 )
 
@@ -61,6 +62,8 @@ const ExercisesSlice = createSlice({
             .addCase(fetchExercisesData.fulfilled,(state, action) => {
                 state.fetchExercisesStatus = 'success';
                 state.excs = action.payload.data
+                state.totalCount = action.payload.total
+
             })
             .addCase(fetchExercisesData.rejected,state => {state.fetchExercisesStatus = 'error'})
 

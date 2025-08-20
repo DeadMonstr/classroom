@@ -16,6 +16,7 @@ import {setAlertOptions} from "slices/layoutSlice";
 import {changeLevel, fetchSubjectLevelsData, setDataSubject, setLevel} from "slices/subjectSlice";
 import Back from "components/ui/back";
 import RequireAuthChildren from "components/auth/requireAuthChildren";
+import Select from "components/ui/form/select";
 
 
 // [
@@ -47,16 +48,16 @@ const Curriculum = () => {
     const [activeConfirm, setActiveConfirm] = useState(false)
     const [activeModalType, setActiveModalType] = useState("")
 
-    const {name, desc, img, id, levels, canDelete, fetchLevelsDataStatus,finished_percentage} = useSelector(state => state.subject)
+    const {name, desc, img, id, canDelete,finished_percentage} = useSelector(state => state.subject)
 
-    const {request} = useHttp()
 
     const dispatch = useDispatch()
+    const {request} = useHttp()
 
     const onSubmit = (data) => {
         setActiveModal(false)
 
-        request(`${BackUrl}level/info/${id}`, "POST", JSON.stringify(data), headers())
+        request(`${BackUrl}level/info/${id}/`, "POST", JSON.stringify(data), headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -70,11 +71,7 @@ const Curriculum = () => {
 
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (id) {
-            dispatch(fetchSubjectLevelsData(id))
-        }
-    }, [id])
+
 
 
     const onSubmitConfirm = () => {
@@ -164,7 +161,7 @@ const Curriculum = () => {
                     <PercentageTrackBar prc={finished_percentage}/>
                 </div>
                 {/*<LastViewed/>*/}
-                <Levels levels={levels}/>
+                <Levels/>
 
 
                 <RequireAuthChildren allowedRules={[ROLES.Methodist]}>
@@ -213,10 +210,12 @@ const CreateEditLevel = ({onSubmit, changeData}) => {
     }, [changeData])
 
 
+
+
     const handleClick = () => {
         const data = {
             name,
-            desc
+            desc,
         }
 
         onSubmit(data)
@@ -225,10 +224,8 @@ const CreateEditLevel = ({onSubmit, changeData}) => {
 
     return (
         <div className={styles.createLevel}>
-
             <Input title={"Daraja nomi"} onChange={setName} value={name}/>
             <Textarea title={"Daraja haqida ma'lumot"} onChange={setDesc} value={desc}/>
-
             <Button onClick={handleClick} type={"submit"}>Tasdiqlash</Button>
         </div>
     )
@@ -286,7 +283,6 @@ const ChangeSubject = ({onSubmit, oldData}) => {
             <ImgInput databaseImg={oldData.img} img={img} setImg={setImg}/>
             <Input title={"Fan nomi"} onChange={setTitle} value={title}/>
             <Textarea title={"Fan haqida ma'lumot"} onChange={setDesc} value={desc}/>
-
             <Button onClick={handleClick} type={"submit"}>Tasdiqlash</Button>
 
         </div>
@@ -322,12 +318,21 @@ const LastViewed = () => {
 }
 
 
-const Levels = ({levels}) => {
+const Levels = () => {
 
 
     const [activeModal, setActiveModal] = useState(false)
     const [activeConfirm, setActiveConfirm] = useState(false)
     const [willChangeItemId, setWillChangeItemId] = useState("")
+    const {id, levels} = useSelector(state => state.subject)
+
+
+    useEffect(() => {
+        if (id ) {
+            dispatch(fetchSubjectLevelsData({id}))
+        }
+    }, [id])
+
 
     const renderLevels = useCallback(() => {
         return levels.map((item, index) => {
@@ -381,8 +386,9 @@ const Levels = ({levels}) => {
     return (
         <div className={styles.levels}>
 
-
-            <h1 className={styles.title}>O’quv dasturi :</h1>
+            <div className={styles.header}>
+                <h1 className={styles.title}>O’quv dasturi :</h1>
+            </div>
 
             <div className={styles.container}>
                 {renderLevels()}
@@ -410,18 +416,6 @@ const Level = ({item, isNumeric = true, setActiveModal, setActiveConfirm, setWil
             {height: `calc(100%)`, top: `4rem`}
             : item.index === item.arrLength - 1 && isNumeric ?
                 {height: `7rem`, top: "-3rem"} : null
-
-
-    // useEffect(() => {
-    // 	document.addEventListener("click",handleClickOutside,true)
-    // },[])
-    //
-    //
-    // const handleClickOutside = (e) => {
-    // 	if (e.target.classList !== styles.innerModal && !e.target.classList.contains("fa-xmark") && e.target.classList !== styles.icon )  {
-    // 		setActiveInnerModal(false)
-    // 	}
-    // }
 
 
     const ref = useRef()

@@ -4,9 +4,7 @@ import {activeTypesSideBar} from "components/presentation/types";
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
 const DefaultDesign= {
-
     fontColor: "#000000",
-
 }
 
 
@@ -218,6 +216,7 @@ const PresentationSlice = createSlice({
 
         setSlideType: (state, action) => {
             state.currentSlide.slideType = action.payload
+            state.currentSlide.activeSidebar = ""
         },
 
 

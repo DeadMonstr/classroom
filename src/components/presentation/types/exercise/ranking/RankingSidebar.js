@@ -6,41 +6,36 @@ import Button from "components/ui/button";
 import {PresentationSidebarContext} from "helpers/contexts";
 
 
-import {scalesType} from "components/presentation/types/exercise/scales/ScalesType";
+import {rankingType} from "components/presentation/types/exercise/ranking/RankingType";
 import {useDispatch, useSelector} from "react-redux";
 import {setContentHeading, setContentSubheading, setExerciseOptionSlide} from "slices/presentationSlice";
+import VariantsSlide from "components/presentation/ui/variants/VariantsSlide";
 import OptionSwitcherSlide from "components/presentation/ui/optionSwitcher/OptionSwitcherSlide";
 import OptionInputSlide from "components/presentation/ui/optionInput/optionInputSlide";
+import {getRandomColor} from "helpers/colorRandomizer";
 import Input from "components/ui/form/input";
 import Textarea from "components/ui/form/textarea";
 import {makeIconComponent} from "helpers/makeIconComponent";
-import VariantsSlide from "components/presentation/ui/variants/VariantsSlide";
-import {getRandomColor} from "helpers/colorRandomizer";
-import Dimension from "components/presentation/ui/dimension/Dimension";
-import dimension from "components/presentation/ui/dimension/Dimension";
 
-export const ScalesSidebar = () => {
+export const RankingSidebar = () => {
 
 
     const {setActiveModal} = useContext(PresentationSidebarContext)
     const {currentSlide} = useSelector(state => state.presentation)
 
     const {heading,subheading,exercise} = currentSlide
-
-    const {variants,dimensions} = exercise
+    const {variants,correctAnswer} = exercise
 
     const dispatch = useDispatch()
 
-
-
     const onAddVariant = () => {
-        if (variants.length < 4) {
+        if (variants.length < 10) {
             dispatch(setExerciseOptionSlide({
                 variants: [...variants, {
                     id: variants.length + 1,
                     name: "",
                     correct: false,
-                    value: 1,
+                    value: 0,
                     color: getRandomColor()
                 }]
             }))
@@ -64,10 +59,6 @@ export const ScalesSidebar = () => {
         }))
     }
 
-
-
-
-
     const onChangeHeading = (e) => {
         dispatch(setContentHeading(e))
     }
@@ -77,20 +68,6 @@ export const ScalesSidebar = () => {
     }
 
 
-    const onChangeLeftDimension = (data) => {
-        dispatch(setExerciseOptionSlide({
-            dimensions: {...dimensions,left: data}
-        }))
-    }
-
-
-    const onChangeRightDimension = (data) => {
-        dispatch(setExerciseOptionSlide({
-            dimensions: {...dimensions,right: data}
-        }))
-    }
-
-    console.log(dimensions)
 
 
     return (
@@ -105,53 +82,35 @@ export const ScalesSidebar = () => {
                     type={"present"}
                     extraClass={cls.type__btn}
                 >
-                    {makeIconComponent(scalesType.icon)}
-                    {scalesType.title}
+                    {makeIconComponent(rankingType.icon)}
+                    {rankingType.title}
                 </Button>
             </div>
             <div className={cls.separator}/>
+
             <Input value={heading} onChange={onChangeHeading} extraClassNameLabel={cls.heading} title={"Heading"}/>
+
+
             <Textarea value={subheading} onChange={onChangeSubheading} extraClassNameLabel={cls.subheading} title={"Subheading"}/>
 
-            <div className={cls.separator}/>
-            <br/>
 
             {
                 variants &&
                 <VariantsSlide
-                    max={4}
+                    haveCorrect={correctAnswer}
                     variants={variants}
                     onAdd={onAddVariant}
                     onChange={onChangeVariant}
                     onDelete={onDeleteVariant}
-
                 />
             }
+            {/*<div className={cls.separator}/>*/}
+            {/*<OptionSwitcherSlide*/}
+            {/*    title={"Correct answer"}*/}
+            {/*    onToggle={onChangeCorrectAnswer}*/}
+            {/*    active={correctAnswer}*/}
+            {/*/>*/}
 
-            <div className={cls.separator}/>
-
-            <h2>Dimensions</h2>
-
-            <br/>
-            <Dimension
-                onChange={(data) => onChangeLeftDimension(data)}
-                placeholderTitle={"Agree"}
-                titleText={"Left"}
-                valueText={"Value"}
-                defaultTitle={dimensions?.left?.title}
-                defaultValue={dimensions?.left?.value}
-                min={0}
-            />
-            <br/>
-            <Dimension
-                onChange={(data) => onChangeRightDimension(data)}
-                placeholderTitle={"Disagree"}
-                titleText={"Right"}
-                valueText={"Value"}
-                defaultTitle={dimensions?.right?.title}
-                defaultValue={dimensions?.right?.value}
-                min={0}
-            />
             {/*<OptionSwitcherSlide title={"live responses"}/>*/}
 
 

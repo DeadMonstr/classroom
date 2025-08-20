@@ -20,11 +20,11 @@ const menuOptions = [
         title: 'Edit',
         icon: <Content/>
     },
-    {
-        name: 'design',
-        title: 'Design',
-        icon: <Design/>
-    }
+    // {
+    //     name: 'design',
+    //     title: 'Design',
+    //     icon: <Design/>
+    // }
 ]
 
 const Sidebar = () => {

@@ -33,5 +33,7 @@ export const activeTypesSideBar = {
     video: "video",
     multipleChoice: "multiple_choice",
     wordCloud: "word_cloud",
-    openEnded: "open_ended"
+    openEnded: "open_ended",
+    scales: "scales",
+    ranking: "ranking"
 }

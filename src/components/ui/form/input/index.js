@@ -199,7 +199,6 @@ const Input = ({
 	};
 
 
-	console.log(register, name, "hello")
 
 
 	return (

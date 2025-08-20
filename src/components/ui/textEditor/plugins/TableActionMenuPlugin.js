@@ -517,7 +517,7 @@ function TableActionMenu({
                     }}
                     className="item wide">
                     <div className="icon-text-container">
-                        <i className="icon vertical-top" />
+                        <i className="icon vertical-top"/>
                         <span className="text">Top Align</span>
                     </div>
                 </DropDownItem>
@@ -527,7 +527,7 @@ function TableActionMenu({
                     }}
                     className="item wide">
                     <div className="icon-text-container">
-                        <i className="icon vertical-middle" />
+                        <i className="icon vertical-middle"/>
                         <span className="text">Middle Align</span>
                     </div>
                 </DropDownItem>
@@ -537,7 +537,7 @@ function TableActionMenu({
                     }}
                     className="item wide">
                     <div className="icon-text-container">
-                        <i className="icon vertical-bottom" />
+                        <i className="icon vertical-bottom"/>
                         <span className="text">Bottom Align</span>
                     </div>
                 </DropDownItem>
@@ -556,7 +556,7 @@ function TableActionMenu({
                 data-test-id="table-freeze-first-column">
                 <span className="text">Toggle First Column Freeze</span>
             </button>
-            <hr />
+            <hr/>
             <button
                 type="button"
                 className="item"
@@ -579,7 +579,7 @@ function TableActionMenu({
             below
         </span>
             </button>
-            <hr />
+            <hr/>
             <button
                 type="button"
                 className="item"
@@ -606,7 +606,7 @@ function TableActionMenu({
             right
         </span>
             </button>
-            <hr />
+            <hr/>
             <button
                 type="button"
                 className="item"
@@ -628,7 +628,7 @@ function TableActionMenu({
                 data-test-id="table-delete">
                 <span className="text">Delete table</span>
             </button>
-            <hr />
+            <hr/>
             <button
                 type="button"
                 className="item"
@@ -678,38 +678,39 @@ function TableCellActionMenuContainer({
 
     const checkTableCellOverflow = useCallback(
         (tableCellParentNodeDOM) => {
-        const scrollableContainer = tableCellParentNodeDOM.closest(
-            '.PlaygroundEditorTheme__tableScrollableWrapper',
-        );
-        if (scrollableContainer) {
-            const containerRect = (
-                scrollableContainer
-        ).getBoundingClientRect();
-            const cellRect = tableCellParentNodeDOM.getBoundingClientRect();
+            const scrollableContainer = tableCellParentNodeDOM.closest(
+                '.PlaygroundEditorTheme__tableScrollableWrapper',
+            );
+            if (scrollableContainer) {
+                const containerRect = (
+                    scrollableContainer
+                ).getBoundingClientRect();
+                const cellRect = tableCellParentNodeDOM.getBoundingClientRect();
 
-            // Calculate where the action button would be positioned (5px from right edge of cell)
-            // Also account for the button width and table cell padding (8px)
-            const actionButtonRight = cellRect.right - 5;
-            const actionButtonLeft = actionButtonRight - 28; // 20px width + 8px padding
+                // Calculate where the action button would be positioned (5px from right edge of cell)
+                // Also account for the button width and table cell padding (8px)
+                const actionButtonRight = cellRect.right - 5;
+                const actionButtonLeft = actionButtonRight - 28; // 20px width + 8px padding
 
-            // Only hide if the action button would overflow the container
-            if (
-                actionButtonRight > containerRect.right ||
-                actionButtonLeft < containerRect.left
-            ) {
-                return true;
+                // Only hide if the action button would overflow the container
+                if (
+                    actionButtonRight > containerRect.right ||
+                    actionButtonLeft < containerRect.left
+                ) {
+                    return true;
+                }
             }
-        }
-        return false;
-    },
+            return false;
+        },
         [],
-);
+    );
 
     const $moveMenu = useCallback(() => {
         const menu = menuButtonRef.current;
         const selection = $getSelection();
         const nativeSelection = getDOMSelection(editor._window);
         const activeElement = document.activeElement;
+
         function disable() {
             if (menu) {
                 menu.classList.remove('table-cell-action-button-container--active');
@@ -723,7 +724,7 @@ function TableCellActionMenuContainer({
         }
 
         const rootElement = editor.getRootElement();
-        let tableObserver= null;
+        let tableObserver = null;
         let tableCellParentNodeDOM = null;
 
         if (
@@ -822,6 +823,7 @@ function TableCellActionMenuContainer({
         }
     }, [editor, anchorElem, checkTableCellOverflow]);
 
+
     useEffect(() => {
         // We call the $moveMenu callback every time the selection changes,
         // once up front, and once after each pointerUp
@@ -878,7 +880,7 @@ function TableCellActionMenuContainer({
                             setIsMenuOpen(!isMenuOpen);
                         }}
                         ref={menuRootRef}>
-                        <i className="chevron-down" />
+                        <i className="chevron-down"/>
                     </button>
                     {colorPickerModal}
                     {isMenuOpen && (

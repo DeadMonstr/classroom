@@ -24,9 +24,9 @@ export const fetchSubjectData = createAsyncThunk(
 
 export const fetchSubjectLevelsData = createAsyncThunk(
 	'SubjectSlice/fetchSubjectLevelsData',
-	async (id) => {
+	async ({id,branchType}) => {
 		const {request} = useHttp();
-		return await request(`${BackUrl}level/info/${id}`,"GET",null,headers())
+		return await request(`${BackUrl}level/info/${id}/`,"GET",null,headers())
 	}
 )
 const SubjectSlice = createSlice({

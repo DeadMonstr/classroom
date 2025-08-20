@@ -2,36 +2,19 @@
 @import "styles/abstracts/variables"
 
 
-.openEnded
+.scales
   width: 100%
   height: 100%
   display: flex
   flex-direction: column
   align-items: center
-  justify-content: space-around
+  justify-content: center
   padding: 2rem
   .text
     width: 100%
-  .sentences
-    width: 100%
-    height: 45rem
-    overflow-y: auto
+  .dimensions
+    width: 100rem
     display: flex
-    align-items: flex-start
-    justify-items: flex-start
-    justify-content: flex-start
-    flex-wrap: wrap
-    gap: 2rem
+    align-items: center
+    justify-content: space-between
 
-    .sentence
-      flex: 1 1 calc(33.333% - 2rem)
-      max-width: calc(33.333% - 2rem)
-      min-width: 200px
-      display: flex
-      align-items: center
-      justify-content: flex-start
-      background-color: rgba($color-grey-light,.2)
-      color: #000000
-      padding: 2rem
-      border-radius: 10px
-      font-size: 2rem
