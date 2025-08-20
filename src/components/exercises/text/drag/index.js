@@ -3,6 +3,7 @@ import styles from "../style.module.sass";
 import classNames from "classnames";
 import {useDraggable, useDroppable} from "@dnd-kit/core";
 import {CSS} from "@dnd-kit/utilities";
+import MathField from "components/ui/mathField";
 
 function DroppableBox({children,id,status}) {
 	const {setNodeRef,over,isOver} = useDroppable({
@@ -39,15 +40,6 @@ function DraggableWord({item,disabled}) {
 		transform: CSS.Translate.toString(transform),
 	};
 
-	const mathFieldRef = useRef(null);
-
-
-
-	useEffect(() => {
-		if (mathFieldRef.current) {
-			mathFieldRef.current.value = item.text;
-		}
-	}, [item.text]);
 
 	return (
 		<div
@@ -59,15 +51,15 @@ function DraggableWord({item,disabled}) {
 
 		>
 			{item.isMath ?
-				<math-field
-					ref={mathFieldRef}
-					readOnly
+				<MathField
 					style={{
 						userSelect: "none",
-					width: "fit-content",
-					height: "fit-content",
-					...styles,
-				}}
+						backgroundColor: "white",
+						color:"black",
+						border: "none",
+						fontSize: "2.3rem",
+					}}
+					value={ item.text}  readOnly
 				/>
 				:
 				<div style={item.styles}  className={item.classNames} dangerouslySetInnerHTML={{__html: item.text}}></div>

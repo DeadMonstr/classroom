@@ -8,6 +8,7 @@ import {ExcContext} from "helpers/contexts";
 import Input from "../../ui/form/input";
 import {useHttp} from "hooks/http.hook";
 import Button from "components/ui/button";
+import MathField from "components/ui/mathField";
 
 const QuestionContext = createContext()
 
@@ -101,7 +102,7 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
                 someFilled: questionComponent?.variants?.typeVariants === "select" ? variants.some(item => item.checked) : input.length > 0
             })
         }
-    }, [variants, input, questionComponent,isChanged])
+    }, [variants, input, questionComponent, isChanged])
 
 
     return (
@@ -121,14 +122,28 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
                 <>
                     {
                         questionComponent.innerType === "text" ? <p>{questionComponent.text}</p>
-                            :
-                            questionComponent.innerType === "image" ? <img
-                                    src={typeof questionComponent.image === "string" ? `${BackUrlForDoc}${questionComponent.image}` : URL.createObjectURL(questionComponent.image)}
-                                    alt=""/>
-                                :
-                                <div className={styles.words}>
-                                    <Words type={"view"} words={questionComponent.words}/>
-                                </div>
+                            : questionComponent.innerType === "math" ?
+                                <>
+
+                                    <MathField
+                                        style={{
+                                            backgroundColor: "white",
+                                            color:"black",
+                                            border: "none",
+                                            fontSize: "2.5rem",}}
+                                        value={questionComponent.text}
+                                        readOnly
+                                    />
+
+
+                                </> :
+                                questionComponent.innerType === "image" ? <img
+                                        src={typeof questionComponent.image === "string" ? `${BackUrlForDoc}${questionComponent.image}` : URL.createObjectURL(questionComponent.image)}
+                                        alt=""/>
+                                    :
+                                    <div className={styles.words}>
+                                        <Words type={"view"} words={questionComponent.words}/>
+                                    </div>
                     }
                 </>
                 {
@@ -141,13 +156,26 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
                                             disabled={disabledExc}
                                             extraClassname={item.isAnswer !== undefined && !item.isAnswer ? styles.error : item.isAnswer ? styles.active : null}
                                             onChange={() => onSetValue(item.index)}
-                                            id={`question-${questionComponent.block_id}-variant-${item.index}`}
-                                            name={`question-${questionComponent.index}-block-${questionComponent.block_id}`}
+                                            id={`question-${questionComponent.id}-variant-${item.index}`}
+                                            name={`question-${questionComponent.index}-block-${questionComponent.id}`}
                                             checked={item.checked}
                                         >
                                             {
                                                 item.innerType === "text" ?
                                                     <p>{item.text}</p>
+                                                    : item.innerType === "math" ?
+                                                        <MathField
+                                                            style={{
+                                                                userSelect: "none",
+                                                                backgroundColor: "white",
+                                                                color:"black",
+                                                                border: "none",
+                                                                fontSize: "2.5rem",
+                                                            }}
+                                                            value={item.text}
+                                                            readOnly
+                                                        />
+
                                                     :
                                                     <img
                                                         src={typeof item.img === "string" ? `${BackUrlForDoc}${item.img}` : URL.createObjectURL(item.img)}
@@ -178,7 +206,7 @@ const ViewExc = ({onChangeCompletedComponent, questionComponent = {}, setAnswers
 }
 
 
-const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponent,extra}) => {
+const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponent, extra}) => {
 
     const [text, setText] = useState("")
     const [image, setImage] = useState("")
@@ -186,7 +214,7 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
     const [words, setWords] = useState([])
     const [variants, setVariants] = useState()
     const [clone, setClone] = useState([])
-    const [loading,setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
 
     const imageRef = useRef()
@@ -268,7 +296,7 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
     const {request} = useHttp()
 
     const onSubmit = () => {
-         const isEmpty = innerType === "text" ? text.length === 0 : innerType === "imageInText" ? !words.some(item => item.img) : !image
+        const isEmpty = innerType === "text" || innerType === "math" ? text.length === 0 : innerType === "imageInText" ? !words.some(item => item.img) : !image
 
         if (variants && !isEmpty) {
 
@@ -276,7 +304,7 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
                 text,
                 innerType,
                 words,
-                image: innerType !== "text" ? image : null,
+                image: innerType !== "text" && innerType !== "math" ? image : null,
                 variants,
                 clone
             }
@@ -305,17 +333,17 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
             let method = questionComponent?.id ? "PUT" : "POST"
 
             const newData = {
-                ...questionComponent,...data,...extra
+                ...questionComponent, ...data, ...extra
             }
 
             formData.append("info", JSON.stringify(newData))
 
 
             setLoading(true)
-            request(`${BackUrl}exercise/block/question/${questionComponent?.id}/`,method,formData,headersImg())
+            request(`${BackUrl}exercise/block/question/${questionComponent?.id}/`, method, formData, headersImg())
                 .then(res => {
                     setLoading(false)
-                    onSetCompletedComponent(data,res.id)
+                    onSetCompletedComponent(data, res.id)
                 })
             // onSetCompletedComponent(data)
         }
@@ -345,8 +373,6 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
 
     return (
         <div className={styles.createQuestion}>
-
-
             <div className={styles.subHeader}>
                 <i
                     onClick={onDelete}
@@ -358,6 +384,16 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
                     innerType === "text" || innerType === "imageInText" ?
                         <textarea disabled={innerType === "imageInText"} value={text}
                                   onChange={e => setText(e.target.value)} name="" id=""/>
+                        : null
+                }
+                {
+                    innerType === "math" ?
+                        <div className={styles.mathField}>
+                            <MathField
+                                value={text} onChange={setText} default-mode="math"
+                            />
+                        </div>
+
                         : null
                 }
                 {
@@ -378,6 +414,7 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
                 <select value={innerType} name="" id="" onChange={changeType}>
                     <option value="text">Text</option>
                     <option value="image">Image</option>
+                    <option value="math">Math</option>
                     {/*<option value="imageInText">Image in text</option>*/}
                 </select>
             </div>
@@ -395,6 +432,17 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
                         </>
                         : null
                 }
+                {
+                    innerType === "math" ?
+                        <>
+                            <div className={styles.createQuestion__text}>
+                                <MathField value={text} readOnly/>
+
+                            </div>
+                        </>
+                        : null
+                }
+
                 {/*{*/}
                 {/*    innerType === "imageInText" ?*/}
                 {/*        <>*/}
@@ -426,8 +474,8 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
                     variants={variants}
                     setVariants={setVariants}
                 />
-                <Button type={"submit"} disabled={loading} onClick={onSubmit} >
-                    Tasdiqlash {loading && <i className="fa-solid fa-spinner" />}
+                <Button type={"submit"} disabled={loading} onClick={onSubmit}>
+                    Tasdiqlash {loading && <i className="fa-solid fa-spinner"/>}
                 </Button>
             </div>
         </div>

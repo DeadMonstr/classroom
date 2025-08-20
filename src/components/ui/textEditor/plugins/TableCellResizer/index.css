@@ -8,5 +8,11 @@
  */
 
 .TableCellResizer__resizer {
+  right: -4px;
+  height: 100%;
+  width: 8px;
+  cursor: ew-resize;
+  z-index: 10;
+  top: 0;
   position: absolute;
 }

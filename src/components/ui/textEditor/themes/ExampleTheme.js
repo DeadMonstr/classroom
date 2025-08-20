@@ -22,6 +22,7 @@ const exampleTheme= {
     },
     image: "editor-dropImage",
     link: "editor-link",
+
     table: 'PlaygroundEditorTheme__table',
     tableAddColumns: 'PlaygroundEditorTheme__tableAddColumns',
     tableAddRows: 'PlaygroundEditorTheme__tableAddRows',
@@ -42,6 +43,7 @@ const exampleTheme= {
     tableScrollableWrapper: 'PlaygroundEditorTheme__tableScrollableWrapper',
     tableSelected: 'PlaygroundEditorTheme__tableSelected',
     tableSelection: 'PlaygroundEditorTheme__tableSelection',
+
     text: {
         bold: "editor-text-bold",
         italic: "editor-text-italic",
