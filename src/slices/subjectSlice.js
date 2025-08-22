@@ -14,6 +14,8 @@ const initialState = {
 	fetchSubjectDataStatus : "idle",
 	fetchLevelsDataStatus : "idle"
 }
+
+
 export const fetchSubjectData = createAsyncThunk(
 	'SubjectSlice/fetchSubjectData',
 	async (id) => {
@@ -26,7 +28,7 @@ export const fetchSubjectLevelsData = createAsyncThunk(
 	'SubjectSlice/fetchSubjectLevelsData',
 	async ({id,branchType}) => {
 		const {request} = useHttp();
-		return await request(`${BackUrl}level/info/${id}/`,"GET",null,headers())
+		return await request(`${BackUrl}level/info/${id}/${branchType}/`,"GET",null,headers())
 	}
 )
 const SubjectSlice = createSlice({

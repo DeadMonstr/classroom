@@ -19,6 +19,7 @@ import Snippet from "components/exercises/snippet";
 import TextEditor from "components/exercises/textEditor/TextEditor";
 import {useDispatch} from "react-redux";
 import {setArchiveId, setLessonData} from "slices/lessonSlice";
+import LoaderPage from "components/ui/loaderPage/LoaderPage";
 
 
 const Exercises =
@@ -99,9 +100,11 @@ const CreateExc = ({
 
     useEffect(() => {
 
-        if (subjectId && levelId) {
-            request(`${BackUrl}lesson/filter/exercise/${subjectId}/${levelId}`, "GET", null, headers())
+        if (subjectId && selectedType) {
+            setLoading(true)
+            request(`${BackUrl}lesson/filter/exercise/${subjectId}/${selectedType}`, "GET", null, headers())
                 .then(res => {
+                    setLoading(false)
                     setExercises(res.data.filter(item => {
                         if (!oldExercises.length > 0) return item
                         return oldExercises.every(oldExc => oldExc?.exc?.id !== item.id)
@@ -109,7 +112,7 @@ const CreateExc = ({
                 })
         }
 
-    }, [subjectId, levelId])
+    }, [subjectId, selectedType])
 
 
     useEffect(() => {
@@ -180,19 +183,24 @@ const CreateExc = ({
 
                 <div className={styles.container}>
                     {
-                        searchedUsers.map(item => {
-                            return (
-                                <div
-                                    className={classNames(styles.exc__item, {
-                                        [`${styles.active}`]: item.active
-                                    })}
-                                    key={item.id}
-                                    onClick={() => onActive(item.id)}
-                                >
-                                    {item.name}
-                                </div>
-                            )
-                        })
+                        loading ? <LoaderPage/> :
+                        <>
+                            {
+                                searchedUsers.map(item => {
+                                    return (
+                                        <div
+                                            className={classNames(styles.exc__item, {
+                                                [`${styles.active}`]: item.active
+                                            })}
+                                            key={item.id}
+                                            onClick={() => onActive(item.id)}
+                                        >
+                                            {item.name}
+                                        </div>
+                                    )
+                                })
+                            }
+                        </>
                     }
                 </div>
                 {
