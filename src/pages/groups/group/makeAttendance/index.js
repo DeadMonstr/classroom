@@ -105,7 +105,6 @@ const MakeAttendanceIndex = () => {
     }, [data])
 
 
-    console.log(users)
 
     const onCheck = async (type, id) => {
 

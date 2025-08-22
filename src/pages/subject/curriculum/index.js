@@ -17,6 +17,7 @@ import {changeLevel, fetchSubjectLevelsData, setDataSubject, setLevel} from "sli
 import Back from "components/ui/back";
 import RequireAuthChildren from "components/auth/requireAuthChildren";
 import Select from "components/ui/form/select";
+import {fetchSystemTypesData} from "slices/extraTypes";
 
 
 // [
@@ -53,6 +54,11 @@ const Curriculum = () => {
 
     const dispatch = useDispatch()
     const {request} = useHttp()
+
+    useEffect(() => {
+        dispatch(fetchSystemTypesData())
+    },[])
+
 
     const onSubmit = (data) => {
         setActiveModal(false)
@@ -200,12 +206,15 @@ const CreateEditLevel = ({onSubmit, changeData}) => {
 
     const [name, setName] = useState("")
     const [desc, setDesc] = useState("")
+    const [typeBranch,setTypeBranch] = useState(null)
+    const {systemTypes} = useSelector(state => state.extraTypes)
 
 
     useEffect(() => {
         if (changeData) {
             setName(changeData.name)
             setDesc(changeData.desc)
+            setTypeBranch(changeData.system_name)
         }
     }, [changeData])
 
@@ -216,6 +225,7 @@ const CreateEditLevel = ({onSubmit, changeData}) => {
         const data = {
             name,
             desc,
+            system_name: typeBranch
         }
 
         onSubmit(data)
@@ -224,8 +234,10 @@ const CreateEditLevel = ({onSubmit, changeData}) => {
 
     return (
         <div className={styles.createLevel}>
+
             <Input title={"Daraja nomi"} onChange={setName} value={name}/>
             <Textarea title={"Daraja haqida ma'lumot"} onChange={setDesc} value={desc}/>
+            <Select value={typeBranch} options={systemTypes} onChange={setTypeBranch} />
             <Button onClick={handleClick} type={"submit"}>Tasdiqlash</Button>
         </div>
     )
@@ -324,14 +336,16 @@ const Levels = () => {
     const [activeModal, setActiveModal] = useState(false)
     const [activeConfirm, setActiveConfirm] = useState(false)
     const [willChangeItemId, setWillChangeItemId] = useState("")
+    const [branchType, setBranchType] = useState(null)
+    const {systemTypes} = useSelector(state => state.extraTypes)
     const {id, levels} = useSelector(state => state.subject)
 
 
     useEffect(() => {
-        if (id ) {
-            dispatch(fetchSubjectLevelsData({id}))
+        if (id && branchType) {
+            dispatch(fetchSubjectLevelsData({id,branchType}))
         }
-    }, [id])
+    }, [id,branchType])
 
 
     const renderLevels = useCallback(() => {
@@ -388,6 +402,7 @@ const Levels = () => {
 
             <div className={styles.header}>
                 <h1 className={styles.title}>O’quv dasturi :</h1>
+                <Select  onChange={setBranchType} options={systemTypes} />
             </div>
 
             <div className={styles.container}>

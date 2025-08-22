@@ -74,13 +74,13 @@ const Exercises = () => {
             search,
             subject:subject,
             type:type,
-            level:level,
+            // level:level,
             page:currentPage,
             per_page: PageSize
         }
 
         dispatch(fetchExercisesData({data}))
-    }, 0.5,[search, level,type,subject,currentPage,PageSize])
+    }, 0.5,[search,type,subject,currentPage,PageSize])
 
 
     // const multiPropsFilter = useMemo(() => {
@@ -368,15 +368,15 @@ const AddModal = ({types, subjects}) => {
                 value={selectedSubject}
                 // all={true}
             />
-            <Select
-                disabled={!selectedSubject}
-                onChange={setSelectedLevel}
-                title={"Mashq darajasi"}
-                name={"level-exc"}
-                options={levels}
-                value={selectedLevel}
-                // all={true}
-            />
+            {/*<Select*/}
+            {/*    disabled={!selectedSubject}*/}
+            {/*    onChange={setSelectedLevel}*/}
+            {/*    title={"Mashq darajasi"}*/}
+            {/*    name={"level-exc"}*/}
+            {/*    options={levels}*/}
+            {/*    value={selectedLevel}*/}
+            {/*    // all={true}*/}
+            {/*/>*/}
 
             <Button type={"submit"} onClick={onSubmit}>Tasdiqlash</Button>
 

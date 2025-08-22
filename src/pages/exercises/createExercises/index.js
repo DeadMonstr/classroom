@@ -78,7 +78,7 @@ const CreateExercises = () => {
         if (
             oldData && Object.keys(oldData).length &&
             (title !== oldData?.name ||
-                selectedLevel !== oldData?.level?.id ||
+                // selectedLevel !== oldData?.level?.id ||
                 selectedType !== oldData?.type?.id ||
                 selectedSubject !== oldData?.subject?.id)
         ) {
@@ -169,7 +169,7 @@ const CreateExercises = () => {
             .then(res => {
                 setDataBaseComponents(res.data.blocks)
                 setSelectedSubject(res.data.subject.id)
-                setSelectedLevel(res.data.level.id)
+                // setSelectedLevel(res.data.level.id)
                 setSelectedType(res.data.type.id)
                 setTitle(res.data.name)
                 // setRandom(res.data.random)
@@ -536,7 +536,7 @@ const CreateExercises = () => {
         //     })
 
 
-        request(`${BackUrl}exercise/crud/${id}/`, "PUT", JSON.stringify({title, subject: selectedSubject, level: selectedLevel, type: selectedType}), headers())
+        request(`${BackUrl}exercise/crud/${id}/`, "PUT", JSON.stringify({title, subject: selectedSubject, type: selectedType}), headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -660,13 +660,13 @@ const CreateExercises = () => {
                                 options={subjects}
                                 value={selectedSubject}
                             /> : null}
-                            {levels.length > 0 ? <Select
-                                onChange={setSelectedLevel}
-                                title={"Mashq darajasi"}
-                                name={"level-exc"}
-                                options={levels}
-                                value={selectedLevel}
-                            /> : null}
+                            {/*{levels.length > 0 ? <Select*/}
+                            {/*    onChange={setSelectedLevel}*/}
+                            {/*    title={"Mashq darajasi"}*/}
+                            {/*    name={"level-exc"}*/}
+                            {/*    options={levels}*/}
+                            {/*    value={selectedLevel}*/}
+                            {/*/> : null}*/}
 
                         </div>
 
