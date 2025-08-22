@@ -53,10 +53,13 @@ const Exercises = () => {
     }, [])
 
 
-
+    console.log(subject , "subject")
     useEffect(() => {
         if (subject && subject !== "all") {
-            dispatch(fetchSubjectLevelsData(subject))
+
+
+
+            dispatch(fetchSubjectLevelsData({id:subject}))
         }
     }, [subject])
 
@@ -288,20 +291,25 @@ const AddModal = ({types, subjects}) => {
     const [selectedLevel, setSelectedLevel] = useState(null)
     const [name,setName] = useState("unnamed")
 
+
+
     const [levels, setLevels] = useState([])
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {request} = useHttp()
 
+
+    console.log(selectedSubject ,"selectedSubject")
     useEffect(() => {
-        if (selectedSubject && selectedSubject !== "all") {
-            request(`${BackUrl}level/info/${selectedSubject}`,"GET",null,headers())
+        if (selectedSubject && selectedSubject !== "all" ) {
+            request(`${BackUrl}level/info/${selectedSubject}/`,"GET",null,headers())
                 .then(res => {
                     setLevels(res.data)
                 })
         }
     }, [selectedSubject])
+
 
 
 
@@ -334,6 +342,7 @@ const AddModal = ({types, subjects}) => {
 
         await navigate(`/createExercises/${exc.data.id}`)
     }
+
 
 
 

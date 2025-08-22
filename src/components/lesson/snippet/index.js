@@ -49,7 +49,7 @@ const SnippetCreate = ({onSetCompletedComponent,component,onDeleteComponent,type
 
 		let method = component?.id ? "PUT" : "POST"
 
-		request(`${BackUrl}lesson/block/code/${component.id || ""}/` ,method,JSON.stringify({...component,text,innerType,...extra}),headers())
+		request(`${BackUrl}lesson/block/code/${component?.id ? component.id + "/" : ""}` ,method,JSON.stringify({...component,text,innerType,...extra}),headers())
 			.then(res => {
 				onSetCompletedComponent({text,innerType},res.id)
 			})

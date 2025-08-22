@@ -340,7 +340,7 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
 
 
             setLoading(true)
-            request(`${BackUrl}exercise/block/question/${questionComponent?.id}/`, method, formData, headersImg())
+            request(`${BackUrl}exercise/block/question/${questionComponent?.id ? questionComponent?.id + "/" : ""}`, method, formData, headersImg())
                 .then(res => {
                     setLoading(false)
                     onSetCompletedComponent(data, res.id)
@@ -350,9 +350,11 @@ const CreateExc = ({questionComponent, onSetCompletedComponent, onDeleteComponen
     }
 
 
+    console.log(questionComponent , "questionComponent")
+
     const onDelete = () => {
         if (questionComponent?.id) {
-            request(`${BackUrl}exercise/block/question/${questionComponent?.id}/`, "DELETE", null, headers())
+            request(`${BackUrl}exercise/block/question/${ questionComponent?.id}/`, "DELETE", null, headers())
                 .then(res => {
                     onDeleteComponent(questionComponent.id)
                 })

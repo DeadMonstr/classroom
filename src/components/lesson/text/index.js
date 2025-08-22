@@ -34,11 +34,13 @@ const TextEditorCreate = ({textComponent,onSetCompletedComponent,onDeleteCompone
 
     const {request} = useHttp()
 
+    console.log(textComponent , "textComponent")
+
     const onAdd = (e) => {
 
         let method = textComponent?.id ? "PUT" : "POST"
 
-        request(`${BackUrl}lesson/block/text/${textComponent.id || ""}/`,method,JSON.stringify({...textComponent,...e,...extra}),headers())
+        request(`${BackUrl}lesson/block/text/${textComponent?.id ? textComponent.id + "/" : ""}`,method,JSON.stringify({...textComponent,...e,...extra}),headers())
             .then(res => {
                 onSetCompletedComponent(e,res.id)
             })

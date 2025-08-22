@@ -25,6 +25,8 @@ import lesson, {fetchLessonData, setLessonData} from "slices/lessonSlice";
 import Loader from "components/ui/loader/Loader";
 import {useAuth} from "hooks/useAuth";
 import user from "slices/userSlice";
+import alert from "components/ui/alert";
+import {setAlertOptions} from "slices/layoutSlice";
 
 
 const Lesson = ({isNavigate}) => {
@@ -188,6 +190,7 @@ const Lesson = ({isNavigate}) => {
     }, [studentLessonId])
 
 
+    console.log(studentLessonId , "studentLessonId")
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -196,8 +199,17 @@ const Lesson = ({isNavigate}) => {
             lesson_id: studentLessonId,
             comment, ball: score.activeBall
         }
-        request(`${BackUrl}add_comment`, "POST", JSON.stringify(res), headers())
-            .then(res => console.log(res))
+        request(`${BackUrl}student/add_comment`, "POST", JSON.stringify(res), headers())
+            .then(res => {
+
+                const alert = {
+                    active: true,
+                    message: res.message,
+                    type: "success"
+                }
+                setModal(false)
+                dispatch(setAlertOptions({alert}))
+            })
             .catch(err => console.log(err))
     }
 

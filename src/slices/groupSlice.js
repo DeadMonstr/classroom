@@ -7,6 +7,7 @@ const initialState = {
 	errors: [],
 	subjectLevels: [],
 	curriculum: [],
+	subjects: [],
 	fetchGroupDataStatus: "idle"
 }
 
@@ -40,6 +41,7 @@ const GroupSlice = createSlice({
 			.addCase(fetchGroup.fulfilled,(state, action) => {
 				state.fetchGroupDataStatus = 'success';
 				state.data = action.payload.data
+				state.subjects = action.payload.data.subjects
 				state.subjectLevels = action.payload.subject_levels
 				state.curriculum = action.payload.curriculum
 				state.errors = action.payload.errors

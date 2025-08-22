@@ -28,12 +28,16 @@ const lev = [
 const AccessLevel = () => {
 
 	const [selectedLevel,setSelectedLevel] = useState()
+	const [selectedSubject,setSelectedSubject] = useState()
 	const [users,setUsers]= useState([])
+	const [selectedSubjectLevel,setSubjectLevel]= useState([])
 
 
 
 	const {subjectLevels,data} = useSelector(state => state.group)
 
+
+	const system_name = localStorage.getItem("system_type")
 
 	// const users = [
 	// 	{
@@ -67,15 +71,25 @@ const AccessLevel = () => {
 	const {request} = useHttp()
 	useEffect(() => {
 		if (data?.id && selectedLevel) {
-			request(`${BackUrl}group/check_level/${data.id}/${selectedLevel}`)
+			request(`${BackUrl}group/check_level/${data.id}/${selectedLevel}` , "GET" , null ,  headers() )
 				.then(res => {
 					console.log(res,"students")
 					setUsers(res.students)
 				})
 		}
 	},[data, selectedLevel])
-	
-	
+
+	useEffect(() => {
+		if (data?.id && selectedSubject) {
+			request(`${BackUrl}level/info/${selectedSubject}/` , "GET" , null ,  headers() )
+				.then(res => {
+					console.log(res,"students")
+					setSubjectLevel(res.data)
+				})
+		}
+	},[data, selectedSubject])
+
+
 	const onChangeChecked = (id) => {
 		setUsers(users => users.map(item => {
 			if (item.id === id) {
@@ -91,7 +105,7 @@ const AccessLevel = () => {
 	}
 
 	const renderUsers = () => {
-		return users.map((item,index) => {
+		return users?.map((item,index) => {
 			return (
 				<tr>
 					<td>{index+1}</td>
@@ -128,9 +142,11 @@ const AccessLevel = () => {
 			<Back/>
 			<div className={styles.header}>
 				<h1>Daraja ruhsat</h1>
+				<div style={{display: "flex"}}>
+					{system_name === "turon" && <Select title={"darajalar"} options={data?.subjects} onChange={setSelectedSubject}/>}
 
-				<Select title={"darajalar"} options={subjectLevels} onChange={setSelectedLevel}/>
-
+					{system_name === "turon" ? selectedSubjectLevel.length ?  <Select title={"darajalar"} options={selectedSubjectLevel} onChange={setSelectedLevel}/> : "" :<Select title={"darajalar"} options={subjectLevels} onChange={setSelectedLevel}/>}
+				</div>
 			</div>
 			<div className={styles.container}>
 				<Table>

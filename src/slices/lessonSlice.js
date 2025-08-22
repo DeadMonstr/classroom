@@ -106,7 +106,7 @@ const LessonSlice = createSlice({
                 state.next = action.payload.next
                 state.prev = action.payload.prev
                 state.archiveId = action.payload.archive_id
-                state.studentLessonId = action.payload.lesson_id
+                state.studentLessonId = action.payload.data.id
                 state.lesson = action.payload.data
                 state.components = action.payload.data.lesson_blocks?.map((item, i) => {
                     const index = i + 1

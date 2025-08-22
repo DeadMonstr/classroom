@@ -60,6 +60,11 @@ const CreateExercises = () => {
     const [random, setRandom] = useState(false)
 
 
+    useEffect(() => {
+        if (levels)
+            setSelectedLevel(levels[0]?.id)
+    } , [levels])
+
     const [title, setTitle] = useState(null)
     const [changeLessonsSort, setChangeLessonsSort] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -190,7 +195,7 @@ const CreateExercises = () => {
     useEffect(() => {
 
         if (selectedSubject) {
-            request(`${BackUrl}level/info/${selectedSubject}`, "GET", null, headers())
+            request(`${BackUrl}level/info/${selectedSubject}/`, "GET", null, headers())
                 .then(res => {
                     setLevels(res.data)
                     // setSelectedLevel(null)
@@ -615,6 +620,7 @@ const CreateExercises = () => {
     if (loading) return <Loader/>
 
 
+    console.log(selectedLevel , levels , "selectedLevel")
     return (<div className={styles.createExc}>
         <main>
             {/*<QuillEditor*/}

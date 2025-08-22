@@ -45,13 +45,12 @@ const Index = () => {
     const {selectedLevel, selectedLesson, selectedChapter, typeData, data} = useSelector(state => state.finishedLessons)
 
 
-    const {subjectLevels} = useSelector(state => state.group)
+    const {subjectLevels , subjects } = useSelector(state => state.group)
     const {chapters} = useSelector(state => state.chapters)
 
     const [lessons, setLessons] = useState([])
-
-
     const dispatch = useDispatch()
+    const system_name = localStorage.getItem("system_type")
     const onChange = (type, id) => {
         dispatch(onChangeSelectOption({type, id}))
     }
@@ -131,6 +130,20 @@ const Index = () => {
 
     }, [data, typeData])
 
+    const [selectedSubject ,setSelectedSubject] = useState(null)
+    const [selectedSubjectLevel ,setSelectedSubjectLevel] = useState(null)
+    const [selectedLevelSubject ,setSelectedLevelSubject] = useState(null)
+
+    const {request} = useHttp()
+    useEffect(() => {
+        if (selectedSubject){
+            request(`${BackUrl}level/info/${selectedSubject}/`,"GET",null,headers())
+                .then(res => {
+                    console.log(res , "res")
+                    setSelectedSubjectLevel(res.data)
+            })
+        }
+    } , [subjects , selectedSubject])
 
     return (
         <div className={cls.lessonsDegree}>
@@ -142,6 +155,25 @@ const Index = () => {
 
             <div className={cls.header}>
                 <div>
+                {/*    {system_name === "turon" ? <>*/}
+                {/*        <Select*/}
+                {/*            value={selectedSubject}*/}
+                {/*            options={subjects}*/}
+                {/*            onChange={setSelectedSubject}*/}
+                {/*            title={"Fan"}*/}
+                {/*        /><Select*/}
+                {/*        value={selectedLevel}*/}
+                {/*        options={selectedSubjectLevel}*/}
+                {/*        onChange={setSelectedLevelSubject}*/}
+                {/*        title={"Daraja"}*/}
+                {/*    />*/}
+                {/*    </> : <Select*/}
+                {/*        value={selectedLevel}*/}
+                {/*    options={subjectLevels}*/}
+                {/*    onChange={(e) => onChange("level", e)}*/}
+                {/*    title={"Daraja"}*/}
+                {/*/>}*/}
+
                     <Select
                         value={selectedLevel}
                         options={subjectLevels}

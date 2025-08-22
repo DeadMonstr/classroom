@@ -97,6 +97,7 @@ const CreateExc = ({
 
     const {request} = useHttp()
 
+    console.log(levelId , "levelId")
     useEffect(() => {
 
         if (subjectId && levelId) {

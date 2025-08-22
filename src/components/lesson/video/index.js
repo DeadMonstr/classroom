@@ -50,7 +50,7 @@ const CreateVideo = ({component,onSetCompletedComponent,onDeleteComponent,extra}
 		let method = component?.id ? "PUT" : "POST"
 
 
-		request(`${BackUrl}lesson/block/video/${component.id || ""}/`,method,JSON.stringify({ ...component,video_link: videoLink,...extra}),headers())
+		request(`${BackUrl}lesson/block/video/${component?.id ? component.id + "/" : ""}`,method,JSON.stringify({ ...component,video_link: videoLink,...extra}),headers())
 			.then(res => {
 				onSetCompletedComponent(data,res.id)
 			})

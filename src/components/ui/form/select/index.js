@@ -32,7 +32,7 @@ const Select = React.memo((
 
 
     useEffect(() => {
-        if (options.length > 0) {
+        if (options?.length > 0) {
             let allObj = []
 
 
