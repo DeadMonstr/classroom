@@ -21,6 +21,7 @@ const Select = React.memo((
         style,
         extraClassName,
         all,
+        optional,
         multiNames = [],
         keyValue,
         disabled
@@ -50,6 +51,20 @@ const Select = React.memo((
                 }]
             }
 
+            if (optional) {
+
+                if (value) {
+                    onChange(value)
+                } else {
+                    onChange("no")
+                }
+                allObj = [{
+                    name: "Not selected",
+                    value: "no",
+                    selected: 0,
+                }]
+            }
+
 
             if (typeof options[0] !== "object") {
                 setCurrentOptions(() => [...allObj ,...options.map((item, index) => {
@@ -59,19 +74,19 @@ const Select = React.memo((
                     return {
                         name: item,
                         value: item,
-                        selected: index === 0 && !all,
+                        selected: index === 0 && !all && !optional,
                     }
                 })])
             } else {
                 setCurrentOptions(() => [...allObj,...options.map((item, index) => {
-                    if (index === 0 && !value && !all) {
+                    if (index === 0 && !value && !all && !optional) {
                         onChange(item[keyValue] || item.value || item.id || item.name || item)
                     }
                     return {
                         ...item,
                         name: item.name || item.value || item,
                         value: item[keyValue] || item.value || item.id || item.name || item,
-                        selected: index === 0 && !all,
+                        selected: index === 0 && !all && !optional,
                     }
                 })])
             }

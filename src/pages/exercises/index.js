@@ -24,6 +24,7 @@ import useDebounce from "hooks/useDebounce";
 import Modal from "components/ui/modal";
 import Button from "components/ui/button";
 import Loader from "components/ui/loader/Loader";
+import {fetchSystemTypesData} from "slices/extraTypes";
 
 
 const Exercises = () => {
@@ -49,7 +50,7 @@ const Exercises = () => {
 
     useEffect(() => {
         dispatch(fetchExercisesTypeData())
-        dispatch(fetchSubjectsData())
+        dispatch(fetchSystemTypesData())
     }, [])
 
 

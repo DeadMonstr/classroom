@@ -29,8 +29,6 @@ const Layout = () => {
 		}
 	},[dispatch, isCheckedPassword])
 	return (
-
-
 		<>
 			{/*<Alert/>*/}
 			{/*<Header/>*/}
@@ -54,9 +52,6 @@ const Layout = () => {
 				</main>
 			</AuthProvider>
 		</>
-
-
-
 	);
 };
 

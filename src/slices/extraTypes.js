@@ -4,6 +4,7 @@ import {useHttp} from "hooks/http.hook";
 
 const initialState = {
     systemTypes: [],
+
     fetchBooksStatus: "idle"
 }
 export const fetchSystemTypesData = createAsyncThunk(

@@ -12,6 +12,7 @@ import finishedLessons from "slices/finishedLessonsSlice";
 import books from "slices/booksSlice";
 import chat from "slices/chatSlice"
 import presentation from "slices/presentationSlice";
+import presentations from "slices/presentationsSlice";
 import pisaTest from "slices/pisaTest";
 import parentSlice from "slices/parentSlice";
 import pisaTestResults from "slices/pisaTestResults";
@@ -41,6 +42,7 @@ const store = configureStore({
         finishedLessons,
         books,
         presentation,
+        presentations,
         chat,
         pisaTest,
         parentSlice,
