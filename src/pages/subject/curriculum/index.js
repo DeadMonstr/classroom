@@ -18,6 +18,7 @@ import Back from "components/ui/back";
 import RequireAuthChildren from "components/auth/requireAuthChildren";
 import Select from "components/ui/form/select";
 import {fetchSystemTypesData} from "slices/extraTypes";
+import {useAuth} from "hooks/useAuth";
 
 
 // [
@@ -49,7 +50,7 @@ const Curriculum = () => {
     const [activeConfirm, setActiveConfirm] = useState(false)
     const [activeModalType, setActiveModalType] = useState("")
 
-    const {name, desc, img, id, canDelete,finished_percentage} = useSelector(state => state.subject)
+    const {name, desc, img, id, canDelete, finished_percentage} = useSelector(state => state.subject)
 
 
     const dispatch = useDispatch()
@@ -57,13 +58,14 @@ const Curriculum = () => {
 
     useEffect(() => {
         dispatch(fetchSystemTypesData())
-    },[])
+    }, [])
 
 
     const onSubmit = (data) => {
         setActiveModal(false)
+        console.log(data, "data")
 
-        request(`${BackUrl}level/info/${id}/`, "POST", JSON.stringify(data), headers())
+        request(`${BackUrl}level/info/${id}/${data.system_name}/`, "POST", JSON.stringify(data), headers())
             .then(res => {
                 const alert = {
                     active: true,
@@ -76,8 +78,6 @@ const Curriculum = () => {
     }
 
     const navigate = useNavigate()
-
-
 
 
     const onSubmitConfirm = () => {
@@ -102,7 +102,6 @@ const Curriculum = () => {
         }
 
     }
-
 
 
     return (
@@ -206,7 +205,7 @@ const CreateEditLevel = ({onSubmit, changeData}) => {
 
     const [name, setName] = useState("")
     const [desc, setDesc] = useState("")
-    const [typeBranch,setTypeBranch] = useState(null)
+    const [typeBranch, setTypeBranch] = useState(null)
     const {systemTypes} = useSelector(state => state.extraTypes)
 
 
@@ -217,8 +216,6 @@ const CreateEditLevel = ({onSubmit, changeData}) => {
             setTypeBranch(changeData.system_name)
         }
     }, [changeData])
-
-
 
 
     const handleClick = () => {
@@ -237,7 +234,7 @@ const CreateEditLevel = ({onSubmit, changeData}) => {
 
             <Input title={"Daraja nomi"} onChange={setName} value={name}/>
             <Textarea title={"Daraja haqida ma'lumot"} onChange={setDesc} value={desc}/>
-            <Select value={typeBranch} options={systemTypes} onChange={setTypeBranch} />
+            <Select value={typeBranch} options={systemTypes} onChange={setTypeBranch}/>
             <Button onClick={handleClick} type={"submit"}>Tasdiqlash</Button>
         </div>
     )
@@ -340,12 +337,20 @@ const Levels = () => {
     const {systemTypes} = useSelector(state => state.extraTypes)
     const {id, levels} = useSelector(state => state.subject)
 
+    const system_name = localStorage.getItem("system_type")
 
     useEffect(() => {
-        if (id && branchType) {
-            dispatch(fetchSubjectLevelsData({id,branchType}))
+        if (systemTypes) {
+            setBranchType(systemTypes[0]?.id)
         }
-    }, [id,branchType])
+    }, [])
+
+    const {role} = useAuth()
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchSubjectLevelsData({id, branchType: role === ROLES.Student ? system_name : branchType}))
+        }
+    }, [id, branchType])
 
 
     const renderLevels = useCallback(() => {
@@ -397,12 +402,14 @@ const Levels = () => {
             })
     }
 
+
     return (
         <div className={styles.levels}>
 
             <div className={styles.header}>
                 <h1 className={styles.title}>O’quv dasturi :</h1>
-                <Select  onChange={setBranchType} options={systemTypes} />
+                {role === ROLES.Methodist || role === ROLES.Teacher ?
+                    <Select onChange={setBranchType} options={systemTypes}/> : ""}
             </div>
 
             <div className={styles.container}>
@@ -515,7 +522,7 @@ const Level = ({item, isNumeric = true, setActiveModal, setActiveConfirm, setWil
 
                 <div className={styles.subHeader}>
                     <div>{item.name}</div>
-                    <div>{item?.finished_percentage ||  0}%</div>
+                    <div>{item?.finished_percentage || 0}%</div>
                 </div>
                 <PercentageTrackBar height={3} prc={item?.finished_percentage}/>
                 <p>
