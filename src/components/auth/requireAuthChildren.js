@@ -12,7 +12,7 @@ const RequireAuthChildren = ({allowedRules,children , allowedSystem}) => {
 
 
     return (
-        allowedRules.includes(role) && allowedSystem === system
+        allowedRules.includes(role) || allowedSystem === system
             ? children
             : null
     );

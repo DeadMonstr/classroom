@@ -34,8 +34,6 @@ const Home = () => {
 
     return (
         <div className={styles.home}>
-
-
             <div className={styles.home__wrapper}>
                 <RequireAuthChildren allowedRules={[ROLES.Methodist,ROLES.Teacher,ROLES.Student]}>
                     <Subjects />
@@ -242,7 +240,7 @@ const CreateSubject = ({onSubmit}) => {
 
         const token = sessionStorage.getItem("token")
 
-        request(`${BackUrl}info/subjects`,"POST",formData,{
+        request(`${BackUrl}subject/crud/`,"POST",formData,{
             "Authorization" : "Bearer " + token,
         })
             .then( res => {
