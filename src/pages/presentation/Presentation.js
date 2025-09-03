@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 
 import cls from "./Presentation.module.sass"
 import Button from "components/ui/button";
@@ -8,7 +8,7 @@ import classNames from "classnames";
 import TypesPreview from "components/presentation/ui/typesPreview/TypesPreview";
 import Modal from "components/ui/modal";
 import {contentTypes} from "components/presentation/types";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Tooltip from "components/ui/tooltip/Tooltip";
 
 
@@ -20,6 +20,15 @@ import Sidebar from "components/presentation/sidebar/Sidebar";
 
 import {PresentationSidebarContext} from "helpers/contexts";
 import Popup from "components/ui/popup/Popup";
+import {
+    fetchPresentationsSlides, onAddPresentationSlide, onAddSlide as onAddSlideSlice,
+    onDeleteSlide
+} from "slices/presentationSlice";
+import {useParams} from "react-router";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {useHttp} from "hooks/http.hook";
+import Confirm from "components/ui/confirm";
+import {BackUrl, headers} from "constants/global";
 
 
 
@@ -28,7 +37,28 @@ const Presentation = () => {
     const [addNewSlide,setAddNewSlide] = useState(false)
     const [modalType,setModalType] = useState("add")
 
-    const {slides} = useSelector(state => state.presentation)
+    const {slides,currentSlide,fetchPresentationSlideStatus} = useSelector(state => state.presentation)
+    const {id} = useParams()
+
+    const dispatch = useDispatch()
+
+    const navigate = useNavigate()
+    useEffect(() => {
+        dispatch(fetchPresentationsSlides(id))
+    },[])
+
+
+    useEffect(() => {
+        if (!slides.length && fetchPresentationSlideStatus === "success") {
+            dispatch(onAddPresentationSlide({slideType: "heading",slide_id:id}))
+                .then(res => {
+                    dispatch(onAddSlideSlice(res.payload))
+                    navigate(`?slide_item=${res.payload.id}`)
+                })
+        }
+    },[slides.length,fetchPresentationSlideStatus])
+
+
 
 
     const onChangeSlideType = () => {
@@ -43,18 +73,6 @@ const Presentation = () => {
     }
 
 
-
-    const renderSlides = useCallback(() => {
-        return slides.map((item,index) => {
-
-            return (
-                <Slide item={item} index={index}/>
-            )
-        })
-    },[slides])
-
-
-
     return (
         <div className={cls.presentation}>
 
@@ -62,7 +80,6 @@ const Presentation = () => {
                 <div className={cls.header__item}>
                     <div className={cls.back}>
                         <i className="fa-solid fa-arrow-left"></i>
-
                     </div>
 
                     <div className={cls.title}>
@@ -97,9 +114,7 @@ const Presentation = () => {
                         <span>New slide</span>
                     </Button>
 
-                    <div className={cls.tabs}>
-                        {renderSlides()}
-                    </div>
+                    <Slides slides={slides}/>
                 </div>
 
                 <div className={cls.contentArea}>
@@ -125,18 +140,87 @@ const Presentation = () => {
                     active={addNewSlide}
                     setActive={setAddNewSlide}
                     type={modalType}
+
                 />
             </Modal>
+
+
 
 
         </div>
     );
 };
 
-
-const Slide = ({item,index}) => {
-    const Icon = contentTypes.filter(type => type.name === item.name)[0].icon
+const Slides = ({slides}) => {
+    const {request} = useHttp()
+    const [active,setActive] = useState(false)
+    const [changedItem,setChangedItem] = useState()
     const {currentSlide} = useSelector(state => state.presentation)
+
+
+    const onDeleteSlideItem = (id) => {
+        setActive(true)
+        setChangedItem(id)
+    }
+
+    const navigate = useNavigate()
+
+    const dispatch = useDispatch()
+
+    const onDeleteSubmit = () => {
+        request(`${BackUrl}v1/presentation/slide_item/delete/${changedItem}`, "DELETE", null, headers())
+            .then(res  => {
+                setActive(false)
+
+                if (changedItem === currentSlide.id) {
+                    const index = slides.findIndex(slide => slide.id === changedItem)
+                    navigate(`?slide_item=${slides[index - 1].id}`)
+                }
+
+                dispatch(onDeleteSlide(changedItem))
+            })
+
+    }
+
+
+
+    const renderSlides = useCallback(() => {
+        return slides.map((item,index) => {
+
+            return (
+                <Slide
+                    onDel={onDeleteSlideItem}
+                    item={item}
+                    index={index}
+                />
+            )
+        })
+    },[slides])
+
+    return (
+        <>
+            <div className={cls.tabs}>
+                {renderSlides()}
+            </div>
+            <Confirm
+                onSubmit={onDeleteSubmit}
+                active={active}
+                setActive={setActive}
+            >
+                Slide o'chirishni hohlaysizmi ?
+            </Confirm>
+
+        </>
+    )
+}
+
+
+const Slide = ({item,index,onDel}) => {
+    const Icon = contentTypes?.filter(type => type?.name === item?.name)[0]?.icon
+    const {currentSlide} = useSelector(state => state.presentation)
+
+    const [searchParams] = useSearchParams();
+    const itemId = searchParams.get("slide_item");
 
 
     const popupOptions = [
@@ -150,8 +234,8 @@ const Slide = ({item,index}) => {
             )
         },
         {
-            // onClick: onDel,
-            children: (
+            onClick: () => onDel(item.id),
+            children:  (
                 <>
                     <span><i style={{color: 'red'}} className="fa-solid fa-trash"></i></span>
                     <span style={{textWrap: "nowrap"}}>Delete slide</span>
@@ -160,10 +244,19 @@ const Slide = ({item,index}) => {
         }
     ]
 
+
+    const navigate = useNavigate()
+
+    const handleClick = (id) => {
+        navigate(`?slide_item=${id}`);
+    };
+
+
+
     return (
         <div
             className={classNames(cls.tabs__item, {
-                [cls.active]: currentSlide.id === item.id
+                [cls.active]: +itemId === item.id
             })}
         >
             <div className={cls.controller}>
@@ -177,7 +270,10 @@ const Slide = ({item,index}) => {
             </div>
 
 
-            <div className={cls.info}>
+            <div
+                className={cls.info}
+                onClick={() => handleClick(item.id)}
+            >
                 {Icon ? <Icon/> : ''}
 
 

@@ -29,7 +29,6 @@ export const MultipleChoiceOptionsSlice = {
 export const multipleChoiceType = {
     name: "multiple_choice",
     title: "Multiple Choice",
-
     icon: Icon,
     sidebar: MultipleChoiceSidebar,
     content: MultipleChoiceContent,
