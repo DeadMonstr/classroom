@@ -1,5 +1,8 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {activeTypesSideBar} from "components/presentation/types";
+import {useHttp} from "hooks/http.hook";
+import {BackUrl, headers} from "constants/global";
+import {useNavigate} from "react-router-dom";
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
@@ -12,13 +15,14 @@ const initialState = {
 
     currentSlide: {
         id: 12,
-        heading: '123123',
-        subheading: "",
-        slideType: "open_ended",
-        image: 'https://asset.gecdesigns.com/img/wallpapers/beautiful-fantasy-wallpaper-ultra-hd-wallpaper-4k-sr10012418-1706506236698-cover.webp',
+        heading: 'Hello',
+        subheading: "hello",
+        slideType: "heading",
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6urTxCDsHhzRjASB99-MkY6hcvN-Ybc9yWA&s',
         video: "",
         imageType: 'center',
         label: "label",
+
         activeType: "layout",
         activeSidebar: "",
 
@@ -49,38 +53,71 @@ const initialState = {
     },
 
     slides: [
-        {
-            id: 12,
-            name: "heading",
-            heading: 'Title heading',
-        },
-        {
-            id: 13,
-            name: "paragraph",
-            heading: 'Title paragraph',
-        },
-        {
-            id: 14,
-            name: "number",
-            heading: 'Title number',
-        },
-        {
-            id: 15,
-            name: "quote",
-            heading: 'Title quote',
-        },
-        {
-            id: 16,
-            name: "image",
-            heading: 'Title image',
-        },
-        {
-            id: 17,
-            name: "video",
-            heading: 'Title video',
-        },
-    ]
+        // {
+        //     id: 12,
+        //     name: "heading",
+        //     heading: 'Title heading',
+        // },
+        // {
+        //     id: 13,
+        //     name: "paragraph",
+        //     heading: 'Title paragraph',
+        // },
+        // {
+        //     id: 14,
+        //     name: "number",
+        //     heading: 'Title number',
+        // },
+        // {
+        //     id: 15,
+        //     name: "quote",
+        //     heading: 'Title quote',
+        // },
+        // {
+        //     id: 16,
+        //     name: "image",
+        //     heading: 'Title image',
+        // },
+         ,
+    ],
+    fetchPresentationStatus:"idle",
+    fetchPresentationSlideStatus:"idle",
 }
+
+
+
+export const fetchPresentationsSlides= createAsyncThunk(
+    'PresentationSlice/fetchPresentationsSlides',
+    async (id) => {
+        const {request} = useHttp();
+        return await request(`${BackUrl}v1/presentation/slide_item/list/?slide_id=${id}`,"GET",null,headers())
+    }
+)
+
+export const fetchPresentationCurrentSlide = createAsyncThunk(
+    'PresentationSlice/fetchPresentation',
+    async (id) => {
+        const {request} = useHttp();
+        return await request(`${BackUrl}v1/presentation/slide_item/get/${id}/`,"GET",null,headers())
+    }
+)
+
+export const onAddPresentationSlide = createAsyncThunk(
+    'PresentationSlice/onAddPresentation',
+    async (data) => {
+        const {request} = useHttp();
+        return await request(`${BackUrl}v1/presentation/slide_item/create`,"POST",JSON.stringify(data),headers())
+    }
+)
+export const onEditPresentationSlide = createAsyncThunk(
+    'PresentationSlice/onAddPresentation',
+    async (data) => {
+        const {request} = useHttp();
+        return await request(`${BackUrl}v1/presentation/slide_item/update/${data.slide_id}/`,"PUT",JSON.stringify(data),headers())
+    }
+)
+
+
 
 const PresentationSlice = createSlice({
     name: "PresentationSlice",
@@ -230,6 +267,24 @@ const PresentationSlice = createSlice({
                 state.currentSlide.exercise[keys[i]] = action.payload[keys[i]]
             }
         },
+        onAddSlide: (state, action) => {
+            state.slides = [...state.slides,{
+                id: action.payload.id,
+                name: action.payload.slide_type
+            }]
+        },
+        onChangeSlideType: (state, action) => {
+            state.currentSlide.slideType = action.payload
+        },
+
+        onDeleteSlide: (state, action) => {
+
+
+            state.slides = state.slides.filter(slide => slide.id !== action.payload)
+
+
+
+        },
 
         // onAddExerciseVariantsSlide: (state, action) => {
         //     state.currentSlide.exercise.variants =
@@ -241,6 +296,31 @@ const PresentationSlice = createSlice({
         //     state.currentSlide.exercise.variants =
         //         [...state.currentSlide.exercise.variants,action.payload]
         // },
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(fetchPresentationCurrentSlide.pending,state => {state.fetchPresentationStatus = 'loading'} )
+            .addCase(fetchPresentationCurrentSlide.fulfilled,(state, action) => {
+                state.fetchPresentationStatus = 'success';
+                state.currentSlide = {
+                    ...state.currentSlide,
+                    id: action.payload.id,
+                    slideType: action.payload.slide_type
+                }
+            })
+            .addCase(fetchPresentationCurrentSlide.rejected,state => {state.fetchPresentationStatus = 'error'})
+
+            .addCase(fetchPresentationsSlides.pending,state => {state.fetchPresentationSlideStatus = 'loading'} )
+            .addCase(fetchPresentationsSlides.fulfilled,(state, action) => {
+                state.fetchPresentationSlideStatus = 'success';
+                state.slides = action.payload.map((slide) => {
+                    return {
+                        id: slide.id,
+                        name: slide.slide_type
+                    }
+                })
+            })
+            .addCase(fetchPresentationsSlides.rejected,state => {state.fetchPresentationSlideStatus = 'error'})
 
     }
 })
@@ -268,5 +348,8 @@ export const {
     toggleSidebar,
     setSlideType,
     setExerciseOptionsSlide,
-    setExerciseOptionSlide
+    setExerciseOptionSlide,
+    onAddSlide,
+    onDeleteSlide,
+    onChangeSlideType
 } = actions

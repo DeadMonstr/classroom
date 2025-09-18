@@ -10,6 +10,9 @@ import DesignSidebar from "components/presentation/sidebar/designSidebar/designS
 import ResponsiveTransformBlock from "helpers/responsiveTransformBlock";
 
 import MathInput from "components/ui/mathField";
+import {fetchPresentation, fetchPresentationCurrentSlide} from "slices/presentationSlice";
+import {useSearchParams} from "react-router-dom";
+import Loader from "components/ui/loader/Loader";
 
 
 const layoutSizeTypes = [
@@ -38,7 +41,17 @@ const layoutSizeTypes = [
 
 const Content = () => {
 
-    const {currentSlide} = useSelector(state => state.presentation)
+    const {currentSlide, fetchPresentationStatus} = useSelector(state => state.presentation)
+
+
+    const [searchParams] = useSearchParams();
+    const itemId = searchParams.get("slide_item");
+    const dispatch = useDispatch()
+
+    // useEffect(() => {
+    //     dispatch(fetchPresentationCurrentSlide(itemId))
+    // }, [itemId])
+
 
     const [layout, setLayout] = useState("")
     const [layoutSizeWidth, setLayoutSizeWidth] = useState("")
@@ -86,14 +99,11 @@ const Content = () => {
     }, [currentSlide.design.backgroundColor])
 
 
-
-
     const renderContent = () => {
         return contentTypes.map(item => {
             if (item.name === currentSlide.slideType) {
                 const Content = item.content
-
-                return Content ? <Content /> : null;
+                return Content ? <Content/> : null;
             }
         })
     }
@@ -120,10 +130,28 @@ const Content = () => {
                         <img src={image} alt=""/>
                     </div>
                 }
+                {
+                    fetchPresentationStatus === "loading" ?
+                        <div
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}
 
-                <div className={cls.content} style={{backgroundColor: currentSlide.slideType !== "image" ? bgColor : null}}>
-                    {renderContent()}
-                </div>
+                        >
+                            <Loader/>
+                        </div>
+                        :
+                        <div className={cls.content}
+                             style={{backgroundColor: currentSlide.slideType !== "image" ? bgColor : null}}>
+                            {renderContent()}
+                        </div>
+                }
+
+
             </ActiveBox>
         </ResponsiveTransformBlock>
 
