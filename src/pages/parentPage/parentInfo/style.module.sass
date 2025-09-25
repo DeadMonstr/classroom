@@ -1,0 +1,49 @@
+.info
+  display: flex
+  flex-direction: column
+  gap: 1rem
+  &__parent
+    width: fit-content
+    display: flex
+    border-bottom: 1px solid
+    padding-bottom: .5rem
+  &__students
+    display: flex
+    flex-direction: column
+    gap: 2rem
+    .children
+      padding: 1rem 2rem
+      display: flex
+      flex-direction: column
+      gap: 1rem
+      &__title
+        font-size: 1.8rem
+      &__container
+        width: 100%
+        padding: 2rem 0
+        display: flex
+        justify-content: center
+        &:after
+          content: ""
+          display: flex
+          width: 5rem
+          height: 1px
+          background: black
+    .students
+      padding: 1rem 2rem
+      display: flex
+      flex-direction: column
+      gap: 1rem
+      &__container
+        width: 100%
+        padding: 2rem 0
+        display: flex
+        justify-content: center
+        &:after
+          content: ""
+          display: flex
+          width: 5rem
+          height: 1px
+          background: black
+      &__btn
+        align-self: flex-end

@@ -507,7 +507,7 @@ const StatementVotesChart = (props = {}) => {
     const keyFromData = (arr) =>
         Array.isArray(arr) ? arr.map((s) => `${s.id}:${s.votes?.length ?? 0}`).join("|") : "";
 
-    // --- local state synced with parent data (robust to in-place mutation) ---
+    // --- local state synced with parentPage data (robust to in-place mutation) ---
     const dataKey = useMemo(() => keyFromData(data), [data]);
     const [statements, setStatements] = useState([]);
 

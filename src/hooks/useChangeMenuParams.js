@@ -57,6 +57,12 @@ const useChangeMenuParams = (type, title) => {
 			},
 			{
 				type: "simple",
+				title: "Ota-onalar",
+				href: "/parent/list",
+				role: [ROLES.Teacher]
+			},
+			{
+				type: "simple",
 				title: "Teacher observation",
 				href: "/teacherObservation",
 				role: [ROLES.Teacher],

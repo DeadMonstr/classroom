@@ -3,9 +3,9 @@ import {useMemo} from "react";
 
 //
 // // export const BackUrlForDoc = "http://26.253.30.50:5001/"
-// export const BackUrlForDoc = "http://26.12.122.72:5000/"
-// // export const BackUrlForDoc = "https://classroom.gennis.uz/"
-// export const BackUrl = `${BackUrlForDoc}api/`
+// export const BackUrlForDoc = "http://26.196.249.247:5001/"
+export const BackUrlForDoc = "https://classroom.gennis.uz/"
+export const BackUrl = `${BackUrlForDoc}api/`
 // export const LogoutUrl = "/login"
 // export const LogoutUrlPisa = "/loginPisa"
 // // export const PlatformUrl = "https://classroom.gennis.uz/"
@@ -15,8 +15,8 @@ import {useMemo} from "react";
 
 
 
-export const BackUrl = "/api/"
-export const BackUrlForDoc = "/"
+// export const BackUrl = "/api/"
+// export const BackUrlForDoc = "/"
 export const PlatformUrl = "https://www.admin.gennis.uz/"
 
 export const LogoutUrl = "/login"

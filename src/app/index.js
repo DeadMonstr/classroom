@@ -43,6 +43,8 @@ import ChildrenWeeklyGrades from "../pages/parentSection/childrenWeeklyGrades/ch
 
 import {PisaTestResults} from "pages/pisaTestResults";
 import TestContent from "pages/testContent";
+import ParentRegister from "pages/parentPage/parentRegister";
+import ParentPage from "../pages/parentPage";
 
 
 
@@ -193,6 +195,7 @@ const App = () => {
                         <Route path={"groups/*"} element={<Groups/>}/>
                         <Route path={"books/*"} element={<Books/>}/>
                         {/*<Route path={"chat/*"} element={<Chat/>} />*/}
+                        <Route path={"parent/*"} element={<ParentPage/>}/>
 
                     </Route>
 

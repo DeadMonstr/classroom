@@ -4,6 +4,8 @@ import {BackUrl, headers} from "../constants/global";
 
 
 const initialState = {
+    parentId: null,
+    fullName: "",
     parent: [],
     dates: [],
     groups: [],
@@ -102,6 +104,8 @@ const ParentSlice = createSlice({
             .addCase(fetchParentData.fulfilled, (state, action) => {
                 state.loading = false
                 state.parent = action.payload.children
+                state.fullName = `${action.payload.name} ${action.payload.surname}`
+                state.parentId = action.payload.parent_id
 
                 state.error = null
             })

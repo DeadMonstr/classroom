@@ -56,17 +56,8 @@ const Profile = () => {
         return () => document.removeEventListener("click", handleClickOutside)
     }, [openInnerModal])
 
-    console.log(data, "data")
-
-    useEffect(() => {
-        if (data?.id2)
-            request(`${PlatformUrlApi}time_table/timetable-lessons/?teacher=${data?.id2}`, "GET", null)
-    }, [data?.id2])
-
     const {username, age, img, name, surname, balance, born_date, father_name, parent_phone, phone, role} = data
 
-
-    console.log(ROLES)
 
     return (
         <div className={styles.profile}>

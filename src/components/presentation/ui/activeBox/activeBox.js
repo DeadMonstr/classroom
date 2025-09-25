@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import { setActiveType } from "slices/presentationSlice";
 
-// Create a context for managing ActiveBox parent-child relationships
+// Create a context for managing ActiveBox parentPage-child relationships
 const ActiveBoxContext = createContext(null);
 
 const ActiveBox = ({
@@ -18,7 +18,7 @@ const ActiveBox = ({
     const [isHovered, setIsHovered] = useState(false);
     const [childIsHovered, setChildIsHovered] = useState(false);
 
-    // Get parent context if it exists
+    // Get parentPage context if it exists
     const parentContext = useContext(ActiveBoxContext);
 
     const handleChildHover = useCallback((hovered) => {
@@ -33,7 +33,7 @@ const ActiveBox = ({
         setIsHovered(false);
     }, []);
 
-    // Notify parent when this child is hovered (throttled)
+    // Notify parentPage when this child is hovered (throttled)
     useEffect(() => {
         if (parentContext?.onChildHover) {
             parentContext.onChildHover(isHovered);
@@ -94,7 +94,7 @@ const ActiveBox = ({
         </div>
     );
 
-    // If this is a parent, provide context to children
+    // If this is a parentPage, provide context to children
     if (isParent) {
         return (
             <ActiveBoxContext.Provider value={contextValue}>

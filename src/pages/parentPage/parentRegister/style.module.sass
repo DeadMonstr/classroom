@@ -1,0 +1,110 @@
+.main
+  width: 100%
+  padding: 3rem 5rem
+  display: flex
+  justify-content: center
+  align-items: center
+
+  &__container
+    width: 500px
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.4)
+    border-radius: 2rem
+    padding: 3rem 5rem
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 2rem
+
+    label
+
+      select
+        margin: 0
+
+    .form
+      width: 100%
+      display: flex
+      flex-direction: column
+      align-items: center
+
+      &__btn
+        width: 100% !important
+
+      &__text
+        width: 100%
+        height: 7rem
+        padding: 1rem
+
+      &__input
+        width: 100%
+        i
+          position: absolute
+          bottom: .7rem
+          right: 1rem
+
+      &__error
+        color: red
+        font-size: 1.6rem
+        margin-top: 1.5rem
+
+      .icon
+        color: black
+        position: absolute
+        right: 2rem
+        top: 50%
+        transform: translateY(-10%)
+        font-size: 2.5rem
+
+      &__inner
+        width: 100%
+        display: flex
+        flex-direction: column
+        align-items: center
+        position: relative
+
+      .error
+        color: red
+        font-size: 1.6rem
+        margin-top: 2rem
+
+      select, button
+        width: 400px
+
+      label, textarea, button
+        resize: none
+        margin-top: 2rem
+        border-radius: 1rem
+
+      .place
+        margin-top: 2rem
+        width: 100%
+        background-color: rgba(104, 104, 104, 0.1)
+        border: 1px solid #626262
+        border-radius: 1rem
+        display: flex
+        align-items: center
+        flex-wrap: wrap
+        padding: 2rem
+        gap: 2rem
+
+        &__inner
+          padding: .5rem 2rem
+          border-radius: 2rem
+          font-size: 1.6rem
+          background-color: rgba(104, 104, 104, 0.2)
+          border: 1px solid rgba(104, 104, 104, 0.3)
+          width: fit-content
+          height: fit-content
+          display: flex
+          align-items: center
+          gap: 1rem
+
+          .innerIcon
+            font-size: 2.4rem
+
+@media (max-width: 430px)
+  .main
+    padding: 1rem 2rem
+    &__container
+      padding: 1rem 2rem 2rem 2rem
+      width: 100%
+

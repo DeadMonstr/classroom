@@ -42,7 +42,7 @@ function isIndentPermitted(maxDepth) {
             const parent = elementNode.getParent();
             if (!$isListNode(parent)) {
                 throw new Error(
-                    "ListMaxIndentLevelPlugin: A ListItemNode must have a ListNode for a parent."
+                    "ListMaxIndentLevelPlugin: A ListItemNode must have a ListNode for a parentPage."
                 );
             }
 

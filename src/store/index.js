@@ -17,6 +17,7 @@ import pisaTest from "slices/pisaTest";
 import parentSlice from "slices/parentSlice";
 import pisaTestResults from "slices/pisaTestResults";
 import extraTypes from "slices/extraTypes";
+import parentStudentSlice from "slices/parentStudentSlice";
 
 
 const stringMiddleware = () => (next) => (action) => {
@@ -47,7 +48,8 @@ const store = configureStore({
         pisaTest,
         parentSlice,
         pisaTestResults,
-        extraTypes
+        extraTypes,
+        parentStudentSlice
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware().concat(
