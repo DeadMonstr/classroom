@@ -1,0 +1,91 @@
+@import "styles/abstracts/variables"
+
+
+.addEquipment
+  padding: 3rem
+  position: relative
+  height: 100%
+  .header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    border-bottom: 1px solid $color-grey-dark
+    padding-bottom: 3rem
+    &>div
+      display: flex
+    .title
+      width: 40rem
+    .room
+      width: 30rem
+    .class
+      width: 30rem
+  .equipments
+    display: flex
+    flex-wrap: wrap
+    gap: 2rem
+    align-items: center
+    padding: 2rem
+    .equipments__item
+      width: 35rem
+      background: white
+      border: 1px solid #e5e7eb
+      border-radius: 12px
+      padding: 24px
+      margin-bottom: 16px
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1)
+      transition: all 0.2s ease
+      position: relative
+
+      &:hover
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)
+        transform: translateY(-2px)
+
+      .btns
+        position: absolute
+        right: 1rem
+        top: 1rem
+        cursor: pointer
+        display: flex
+        gap: 1rem
+        .trash
+          i
+            color: red
+            font-size: 1.4rem
+        .edit
+          i
+            color: #5b5b5b
+            font-size: 1.4rem
+
+      h2
+        font-size: 1.25rem
+        font-weight: 600
+        color: #1f2937
+        margin-bottom: 8px
+        display: flex
+        align-items: center
+        gap: 8px
+
+
+        &:first-of-type
+          color: #3b82f6
+
+
+        &:last-of-type
+          color: #059669
+          font-size: 1.125rem
+
+
+      p
+        color: #6b7280
+        line-height: 1.6
+        margin-top: 12px
+        font-size: 0.95rem
+  .footer
+    display: flex
+    justify-content: flex-end
+    backdrop-filter: blur(10px)
+    bottom: 0
+    left: 0
+    position: absolute
+    padding: 2rem
+    width: 100%

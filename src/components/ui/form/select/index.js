@@ -20,6 +20,7 @@ const Select = React.memo((
         defaultOption,
         style,
         extraClassName,
+        extraClassNameLabel,
         all,
         optional,
         multiNames = [],
@@ -128,7 +129,7 @@ const Select = React.memo((
 
 
     return (
-        <label style={style} htmlFor={name} className={styles.selectLabel}>
+        <label style={style} htmlFor={name} className={classNames(styles.selectLabel,extraClassNameLabel)}>
             {
                 title ?
                     <div className={styles.info}>

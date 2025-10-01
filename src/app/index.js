@@ -43,6 +43,7 @@ import ChildrenWeeklyGrades from "../pages/parentSection/childrenWeeklyGrades/ch
 
 import {PisaTestResults} from "pages/pisaTestResults";
 import TestContent from "pages/testContent";
+import TeacherEquipments from "pages/teacherEquipments/TeacherEquipments";
 
 
 
@@ -198,6 +199,7 @@ const App = () => {
 
                     <Route element={<RequireAuth allowedRules={[ROLES.Teacher]}/>}>
                         <Route path={"teacherObservation/*"} element={<TeacherObservation/>}/>
+                        <Route path={"teacherEquipments/*"} element={<TeacherEquipments/>}/>
                     </Route>
 
                     <Route element={<RequireAuth allowedRules={[ROLES.Methodist]}/>}>

@@ -82,6 +82,12 @@ const useChangeMenuParams = (type, title) => {
 				href: "/pisaTestResults.js",
 				role: [ROLES.Methodist],
 			},
+			{
+				type: "simple",
+				title: "Equipments",
+				href: "/teacherEquipments",
+				role: [ROLES.Teacher],
+			},
 		],
 		subject: [
 			{

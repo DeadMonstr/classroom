@@ -4,11 +4,31 @@ import {useHttp} from "hooks/http.hook";
 
 const initialState = {
     systemTypes: [],
+    classes: [],
+    rooms: [],
 
-    fetchBooksStatus: "idle"
+    fetchSystemTypesDataStatus: "idle",
+    fetchClassesDataStatus: "idle",
+    fetchRoomsStatus: "idle",
 }
 export const fetchSystemTypesData = createAsyncThunk(
-    'BooksSlice/fetchBooksData',
+    'ExtraTypesSlice/fetchBooksData',
+    async () => {
+        const {request} = useHttp();
+        return await request(`${BackUrl}level/system/list/`, "GET", null)
+    }
+)
+
+export const fetchClassesData = createAsyncThunk(
+    'ExtraTypesSlice/fetchClassesData',
+    async () => {
+        const {request} = useHttp();
+        return await request(`${BackUrl}level/system/list/`, "GET", null)
+    }
+)
+
+export const fetchRooms = createAsyncThunk(
+    'ExtraTypesSlice/fetchRooms',
     async () => {
         const {request} = useHttp();
         return await request(`${BackUrl}level/system/list/`, "GET", null)
@@ -24,14 +44,36 @@ const ExtraTypesSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(fetchSystemTypesData.pending, state => {
-                state.fetchBooksStatus = 'loading'
+                state.fetchSystemTypesDataStatus = 'loading'
             })
             .addCase(fetchSystemTypesData.fulfilled, (state, action) => {
                 state.systemTypes = action.payload.data
-                state.fetchBooksStatus = "success"
+                state.fetchSystemTypesDataStatus = "success"
             })
             .addCase(fetchSystemTypesData.rejected, state => {
-                state.fetchBooksStatus = 'error'
+                state.fetchSystemTypesDataStatus = 'error'
+            })
+
+            .addCase(fetchClassesData.pending, state => {
+                state.fetchClassesDataStatus = 'loading'
+            })
+            .addCase(fetchClassesData.fulfilled, (state, action) => {
+                state.classes = action.payload.data
+                state.fetchClassesDataStatus = "success"
+            })
+            .addCase(fetchClassesData.rejected, state => {
+                state.fetchClassesDataStatus = 'error'
+            })
+
+            .addCase(fetchRooms.pending, state => {
+                state.fetchRoomsStatus = 'loading'
+            })
+            .addCase(fetchRooms.fulfilled, (state, action) => {
+                state.rooms = action.payload.data
+                state.fetchRoomsStatus = "success"
+            })
+            .addCase(fetchRooms.rejected, state => {
+                state.fetchRoomsStatus = 'error'
             })
 
 
