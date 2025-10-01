@@ -22,6 +22,7 @@ import ParentSection from "../parentSection/parentSection";
 
 const Home = () => {
 
+    const {request} = useHttp()
     const options = useChangeMenuParams("main","")
     const dispatch = useDispatch()
 
@@ -30,7 +31,19 @@ const Home = () => {
         dispatch(setOptions(options))
     },[dispatch, options])
 
-
+    useEffect(() => {
+        // request(`${BackUrl}teacher/requests?turon_id=208`, "POST", JSON.stringify({
+        //     teacher: 208,
+        //     branch: 1,
+        //     text: "hello 2",
+            
+        // }), headers())
+        // request(`${BackUrl}teacher/requests?turon_id=208`, "GET", null, headers())
+        // request(`${BackUrl}teacher/requests/1?turon_id=208`, "PATCH", JSON.stringify({
+        //     text: "world 2",
+        // }), headers())
+        // request(`${BackUrl}teacher/requests/3?turon_id=208`, "DELETE", null, headers())
+    }, [])
 
     return (
         <div className={styles.home}>
