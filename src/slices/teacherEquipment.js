@@ -3,43 +3,75 @@ import {BackUrl, headers} from "constants/global";
 import {useHttp} from "hooks/http.hook";
 
 const initialState = {
-    data: [],
+    list: [],
 
     fetchTeacherEquipmentsDataStatus : "idle"
 }
 
 
 export const fetchTeacherEquipmentsData = createAsyncThunk(
-    'TeacherEquipmentSlice/fetchTeacherEquipmentsData',
-    async (id) => {
+    'teacherEquipmentSlice/fetchTeacherEquipmentsData',
+    async ({id, status, system}) => {
         const {request} = useHttp();
-        return await request(`${BackUrl}`, "GET", null, headers())
+        return await request(`${BackUrl}teacher/requests?${system === "turon" ? `turon_id=${id}` : `teacher_id=${id}`}${status !== "all" ? `&status=${status}` : ""}`, "GET", null, headers())
     }
 )
 
 
-const TeacherEquipmentSlice = createSlice({
-    name: "TeacherEquipmentSlice",
+const teacherEquipmentSlice = createSlice({
+    name: "teacherEquipmentSlice",
     initialState,
-    reducers: {},
+    reducers: {
+        loadingEquipment: (state) => {
+            state.fetchTeacherEquipmentsDataStatus = "loading"
+        },
+        createEquipment: (state, action) => {
+            state.list = [
+                ...state.list,
+                action.payload
+            ]
+            state.fetchTeacherEquipmentsDataStatus = "success"
+        },
+        updateEquipment: (state, action) => {
+            console.log(action.payload)
+            state.list = state.list.map(item => {
+                if (item.id === action.payload?.id) {
+                    return action.payload
+                } else return item
+            })
+            state.fetchTeacherEquipmentsDataStatus = "success"
+        },
+        deleteEquipment: (state, action) => {
+            state.list = state.list.filter(item => item.id !== action.payload)
+            state.fetchTeacherEquipmentsDataStatus = "success"
+        }
+    },
     extraReducers: builder => {
         builder
             .addCase(fetchTeacherEquipmentsData.pending, state => {
-                state.fetchSubjectDataStatus = 'loading'
+                state.fetchTeacherEquipmentsDataStatus = 'loading'
             })
             .addCase(fetchTeacherEquipmentsData.fulfilled, (state, action) => {
-
+                console.log(action.payload);
+                
+                state.list = action.payload
+                state.fetchTeacherEquipmentsDataStatus = "success"
 
             })
             .addCase(fetchTeacherEquipmentsData.rejected, state => {
-                state.fetchSubjectDataStatus = 'error'
+                state.fetchTeacherEquipmentsDataStatus = 'error'
             })
 
     }
 })
 
-const {actions, reducer} = TeacherEquipmentSlice;
+const {actions, reducer} = teacherEquipmentSlice;
 
 export default reducer
 
-export const {} = actions
+export const {
+    loadingEquipment, 
+    createEquipment,
+    updateEquipment,
+    deleteEquipment
+} = actions

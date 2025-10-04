@@ -36,9 +36,8 @@ const Home = () => {
         //     teacher: 208,
         //     branch: 1,
         //     text: "hello 2",
-            
-        // }), headers())
-        // request(`${BackUrl}teacher/requests?turon_id=208`, "GET", null, headers())
+        // }), headers()) //
+        // request(`${BackUrl}teacher/requests?turon_id=208`, "GET", null, headers()) // 
         // request(`${BackUrl}teacher/requests/1?turon_id=208`, "PATCH", JSON.stringify({
         //     text: "world 2",
         // }), headers())
