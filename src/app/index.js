@@ -46,6 +46,7 @@ import TestContent from "pages/testContent";
 import TeacherEquipments from "pages/teacherEquipments/TeacherEquipments";
 import ParentRegister from "pages/parentPage/parentRegister";
 import ParentPage from "../pages/parentPage";
+import { TimeTable } from 'pages/timeTable';
 
 
 
@@ -197,7 +198,7 @@ const App = () => {
                         <Route path={"books/*"} element={<Books/>}/>
                         {/*<Route path={"chat/*"} element={<Chat/>} />*/}
                         <Route path={"parent/*"} element={<ParentPage/>}/>
-
+                        <Route path={'timeTable'} element={<TimeTable/>}/>
                     </Route>
 
                     <Route element={<RequireAuth allowedRules={[ROLES.Teacher]}/>}>

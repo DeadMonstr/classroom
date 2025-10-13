@@ -25,6 +25,7 @@ import { useState } from 'react';
 import LoaderPage from 'components/ui/loader/Loader';
 import Confirm from 'components/ui/confirm';
 import Select from 'components/ui/form/select';
+import { Switch } from 'components/ui/switch/switch';
 
 const statuses = [
     {id: "all", name: "Hammasi"},
@@ -59,19 +60,21 @@ const Index = () => {
 
     const [activeModal, setActiveModal] = useState(false)
     const [editModal, setEditModal] = useState(false)
-    const [editItem, setEditItem] = useState(null)
     const [isDelete, setIsDelete] = useState(false)
+    const [isFilter, setIsFilter] = useState(false)
+    const [editItem, setEditItem] = useState(null)
     const [selectedStatus, setSelectedStatus] = useState("all")
+    const [isDeletedData, setIsDeletedData] = useState(false)
     
     useEffect(() => {
         if (data?.turon_teacher_id || data?.platform_id) {
             dispatch(fetchTeacherEquipmentsData({
-                id: data?.system_name === "turon" ? data?.turon_teacher_id : data?.platform_id,
+                id: data?.system_name === "turon" ? `turon_id=${data?.turon_teacher_id}` : `teacher_id=${data?.platform_id}`,
                 status: selectedStatus,
-                system:data?.system_name
+                deleted: isDeletedData
             }))
         }
-    }, [data, selectedStatus])
+    }, [data, selectedStatus, isDeletedData])
 
     const onSubmit = (form) => {
         dispatch(loadingEquipment())
@@ -93,7 +96,7 @@ const Index = () => {
                 branch: data?.turon_branch_id,
             }
         } else {
-            url = `${url}teacher_id=${data?.id2}`
+            url = `${url}teacher_id=${data?.platform_id}`
             forPost = {
                 ...forPost,
                 teacher_id: data?.platform_id,
@@ -137,7 +140,7 @@ const Index = () => {
                 branch: data?.turon_branch_id,
             }
         } else {
-            url = `${url}teacher_id=${data?.id2}`
+            url = `${url}teacher_id=${data?.platform_id}`
             forPatch = {
                 ...forPatch,
                 teacher_id: data?.platform_id,
@@ -160,10 +163,10 @@ const Index = () => {
         if (data?.system_name === "turon") {
             url = `${url}turon_id=${data?.turon_teacher_id}`
         } else {
-            url = `${url}teacher_id=${data?.id2}`
+            url = `${url}teacher_id=${data?.platform_id}`
         }
 
-        request(`${BackUrl}teacher/requests/${editItem?.id}${url}`, "DELETE", null, headers())
+        request(`${BackUrl}${url}`, "PATCH", JSON.stringify({deleted: true}), headers())
             .then(res => {
                 dispatch(deleteEquipment(editItem?.id))
                 setEditModal(false)
@@ -187,17 +190,30 @@ const Index = () => {
                     <td>{item?.comment ?? "—"}</td>
                     <td 
                         className={cls[item?.status]}
+                        style={isDeletedData ? {color: "red"} : null}
                     >
-                        {statuses.filter(st => st.id === item.status)[0]?.name}
+                        {
+                            isDeletedData
+                            ? "—"
+                            : statuses.filter(st => st.id === item.status)[0]?.name
+                        }
                     </td>
-                    <td><i onClick={() => {
-                        setEditModal(true)
-                        setEditItem(item)
-                        setValue("nameEdit", item?.text?.slice(sliceIndex+3, item?.text?.length))
-                        setValue("countEdit", +item?.text?.slice(0, sliceIndex))
-                        setValue("priceEdit", item?.price)
-                        setValue("addressEdit", item?.address)
-                    }} className={"fa fa-edit"}/></td>
+                    <td>
+                        {
+                            !isDeletedData &&
+                            <i
+                                onClick={() => {
+                                    setEditModal(true)
+                                    setEditItem(item)
+                                    setValue("nameEdit", item?.text?.slice(sliceIndex+3, item?.text?.length))
+                                    setValue("countEdit", +item?.text?.slice(0, sliceIndex))
+                                    setValue("priceEdit", item?.price)
+                                    setValue("addressEdit", item?.address)
+                                }} 
+                                className={"fa fa-edit"}
+                            />
+                        }
+                    </td>
                 </tr>
             )
         })
@@ -210,12 +226,7 @@ const Index = () => {
                 <div className={cls.header}>
                     <div>
                         {/* <Input title={"Qidiruv"}/> */}
-                        <Select
-                            title={"Status"}
-                            options={statuses}
-                            onChange={setSelectedStatus} 
-                            defaultOption={selectedStatus}
-                        />
+                        <Button onClick={() => setIsFilter(true)}>Filter</Button>
                     </div>
 
 
@@ -248,6 +259,21 @@ const Index = () => {
                     }
                 </div>
             </div>
+            <Modal title={"Filter"} active={isFilter} setActive={setIsFilter}>
+                <div className={cls.filter}>
+                    <Select
+                        disabled={isDeletedData}
+                        title={"Status"}
+                        options={statuses}
+                        onChange={setSelectedStatus} 
+                        defaultOption={selectedStatus}
+                    />
+                    <div className={cls.filter__inner}>
+                        <h2>O'chirilgan</h2>
+                        <Switch setSwitchOn={setIsDeletedData} switchOn={isDeletedData}/>
+                    </div>
+                </div>
+            </Modal>
             <Modal title={"Buyum qo'shish"} active={activeModal} setActive={setActiveModal}>
                 <Form extraClassname={cls.addChange} id={"add"} typeSubmit={"outside"} onSubmit={handleSubmit(onSubmit)}>
                     <Input required name={"name"} register={register} title={"Nomi"}/>

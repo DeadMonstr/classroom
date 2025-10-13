@@ -11,9 +11,9 @@ const initialState = {
 
 export const fetchTeacherEquipmentsData = createAsyncThunk(
     'teacherEquipmentSlice/fetchTeacherEquipmentsData',
-    async ({id, status, system}) => {
+    async ({id, status, system, deleted}) => {
         const {request} = useHttp();
-        return await request(`${BackUrl}teacher/requests?${system === "turon" ? `turon_id=${id}` : `teacher_id=${id}`}${status !== "all" ? `&status=${status}` : ""}`, "GET", null, headers())
+        return await request(`${BackUrl}teacher/requests?deleted=${deleted}&${id}${status !== "all" ? `&status=${status}` : ""}`, "GET", null, headers())
     }
 )
 
