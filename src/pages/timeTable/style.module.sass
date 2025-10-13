@@ -1,0 +1,237 @@
+.timeTableWrapper
+  width: 100%
+  padding: 20px
+  background: #ffffff
+  border-radius: 12px
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
+  overflow-x: auto
+
+.headerPortal
+  position: sticky
+  top: 0
+  z-index: 100
+  background: #ffffff
+  border-bottom: 2px solid #ddd
+  margin-bottom: 16px
+
+.headerRow
+  display: flex
+  gap: 0
+
+.timeHeaderCell
+  min-width: 100px
+  flex-shrink: 0
+
+.dayHeader
+  flex: 1
+  min-width: 150px
+  padding: 16px 12px
+  text-align: center
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)
+  border-right: 1px solid #ddd
+  
+  &:last-child
+    border-right: none
+
+.weekday
+  font-size: 16px
+  font-weight: 600
+  color: #2c3e50
+  margin-bottom: 4px
+
+.date
+  font-size: 14px
+  color: #7f8c8d
+  font-weight: 400
+
+.timeTable
+  display: flex
+  gap: 0
+  max-height: 53.5rem
+
+.timeColumn
+  min-width: 100px
+  flex-shrink: 0
+
+.timeCell
+  height: 90px
+  padding: 12px
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  border-bottom: 1px solid #ddd
+  border-right: 2px solid #ddd
+  background: #f8f9fa
+  
+  &:last-child
+    border-bottom: none
+
+.startTime
+  font-size: 15px
+  font-weight: 600
+  color: #2c3e50
+  margin-bottom: 4px
+
+.endTime
+  font-size: 13px
+  color: #7f8c8d
+
+.scheduleGrid
+  flex: 1
+  display: flex
+  flex-direction: column
+
+.scheduleRow
+  display: flex
+  gap: 0
+  
+  &:not(:last-child)
+    border-bottom: 1px solid #ddd
+
+.scheduleCell
+  flex: 1
+  min-width: 150px
+  height: 89px
+  border-right: 1px solid #ddd
+  position: relative
+  
+  &:last-child
+    border-right: none
+
+.emptyCell
+  width: 100%
+  height: 100%
+  background: #f5f5f5
+  border-radius: 4px
+
+.lessonCard
+  width: 100%
+  height: 100%
+  padding: 12px
+  background: #ffffff
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  transition: all 0.3s ease
+  cursor: pointer
+  position: relative
+
+  &__bg
+    position: absolute
+    // z-index: -1
+    font-size: 20px
+    color: #228b2266
+    // color: #1e8fff43
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+    &.flow
+  
+  &:hover
+    background: #f8f9fa
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1)
+    transform: translateY(-2px)
+
+.lessonContent
+  flex: 1
+
+.groupName
+  font-size: 15px
+  font-weight: 600
+  color: #2c3e50
+  margin-bottom: 6px
+  line-height: 1.3
+
+.subjectName
+  font-size: 14px
+  color: #34495e
+  margin-bottom: 6px
+  line-height: 1.3
+
+.roomName
+  font-size: 13px
+  color: #7f8c8d
+  font-weight: 500
+
+.slideCounter
+  font-size: 12px
+  color: #95a5a6
+  text-align: center
+  margin-top: 8px
+  padding-top: 8px
+  border-top: 1px solid #ecf0f1
+
+.swiperContainer
+  width: 100%
+  height: 100%
+  
+  :global(.swiper-pagination)
+    bottom: 4px
+    
+  :global(.swiper-pagination-bullet)
+    background: #3498db
+    opacity: 0.5
+    
+  :global(.swiper-pagination-bullet-active)
+    opacity: 1
+
+.loaderContainer
+  display: flex
+  justify-content: center
+  align-items: center
+  min-height: 400px
+  width: 100%
+
+.loader
+  width: 48px
+  height: 48px
+  border: 4px solid #f3f3f3
+  border-top: 4px solid #3498db
+  border-radius: 50%
+  animation: spin 1s linear infinite
+
+@keyframes spin
+  0%
+    transform: rotate(0deg)
+  100%
+    transform: rotate(360deg)
+
+.error
+  padding: 40px
+  text-align: center
+  font-size: 16px
+  color: #e74c3c
+  background: #fef5f5
+  border-radius: 8px
+  border: 1px solid #f5c6cb
+
+// Responsive design
+@media (max-width: 768px)
+  .timeTableWrapper
+    padding: 12px
+    
+  .dayHeader
+    min-width: 120px
+    padding: 12px 8px
+    
+  .scheduleCell
+    min-width: 120px
+    
+  .weekday
+    font-size: 14px
+    
+  .date
+    font-size: 12px
+    
+  .lessonCard
+    padding: 8px
+    
+  .groupName
+    font-size: 14px
+    
+  .subjectName
+    font-size: 13px
+    
+  .roomName
+    font-size: 12px

@@ -63,6 +63,12 @@ const useChangeMenuParams = (type, title) => {
 			},
 			{
 				type: "simple",
+				title: "Time Table",
+				href: "/timeTable",
+				role: [ROLES.Teacher]
+			},
+			{
+				type: "simple",
 				title: "Teacher observation",
 				href: "/teacherObservation",
 				role: [ROLES.Teacher],

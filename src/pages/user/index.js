@@ -14,6 +14,7 @@ import TeacherSalary from "pages/user/teacherSalary/TeacherSalary";
 import TeacherMonthSalary from "pages/user/teacherMonthSalary/TeacherMonthSalary";
 import TeacherStudentsDebt from "pages/user/teacherStudentsDebt/TeacherStudentsDebt";
 import StudentsCertificates from "pages/user/studentsCertificates/StudentsCertificates";
+import { BackUrl, headers } from 'constants/global';
 
 
 
@@ -24,7 +25,9 @@ const User = () => {
 	const {request} = useHttp()
 
 
-
+	useEffect(() => {
+		request(`${BackUrl}time_table/timetable-lessons/?teacher=119`, "GET", null, headers())
+	},[])
 
 
 	return (
