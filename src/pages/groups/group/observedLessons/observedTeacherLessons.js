@@ -45,20 +45,20 @@ const ObservedTeacherLessons = () => {
             request(`${BackUrl}teacher/observed_group/${groupData.id}`, "GET", null, headers())
                 .then(res => {
 
-                    if (res.month_list.length === 1) {
-                        setMonth(res.month_list[0])
+                    if (res?.month_list?.length === 1) {
+                        setMonth(res?.month_list[0])
                     } else {
-                        setMonth(res.month)
+                        setMonth(res?.month)
                     }
-                    setMonths(res.month_list)
+                    setMonths(res?.month_list)
 
-                    if (res.years_list.length === 1) {
-                        setYear(res.years_list[0])
+                    if (res?.years_list?.length === 1) {
+                        setYear(res?.years_list[0])
                     }
-                    setYears(res.years_list)
+                    setYears(res?.years_list)
 
 
-                    setYear(res.year)
+                    setYear(res?.year)
 
                 })
         }
