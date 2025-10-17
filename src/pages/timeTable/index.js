@@ -17,10 +17,10 @@ const Loader = () => (
 
 export const TimeTable = () => {
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-    const {timeTable: data, loading} = useSelector(state => state.timeTableSlice)
-    const {data: user} = useSelector(state => state.user)
+  const { timeTable: data, loading } = useSelector(state => state.timeTableSlice)
+  const { data: user } = useSelector(state => state.user)
   const [mounted, setMounted] = useState(false)
   const headerRef = useRef(null)
 
@@ -30,7 +30,7 @@ export const TimeTable = () => {
 
   useEffect(() => {
     if (user?.id2) {
-        dispatch(fetchTimeTableForShow({teacher: user?.id2}))
+      dispatch(fetchTimeTableForShow({ teacher: user?.id2 }))
     }
   }, [user])
 
@@ -55,7 +55,7 @@ export const TimeTable = () => {
         room.lessons.forEach((lesson) => {
           // Only include lessons that have an id field
           if (lesson.id && lesson.hours === hourId) {
-            lessons.push({...lesson, roomName: room?.name})
+            lessons.push({ ...lesson, roomName: room?.name })
           }
         })
       }
@@ -70,7 +70,7 @@ export const TimeTable = () => {
         <div className={styles.subjectName}>{lesson.subject?.name || "N/A"}</div>
         <div className={styles.roomName}>Room: {lesson?.roomName || "N/A"}</div>
       </div>
-      <div className={classNames(styles.lessonCard__bg, {[styles.flow]: lesson?.is_flow})}>{lesson?.is_flow ? "Flow" : "Class"}</div>
+      <div className={classNames(styles.lessonCard__bg, { [styles.flow]: lesson?.is_flow })}>{lesson?.is_flow ? "Flow" : "Class"}</div>
       {/* {total > 1 && (
         <div className={styles.slideCounter}>
           {index + 1} / {total}
@@ -110,52 +110,48 @@ export const TimeTable = () => {
     )
   }
 
-//   const DayHeaders = () => (
-    
-//   )
+  //   const DayHeaders = () => (
 
-  console.log(!!(mounted && headerRef.current))
-  console.log(headerRef.current);
-  console.log(mounted);
-  
+  //   )
+
   return (
     <div className={styles.timeTableWrapper}>
-        {/* {mounted && headerRef.current && createPortal(<DayHeaders />, headerRef.current)} */}
+      {/* {mounted && headerRef.current && createPortal(<DayHeaders />, headerRef.current)} */}
 
-        <div ref={headerRef} className={styles.headerPortal}>
-            <div className={styles.headerRow}>
-                <div className={styles.timeHeaderCell}></div>
-                {time_tables.map((day) => (
-                    <div key={day.date} className={styles.dayHeader}>
-                    <div className={styles.weekday}>{day.weekday}</div>
-                    <div className={styles.date}>{day.date}</div>
-                    </div>
-                ))}
+      <div ref={headerRef} className={styles.headerPortal}>
+        <div className={styles.headerRow}>
+          <div className={styles.timeHeaderCell}></div>
+          {time_tables.map((day) => (
+            <div key={day.date} className={styles.dayHeader}>
+              <div className={styles.weekday}>{day.weekday}</div>
+              <div className={styles.date}>{day.date}</div>
             </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.timeTable}>
+        <div className={styles.timeColumn}>
+          {hours_list.map((hour) => (
+            <div key={hour.id} className={styles.timeCell}>
+              <div className={styles.startTime}>{hour.start_time}</div>
+              <div className={styles.endTime}>{hour.end_time}</div>
+            </div>
+          ))}
         </div>
 
-        <div className={styles.timeTable}>
-            <div className={styles.timeColumn}>
-            {hours_list.map((hour) => (
-                <div key={hour.id} className={styles.timeCell}>
-                <div className={styles.startTime}>{hour.start_time}</div>
-                <div className={styles.endTime}>{hour.end_time}</div>
+        <div className={styles.scheduleGrid}>
+          {hours_list.map((hour) => (
+            <div key={hour.id} className={styles.scheduleRow}>
+              {time_tables.map((day) => (
+                <div key={`${hour.id}-${day.date}`} className={styles.scheduleCell}>
+                  {renderCell(hour.id, day.date)}
                 </div>
-            ))}
+              ))}
             </div>
-
-            <div className={styles.scheduleGrid}>
-            {hours_list.map((hour) => (
-                <div key={hour.id} className={styles.scheduleRow}>
-                {time_tables.map((day) => (
-                    <div key={`${hour.id}-${day.date}`} className={styles.scheduleCell}>
-                    {renderCell(hour.id, day.date)}
-                    </div>
-                ))}
-                </div>
-            ))}
-            </div>
+          ))}
         </div>
+      </div>
     </div>
   )
 }
