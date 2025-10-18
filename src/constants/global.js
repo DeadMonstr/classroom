@@ -1,28 +1,28 @@
-import {useMemo} from "react";
+import { useMemo } from "react";
 
 
 //
 // export const BackUrlForDoc = "http://26.253.30.50:5001/"
-export const BackUrlForDoc = "http://26.12.122.72:5000/"
-// export const BackUrlForDoc = "https://classroom.gennis.uz/"
+// export const BackUrlForDoc = "http://26.12.122.72:5000/"
+export const BackUrlForDoc = "https://classroom.gennis.uz/"
 export const BackUrl = `${BackUrlForDoc}api/`
-export const LogoutUrl = "/login"
-export const LogoutUrlPisa = "/loginPisa"
+// export const LogoutUrl = "/login"
+// export const LogoutUrlPisa = "/loginPisa"
 // export const PlatformUrl = "https://classroom.gennis.uz/"
-export const PlatformUrl = "http://26.12.122.72:5000/"
+// export const PlatformUrl = "http://26.12.122.72:5000/"
 // export const PlatformUrl = "http://26.253.30.50:5001/"
-export const PlatformUrlApi = `${PlatformUrl}api/`
+// export const PlatformUrlApi = `${PlatformUrl}api/`
 
 
 
 // export const BackUrl = "/api/"
 // export const BackUrlForDoc = "/"
-// export const PlatformUrl = "https://www.admin.gennis.uz/"
-//
-// export const LogoutUrl = "/login"
-//
-// export const LogoutUrlPisa = "/loginPisa"
-// export const PlatformUrlApi = `${PlatformUrl}api/`
+export const PlatformUrl = "https://www.admin.gennis.uz/"
+
+export const LogoutUrl = "/login"
+
+export const LogoutUrlPisa = "/loginPisa"
+export const PlatformUrlApi = `${PlatformUrl}api/`
 
 
 
@@ -34,7 +34,7 @@ export const headers = () => {
     return {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        "Authorization" : "Bearer " + token
+        "Authorization": "Bearer " + token
     }
 }
 
@@ -45,21 +45,21 @@ export const headersOldToken = () => {
     return {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        "Authorization" : "Bearer " + token,
+        "Authorization": "Bearer " + token,
     }
 }
 
 export const headersImg = () => {
     const token = sessionStorage.getItem("token")
     return {
-        "Authorization" : "Bearer " + token,
+        "Authorization": "Bearer " + token,
         // 'Content-Type': 'multipart/form-data'
     }
 }
 export const headersOldTokenImg = () => {
     const token = sessionStorage.getItem("oldToken")
     return {
-        "Authorization" : "Bearer " + token,
+        "Authorization": "Bearer " + token,
     }
 }
 
@@ -245,10 +245,10 @@ export const DatesList = () => {
                 num: "1970"
             },
         ]
-    ,[])
+        , [])
 
     const days = useMemo(() =>
-         [
+        [
             {
                 num: "01"
             },
@@ -343,9 +343,9 @@ export const DatesList = () => {
                 num: "31"
             }
         ]
-    ,[])
-    const months = useMemo(()=>
-         [
+        , [])
+    const months = useMemo(() =>
+        [
             {
                 num: "01"
             },
@@ -383,10 +383,10 @@ export const DatesList = () => {
                 num: "12"
             }
         ]
-    ,[])
+        , [])
 
 
-    return {days,months,years}
+    return { days, months, years }
 }
 
 
