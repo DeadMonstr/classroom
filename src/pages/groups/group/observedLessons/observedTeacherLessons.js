@@ -106,14 +106,14 @@ const ObservedTeacherLessons = () => {
 
 
     const renderInfo = () => {
-        return info.map((item, index) => {
+        return info?.map((item, index) => {
             return (
                 <tr>
                     <td>{index + 1}</td>
-                    <td>{item.title}</td>
+                    <td>{item?.title}</td>
                     {
-                        Object.values(item.values).map(vl => {
-                            if (!vl.value) {
+                        Object?.values(item?.values).map(vl => {
+                            if (!vl?.value) {
                                 return <td></td>
                             }
                             return (
@@ -126,10 +126,10 @@ const ObservedTeacherLessons = () => {
                     <td
                         onClick={() => {
                             setActive(!active)
-                            setComment(item.comment)
+                            setComment(item?.comment)
                         }}
                     >
-                        {item.comment}
+                        {item?.comment}
                     </td>
                 </tr>
             )
