@@ -46,6 +46,7 @@ const LessonPlan = ({backBtn}) => {
 
     const {request} = useHttp()
 
+    const system_type = localStorage.getItem("system_type")
     useEffect(() => {
         if (groupData.id) {
             request(`${BackUrl}teacher/lesson_plan_list/${groupData.id}`, "GET", null, headers() )
@@ -149,6 +150,7 @@ const LessonPlan = ({backBtn}) => {
 
     const {name,teacher} = data
     const {id: meId} = useAuth()
+    console.log(teacher , meId , "canChange")
 
     return (
         <div className={cls.lessonPlan}>
@@ -221,6 +223,7 @@ const LessonPlan = ({backBtn}) => {
                 {
                     teacher?.id === meId && canChange ?  <Button form={"lessonPlan"} type={"submit"} >Tasdiqlash</Button> : null
                 }
+                {system_type === "turon" && canChange ? <Button form={"lessonPlan"} type={"submit"} >Tasdiqlash</Button> : null}
 
             </div>
             <div className={classNames(cls.students,cls.row)}>

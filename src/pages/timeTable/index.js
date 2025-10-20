@@ -88,7 +88,7 @@ export const TimeTable = () => {
             </div>
             <div onClick={() => {
 
-                console.log(lesson)
+
                 navigate(`../groups/${lesson.id}/lessonPlan`)
             }} className={styles.flow__icon2}>
                 <i className="fa-solid fa-person-chalkboard"/>
