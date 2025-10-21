@@ -9,6 +9,7 @@ import "swiper/css/pagination"
 import styles from "./style.module.sass"
 import {fetchTimeTableForShow} from "slices/timeTableSlice"
 import {useNavigate} from "react-router-dom";
+import Button from "components/ui/button";
 
 const Loader = () => (
     <div className={styles.loaderContainer}>
@@ -24,6 +25,7 @@ export const TimeTable = () => {
     const {data: user} = useSelector(state => state.user)
     const [mounted, setMounted] = useState(false)
     const headerRef = useRef(null)
+    const [queryType, setQueryType] = useState(null);
 
     const navigate = useNavigate()
     useEffect(() => {
@@ -32,17 +34,14 @@ export const TimeTable = () => {
 
     useEffect(() => {
         if (user?.id2) {
-            dispatch(fetchTimeTableForShow({teacher: user?.id2}))
+            dispatch(fetchTimeTableForShow({teacher: user?.id2 , week: queryType}))
         }
-    }, [user])
+    }, [user ,queryType])
 
-    if (loading) {
-        return <Loader/>
-    }
+    // if (loading) {
+    //     return <Loader/>
+    // }
 
-    if (!data || !data.time_tables || !data.hours_list) {
-        return <div className={styles.error}>No data available</div>
-    }
 
     const {time_tables, hours_list} = data
 
@@ -131,44 +130,84 @@ export const TimeTable = () => {
 
     //   )
 
+    const handleClick = (type) => {
+        // faqat kelgan turga asoslanamiz
+        if (queryType === "next" && type === "prev") {
+            setQueryType("")
+        } else if (queryType === "prev" && type === "next") {
+            setQueryType("")
+        } else {
+            setQueryType(type);
+        }
+
+        // let query = { teacher: user?.id2 };
+        //
+        // if (type === "next") {
+        //     query = { ...query, next: true };
+        // } else if (type === "prev") {
+        //     query = { ...query, prev: true };
+        // }
+        //
+        // // state faqat UI uchun (masalan, active tugma)
+        // setQueryType(type);
+        //
+        console.log(queryType)
+    };
+
+
+
     return (
         <div className={styles.timeTableWrapper}>
             {/* {mounted && headerRef.current && createPortal(<DayHeaders />, headerRef.current)} */}
 
-            <div ref={headerRef} className={styles.headerPortal}>
-                <div className={styles.headerRow}>
-                    <div className={styles.timeHeaderCell}></div>
-                    {time_tables.map((day) => (
-                        <div key={day.date} className={styles.dayHeader}>
-                            <div className={styles.weekday}>{day.weekday}</div>
-                            <div className={styles.date}>{day.date}</div>
-                        </div>
-                    ))}
-                </div>
-            </div>
+                <Button disabled={queryType === "prev"} active={queryType === "prev"} onClick={() => handleClick("prev")}>Prev
+                    (oldingi hafta)</Button>
+                <Button disabled={queryType === "next"} active={queryType === "next"} onClick={() => handleClick("next")}>Next
+                    (keyingi hafta)</Button>
+                <h1>{queryType === "next" ? "Keyingi hafta" : queryType === "prev" ? "Oldingi hafta" : "Hozirgi hafta"}</h1>
 
-            <div className={styles.timeTable}>
-                <div className={styles.timeColumn}>
-                    {hours_list.map((hour) => (
-                        <div key={hour.id} className={styles.timeCell}>
-                            <div className={styles.startTime}>{hour.start_time}</div>
-                            <div className={styles.endTime}>{hour.end_time}</div>
-                        </div>
-                    ))}
-                </div>
 
-                <div className={styles.scheduleGrid}>
-                    {hours_list.map((hour) => (
-                        <div key={hour.id} className={styles.scheduleRow}>
-                            {time_tables.map((day) => (
-                                <div key={`${hour.id}-${day.date}`} className={styles.scheduleCell}>
-                                    {renderCell(hour.id, day.date)}
+            {!data || !data.time_tables || !data.hours_list &&
+                <div className={styles.error}>No data available</div>}
+
+            {
+                loading ? <Loader/> : <>
+                    <div ref={headerRef} className={styles.headerPortal}>
+                        <div className={styles.headerRow}>
+                            <div className={styles.timeHeaderCell}></div>
+                            {time_tables?.map((day) => (
+                                <div key={day?.date} className={styles.dayHeader}>
+                                    <div className={styles.weekday}>{day?.weekday}</div>
+                                    <div className={styles.date}>{day?.date}</div>
                                 </div>
                             ))}
                         </div>
-                    ))}
-                </div>
-            </div>
+                    </div>
+
+                    <div className={styles.timeTable}>
+                        <div className={styles.timeColumn}>
+                            {hours_list?.map((hour) => (
+                                <div key={hour?.id} className={styles.timeCell}>
+                                    <div className={styles.startTime}>{hour?.start_time}</div>
+                                    <div className={styles.endTime}>{hour?.end_time}</div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className={styles.scheduleGrid}>
+                            {hours_list?.map((hour) => (
+                                <div key={hour?.id} className={styles.scheduleRow}>
+                                    {time_tables?.map((day) => (
+                                        <div key={`${hour?.id}-${day?.date}`} className={styles.scheduleCell}>
+                                            {renderCell(hour?.id, day?.date)}
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </>
+            }
         </div>
     )
 }

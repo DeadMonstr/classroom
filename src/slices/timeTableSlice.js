@@ -4,9 +4,10 @@ import { BackUrl, headers } from "constants/global";
 
 export const fetchTimeTableForShow = createAsyncThunk(
     "timeTableSlice/fetchTimeTableForShow",
-    async ({branch, teacher, student, group}) => {
+    async ({branch, teacher, student, group , week}) => {
+        console.log(week)
         const {request} = useHttp()
-        return await request(`${BackUrl}time_table/timetable-lessons/?teacher=${teacher}`, "GET", null, headers())
+        return await request(`${BackUrl}time_table/timetable-lessons/?teacher=${teacher}${week ? `&which_week=${week}` : ""}`, "GET", null, headers())
     }
 )
 
