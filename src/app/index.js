@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect, useState} from 'react';
+import React, { lazy, Suspense, useEffect, useState } from 'react';
 import {
     Route,
     Navigate,
@@ -15,7 +15,7 @@ import ChangeExercises from "pages/exercises/changeExercises";
 
 import GetUser from "pages/getUser";
 import RequireAuth from "components/auth/requireAuth";
-import {ROLES} from "constants/global";
+import { ROLES } from "constants/global";
 import Books from "pages/books/Books";
 import TeacherObservation from "pages/teacherObservation/teacherObservation";
 import Lesson from "pages/subject/level/chapters/lesson";
@@ -41,7 +41,7 @@ import ChildrenLayoutMB from "../pages/parentSection/childrenLayoutMB/childrenLa
 // import {isMobile} from "react-device-detect";
 import ChildrenWeeklyGrades from "../pages/parentSection/childrenWeeklyGrades/childrenWeeklyGrades";
 
-import {PisaTestResults} from "pages/pisaTestResults";
+import { PisaTestResults } from "pages/pisaTestResults";
 import TestContent from "pages/testContent";
 import TeacherEquipments from "pages/teacherEquipments/TeacherEquipments";
 import ParentRegister from "pages/parentPage/parentRegister";
@@ -87,66 +87,66 @@ const App = () => {
             <>
                 <Route
                     path={"get_user/:token/:refreshToken"}
-                    element={<GetUser/>}
+                    element={<GetUser />}
                 />
 
                 <Route
                     path={"get_user_turon/:username/:token/:refreshToken"}
-                    element={<GetUserTuron/>}
+                    element={<GetUserTuron />}
                 />
 
 
                 <Route
                     index
                     path={"lesson/:chapterId/:lessonOrder/:token"}
-                    element={<Lesson/>}
+                    element={<Lesson />}
                 />
 
 
                 <Route
                     index
                     path={"testTuron"}
-                    element={<ViewTestTuron/>}
+                    element={<ViewTestTuron />}
                 />
 
                 <Route
                     index
                     path={"login"}
-                    element={<Login/>}
+                    element={<Login />}
                 />
                 <Route
                     index
                     path={"content"}
-                    element={<TestContent/>}
+                    element={<TestContent />}
                 />
 
                 <Route
                     index
                     path={"login_block_test"}
-                    element={<LoginPisa/>}
+                    element={<LoginPisa />}
                 />
 
 
 
-                <Route path={"registerPisaTest"} element={<RegisterPisa/>}/>
+                <Route path={"registerPisaTest"} element={<RegisterPisa />} />
 
-                <Route path={"register_block_test"} element={<RegisterPisa/>} />
+                <Route path={"register_block_test"} element={<RegisterPisa />} />
 
 
-                <Route path="/*" element={<Layout/>}>
+                <Route path="/*" element={<Layout />}>
 
-                    <Route element={<RequireAuth allowedRules={[ROLES.Parent]}/>}>
+                    <Route element={<RequireAuth allowedRules={[ROLES.Parent]} />}>
 
                         {
                             isMobile && (
-                                <Route path="home" element={<ChildrenLayoutMB/>}>
-                                    <Route index element={<ChildrenWeeklyGrades/>}/>
-                                    <Route path="monthly-grades" element={<ChildrenMonthlyGrades/>}/>
-                                    <Route path="monthly-attendance" element={<ChildrenMonthlyAttendance/>}/>
-                                    <Route path="monthly-balance" element={<ParentBalanceList/>}/>
-                                    <Route path="monthly-result" element={<ChildrenMonthlyTestsResults/>}/>
+                                <Route path="home" element={<ChildrenLayoutMB />}>
+                                    <Route index element={<ChildrenWeeklyGrades />} />
+                                    <Route path="monthly-grades" element={<ChildrenMonthlyGrades />} />
+                                    <Route path="monthly-attendance" element={<ChildrenMonthlyAttendance />} />
+                                    <Route path="monthly-balance" element={<ParentBalanceList />} />
+                                    <Route path="monthly-result" element={<ChildrenMonthlyTestsResults />} />
 
-                                    <Route path="*" element={<Navigate to="home" replace/>}/>
+                                    <Route path="*" element={<Navigate to="home" replace />} />
                                 </Route>
                             )
                         }
@@ -154,17 +154,17 @@ const App = () => {
                             !isMobile && (
                                 <>
 
-                                    <Route path="home/parentBalance" element={<ParentBalanceList/>}/>
-                                    <Route path="home/childrenTestsResults" element={<ChildrenMonthlyTestsResults/>}/>
-                                    <Route path="home/childrenGrades" element={<ChildrenMonthlyGrades/>}/>
-                                    <Route path="home/childrenAttendance" element={<ChildrenMonthlyAttendance/>}/>
+                                    <Route path="home/parentBalance" element={<ParentBalanceList />} />
+                                    <Route path="home/childrenTestsResults" element={<ChildrenMonthlyTestsResults />} />
+                                    <Route path="home/childrenGrades" element={<ChildrenMonthlyGrades />} />
+                                    <Route path="home/childrenAttendance" element={<ChildrenMonthlyAttendance />} />
                                 </>
                             )
                         }
 
                     </Route>
 
-                    <Route path={"home"} element={<Home/>}/>
+                    <Route path={"home"} element={<Home />} />
 
 
 
@@ -172,67 +172,68 @@ const App = () => {
                     <Route
                         index
                         path={"user/:id/*"}
-                        element={<User/>}
+                        element={<User />}
                     />
 
                     <Route
                         index
                         path={"createTestTuron"}
-                        element={<CreateTestTuron/>}
+                        element={<CreateTestTuron />}
                     />
 
 
                     <Route
                         path={"subject/:id/*"}
-                        element={<Subject/>}
+                        element={<Subject />}
                     />
-                    <Route path={"taskManager/*"} element={<TaskManager/>}/>
+                    <Route path={"taskManager/*"} element={<TaskManager />} />
 
 
-                    <Route path={"viewPisaTest/:id"} element={<ViewPisaTest/>}/>
-                    <Route path={"myResultsPisaTest/:id"} element={<MyResultPisaTest/>}/>
-                    <Route path={"checkMyResultsPisaTest/:id"} element={<CheckResultsPisaTest/>}/>
+                    <Route path={"viewPisaTest/:id"} element={<ViewPisaTest />} />
+                    <Route path={"myResultsPisaTest/:id"} element={<MyResultPisaTest />} />
+                    <Route path={"checkMyResultsPisaTest/:id"} element={<CheckResultsPisaTest />} />
 
-                    <Route element={<RequireAuth allowedRules={[ROLES.Teacher, ROLES.Student]}/>}>
-                        <Route path={"groups/*"} element={<Groups/>}/>
-                        <Route path={"books/*"} element={<Books/>}/>
+                    <Route element={<RequireAuth allowedRules={[ROLES.Teacher, ROLES.Student]} />}>
+                        <Route path={"groups/*"} element={<Groups />} />
+                        <Route path={"books/*"} element={<Books />} />
                         {/*<Route path={"chat/*"} element={<Chat/>} />*/}
-                        <Route path={"parent/*"} element={<ParentPage/>}/>
-                        <Route path={'timeTable'} element={<TimeTable/>}/>
+                        <Route path={"parent/*"} element={<ParentPage />} />
+                        <Route path={'timeTable'} element={<TimeTable />} />
                     </Route>
 
-                    <Route element={<RequireAuth allowedRules={[ROLES.Teacher]}/>}>
-                        <Route path={"teacherObservation/*"} element={<TeacherObservation/>}/>
-                        <Route path={"teacherEquipments/*"} element={<TeacherEquipments/>}/>
+                    <Route element={<RequireAuth allowedRules={[ROLES.Teacher]} />}>
+                        <Route path={"teacherObservation/*"} element={<TeacherObservation />} />
+                        <Route path={"teacherEquipments/*"} element={<TeacherEquipments />} />
                     </Route>
 
-                    <Route element={<RequireAuth allowedRules={[ROLES.Methodist]}/>}>
-                        <Route path={"exercises"} element={<Exercises/>}/>
+                    <Route element={<RequireAuth allowedRules={[ROLES.Methodist]} />}>
+                        <Route path={"exercises"} element={<Exercises />} />
 
-                        <Route path={"createExercises/:id"} element={<CreateExercises/>}/>
-                        <Route path={"changeExercises/:id"} element={<ChangeExercises/>}/>
-                        <Route path={"createExercisesTypes"} element={<CreateExercisesTypes/>}/>
-                        <Route path={"pisaTest"} element={<PisaTestList/>}/>
-                        <Route path={"createPisaTest/:id"} element={<CreatePisaTest/>}/>
-                        <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa/>}/>
+                        <Route path={"createExercises/:id"} element={<CreateExercises />} />
+                        <Route path={"changeExercises/:id"} element={<ChangeExercises />} />
+                        <Route path={"createExercisesTypes"} element={<CreateExercisesTypes />} />
+                        <Route path={"pisaTest"} element={<PisaTestList />} />
+                        <Route path={"createPisaTest/:id"} element={<CreatePisaTest />} />
+                        <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa />} />
 
-                        <Route path={"createExercises"} element={<CreateExercises/>} />
-                        <Route path={"changeExercises/:id"} element={<ChangeExercises/>} />
-                        <Route path={"createExercisesTypes"} element={<CreateExercisesTypes/>} />
-                        <Route path={"pisaTest"} element={<PisaTestList/>} />
-                        <Route path={"createPisaTest/:id"} element={<CreatePisaTest/>} />
-                        <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa/>} />
-                        <Route path={"pisaTestResults.js"} element={<PisaTestResults/>} />
+                        <Route path={"createExercises"} element={<CreateExercises />} />
+                        <Route path={"changeExercises/:id"} element={<ChangeExercises />} />
+                        <Route path={"createExercisesTypes"} element={<CreateExercisesTypes />} />
+                        <Route path={"pisaTest"} element={<PisaTestList />} />
+                        <Route path={"createPisaTest/:id"} element={<CreatePisaTest />} />
+                        <Route path={"registeredStudentsPisa"} element={<RegisteredStudentsPisa />} />
+                        <Route path={"pisaTestResults.js"} element={<PisaTestResults />} />
 
 
 
-                        <Route path={"presentations/*"} element={<Presentations/>}/>
-                        <Route path={"presentation/:id"} element={<Presentation/>}/>
+
+                        <Route path={"presentation/:id"} element={<Presentation />} />
                     </Route>
 
+                    <Route path={"presentations/*"} element={<Presentations />} />
                     <Route
                         path="*"
-                        element={<Navigate to="/home" replace/>}
+                        element={<Navigate to="/home" replace />}
                     />
                 </Route>
             </>
@@ -240,8 +241,8 @@ const App = () => {
     );
 
     return (
-        <Suspense fallback={<Loader/>}>
-            <RouterProvider router={router}/>
+        <Suspense fallback={<Loader />}>
+            <RouterProvider router={router} />
         </Suspense>
     );
 };
