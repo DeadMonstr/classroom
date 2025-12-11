@@ -46,6 +46,7 @@ const LessonPlan = ({backBtn}) => {
 
     const {request} = useHttp()
 
+    const system_type = localStorage.getItem("system_type")
     useEffect(() => {
         if (groupData.id) {
             request(`${BackUrl}teacher/lesson_plan_list/${groupData.id}`, "GET", null, headers() )
@@ -97,14 +98,14 @@ const LessonPlan = ({backBtn}) => {
                 .then(res => {
 
                     setCanChange(res.status)
-                    setValue("homework",res.lesson_plan.homework)
-                    setValue("objective",res.lesson_plan.objective)
-                    setValue("assessment",res.lesson_plan.assessment)
-                    setValue("resources",res.lesson_plan.resources)
-                    setValue("main_lesson",res.lesson_plan.main_lesson)
-                    setValue("activities",res.lesson_plan.activities)
-                    setStudents(res.lesson_plan.students)
-                    setPlanId(res.lesson_plan.id)
+                    setValue("homework",res.lesson_plan?.homework)
+                    setValue("objective",res.lesson_plan?.objective)
+                    setValue("assessment",res.lesson_plan?.assessment)
+                    setValue("resources",res.lesson_plan?.resources)
+                    setValue("main_lesson",res.lesson_plan?.main_lesson)
+                    setValue("activities",res.lesson_plan?.activities)
+                    setStudents(res.lesson_plan?.students)
+                    setPlanId(res.lesson_plan?.id)
                 })
         }
 
@@ -149,6 +150,7 @@ const LessonPlan = ({backBtn}) => {
 
     const {name,teacher} = data
     const {id: meId} = useAuth()
+    console.log(teacher , meId , "canChange")
 
     return (
         <div className={cls.lessonPlan}>
@@ -221,6 +223,7 @@ const LessonPlan = ({backBtn}) => {
                 {
                     teacher?.id === meId && canChange ?  <Button form={"lessonPlan"} type={"submit"} >Tasdiqlash</Button> : null
                 }
+                {system_type === "turon" && canChange ? <Button form={"lessonPlan"} type={"submit"} >Tasdiqlash</Button> : null}
 
             </div>
             <div className={classNames(cls.students,cls.row)}>
